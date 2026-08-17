@@ -23,7 +23,6 @@ export default function AdminDashboard() {
     blogPosts: 0,
     faqItems: 0,
   });
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -47,15 +46,13 @@ export default function AdminDashboard() {
         setStats((prev) => ({ ...prev, ...results }));
       } catch (error) {
         console.error("Error fetching stats:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchStats();
   }, []);
 
-  const StatCard = ({ title, value, icon, link }: { title: string; value: number; icon: string; link: string }) => (
+  const StatCard = ({ title, value, link }: { title: string; value: number; link: string }) => (
     <Link href={link}>
       <Card className="cursor-pointer hover:shadow-lg transition-shadow">
         <CardHeader className="pb-3">
@@ -87,37 +84,31 @@ export default function AdminDashboard() {
         <StatCard
           title="Banners"
           value={stats.banners}
-          icon="🎨"
           link="/admin/banners"
         />
         <StatCard
           title="Passeios"
           value={stats.tours}
-          icon="🏖️"
           link="/admin/tours"
         />
         <StatCard
           title="Transfers"
           value={stats.transfers}
-          icon="🚗"
           link="/admin/transfers"
         />
         <StatCard
           title="Depoimentos"
           value={stats.testimonials}
-          icon="⭐"
           link="/admin/testimonials"
         />
         <StatCard
           title="Blog Posts"
           value={stats.blogPosts}
-          icon="📝"
           link="/admin/blog"
         />
         <StatCard
           title="FAQ Items"
           value={stats.faqItems}
-          icon="❓"
           link="/admin/faq"
         />
       </div>

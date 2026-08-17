@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
@@ -9,23 +8,6 @@ import { useTransfers } from "@/hooks/useApi";
 
 export default function TransfersAdmin() {
   const { data: transfers, loading, error } = useTransfers(false);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
-
-  const handleDelete = async (id: string) => {
-    try {
-      const response = await fetch(`/api/transfers/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) throw new Error("Delete failed");
-
-      toast.success("Transfer deleted successfully");
-      setDeleteId(null);
-      window.location.reload();
-    } catch (error) {
-      toast.error("Failed to delete transfer");
-    }
-  };
 
   if (loading) {
     return (
@@ -88,7 +70,18 @@ export default function TransfersAdmin() {
                     <Button
                       variant="destructive"
                       size="sm"
-                      onClick={() => setDeleteId(transfer.id)}
+                      onClick={async () => {
+                        try {
+                          const response = await fetch(`/api/transfers/${transfer.id}`, {
+                            method: "DELETE",
+                          });
+                          if (!response.ok) throw new Error("Delete failed");
+                          toast.success("Transfer deleted successfully");
+                          window.location.reload();
+                        } catch (error) {
+                          toast.error("Failed to delete transfer");
+                        }
+                      }}
                     >
                       Deletar
                     </Button>

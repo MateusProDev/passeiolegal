@@ -21,7 +21,7 @@ export async function PUT(
 
 // DELETE /api/testimonials/[id] - Delete testimonial
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

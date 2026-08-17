@@ -21,7 +21,7 @@ export async function PUT(
 
 // DELETE /api/tours/[id] - Delete tour
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

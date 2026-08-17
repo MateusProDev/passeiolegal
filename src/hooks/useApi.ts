@@ -47,6 +47,7 @@ export function useQuery<T>(
       const interval = setInterval(fetchData, options.refetchInterval);
       return () => clearInterval(interval);
     }
+    return undefined;
   }, [fetchData, options?.refetchInterval]);
 
   return { data, loading, error, refetch: fetchData };

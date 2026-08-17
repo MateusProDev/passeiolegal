@@ -11,7 +11,7 @@ A quick reference guide for common tasks in the Passeio Legal project.
 | Firestore Services | `src/lib/firestore.ts` |
 | Cloudinary Utils | `src/lib/cloudinary.ts` |
 | General Utils | `src/lib/utils.ts` |
-| Custom Hooks | `src/hooks/useApi.ts`, `src/hooks/useAuth.ts` |
+| Custom Hooks | `src/hooks/useApi.ts`, `src/hooks/useAuth.tsx` |
 | UI Components | `src/components/ui/` |
 | Admin Layout | `src/app/admin/layout.tsx` |
 | API Routes | `src/app/api/[resource]/route.ts` |

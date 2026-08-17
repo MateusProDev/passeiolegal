@@ -3,8 +3,8 @@ import { bannerService } from "@/lib/firestore";
 
 // GET /api/banners/[id] - Get single banner
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  _request: NextRequest,
+  { params: _params }: { params: { id: string } }
 ) {
   try {
     const banner = await bannerService.getAll(); // In real app, get by ID
@@ -38,7 +38,7 @@ export async function PUT(
 
 // DELETE /api/banners/[id] - Delete banner
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

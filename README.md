@@ -185,7 +185,7 @@ src/
 │   └── cn.ts                   # Classname helper
 ├── hooks/
 │   ├── useApi.ts               # API data fetching hooks
-│   └── useAuth.ts              # Authentication hooks
+│   └── useAuth.tsx            # Authentication hooks
 ├── types/
 │   └── index.ts                # TypeScript type definitions
 ├── stores/                     # Zustand state management

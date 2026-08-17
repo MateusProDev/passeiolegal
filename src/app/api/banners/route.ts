@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { bannerService } from "@/lib/firestore";
-import { APIError } from "@/lib/utils";
 
 // GET /api/banners - Get all banners
 export async function GET() {

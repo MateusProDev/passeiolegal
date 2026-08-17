@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
@@ -9,7 +8,6 @@ import { useBanners } from "@/hooks/useApi";
 
 export default function BannersAdmin() {
   const { data: banners, loading, error } = useBanners();
-  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const handleDelete = async (id: string) => {
     try {
@@ -20,7 +18,6 @@ export default function BannersAdmin() {
       if (!response.ok) throw new Error("Delete failed");
 
       toast.success("Banner deleted successfully");
-      setDeleteId(null);
       // Refetch banners
       window.location.reload();
     } catch (error) {
@@ -89,7 +86,7 @@ export default function BannersAdmin() {
                     <Button
                       variant="destructive"
                       size="sm"
-                      onClick={() => setDeleteId(banner.id)}
+                      onClick={() => handleDelete(banner.id)}
                     >
                       Deletar
                     </Button>

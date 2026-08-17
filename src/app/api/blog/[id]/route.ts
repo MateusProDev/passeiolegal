@@ -21,7 +21,7 @@ export async function PUT(
 
 // DELETE /api/blog/[id] - Delete blog post
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

@@ -3,13 +3,47 @@ import { NextRequest, NextResponse } from "next/server";
 // Paths that require authentication
 const protectedPaths = ["/admin"];
 
+// List of known search engine bots
+const botUserAgents = [
+  'googlebot',
+  'bingbot',
+  'slurp',
+  'duckduckbot',
+  'baiduspider',
+  'yandexbot',
+  'sogou',
+  'exabot',
+  'facebot',
+  'facebookexternalhit',
+  'twitterbot',
+  'linkedinbot',
+  'whatsapp',
+  'telegrambot',
+];
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const userAgent = request.headers.get('user-agent')?.toLowerCase() || '';
+
+  // Check if the request is from a known bot
+  const isBot = botUserAgents.some(bot => userAgent.includes(bot));
+
+  // Allow bots to access public pages without authentication
+  if (isBot && !pathname.startsWith('/admin')) {
+    const response = NextResponse.next();
+    response.headers.set('X-Bot-Access', 'allowed');
+    return response;
+  }
 
   // Check if the path requires authentication
   const isProtectedPath = protectedPaths.some((path) =>
     pathname.startsWith(path)
   );
+
+  // Allow access to admin login page without authentication
+  if (pathname === '/admin/login') {
+    return NextResponse.next();
+  }
 
   if (isProtectedPath) {
     // Check for auth token in cookies

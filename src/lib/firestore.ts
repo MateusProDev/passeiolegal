@@ -6,8 +6,6 @@ import {
   query,
   where,
   orderBy,
-  limit,
-  offset,
   addDoc,
   updateDoc,
   deleteDoc,

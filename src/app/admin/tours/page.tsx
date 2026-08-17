@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
@@ -9,23 +8,6 @@ import { useTours } from "@/hooks/useApi";
 
 export default function ToursAdmin() {
   const { data: tours, loading, error } = useTours(false);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
-
-  const handleDelete = async (id: string) => {
-    try {
-      const response = await fetch(`/api/tours/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) throw new Error("Delete failed");
-
-      toast.success("Tour deleted successfully");
-      setDeleteId(null);
-      window.location.reload();
-    } catch (error) {
-      toast.error("Failed to delete tour");
-    }
-  };
 
   if (loading) {
     return (
@@ -88,7 +70,18 @@ export default function ToursAdmin() {
                     <Button
                       variant="destructive"
                       size="sm"
-                      onClick={() => setDeleteId(tour.id)}
+                      onClick={async () => {
+                        try {
+                          const response = await fetch(`/api/tours/${tour.id}`, {
+                            method: "DELETE",
+                          });
+                          if (!response.ok) throw new Error("Delete failed");
+                          toast.success("Tour deleted successfully");
+                          window.location.reload();
+                        } catch (error) {
+                          toast.error("Failed to delete tour");
+                        }
+                      }}
                     >
                       Deletar
                     </Button>

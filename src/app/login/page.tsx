@@ -29,7 +29,7 @@ function LoginForm() {
         throw new Error("Login failed");
       }
 
-      const { token } = await response.json();
+      const { token: _token } = await response.json();
       // Cookie is set by the API, no need for localStorage
       window.location.href = redirect;
     } catch (error) {

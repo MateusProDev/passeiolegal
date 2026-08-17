@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Providers } from "./providers";
 import "./globals.css";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
@@ -65,7 +64,7 @@ export default function RootLayout({
         <link rel="canonical" href={baseUrl} />
       </head>
       <body>
-        <Providers>{children}</Providers>
+        {children}
       </body>
     </html>
   );

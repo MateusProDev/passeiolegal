@@ -45,6 +45,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Allow auth API endpoints without authentication
+  if (pathname === '/api/auth/login' || pathname === '/api/auth/logout') {
+    return NextResponse.next();
+  }
+
   if (isProtectedPath) {
     // Check for auth token in cookies
     const authToken = request.cookies.get("authToken")?.value;

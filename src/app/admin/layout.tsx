@@ -14,7 +14,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     // Check if user is authenticated
     const authToken = localStorage.getItem("authToken");
     if (!authToken) {
-      router.push("/admin/login");
+      router.push("/login");
     } else {
       setIsLoggedIn(true);
     }
@@ -35,7 +35,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    router.push("/admin/login");
+    router.push("/login");
   };
 
   return (

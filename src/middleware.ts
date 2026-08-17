@@ -40,8 +40,8 @@ export function middleware(request: NextRequest) {
     pathname.startsWith(path)
   );
 
-  // Allow access to admin login page without authentication
-  if (pathname === '/admin/login') {
+  // Allow access to login page without authentication
+  if (pathname === '/login') {
     return NextResponse.next();
   }
 
@@ -51,7 +51,7 @@ export function middleware(request: NextRequest) {
 
     if (!authToken) {
       // Redirect to login if no token
-      const loginUrl = new URL("/admin/login", request.url);
+      const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);
     }
@@ -63,7 +63,7 @@ export function middleware(request: NextRequest) {
       return NextResponse.next();
     } catch (error) {
       // Invalid token, redirect to login
-      const loginUrl = new URL("/admin/login", request.url);
+      const loginUrl = new URL("/login", request.url);
       return NextResponse.redirect(loginUrl);
     }
   }

@@ -7,39 +7,52 @@ import { Button } from "@/components/ui/Button";
 import toast from "react-hot-toast";
 
 export default function AdminLogin() {
+  console.log("[LOGIN] Component started rendering");
+
   const router = useRouter();
+  console.log("[LOGIN] Router initialized:", !!router);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  console.log("[LOGIN] State initialized");
+
   const handleLogin = async (e: React.FormEvent) => {
+    console.log("[LOGIN] handleLogin called");
     e.preventDefault();
     setLoading(true);
+    console.log("[LOGIN] Loading set to true");
 
     try {
-      // In production, this would use Firebase Auth
-      // For now, this is a placeholder
+      console.log("[LOGIN] Fetching /api/auth/login");
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
+      console.log("[LOGIN] Response received:", response.status);
+
       if (!response.ok) {
         throw new Error("Login failed");
       }
 
       const { token } = await response.json();
+      console.log("[LOGIN] Token received");
       localStorage.setItem("authToken", token);
       toast.success("Login successful!");
       router.push("/admin/dashboard");
     } catch (error) {
+      console.error("[LOGIN] Error:", error);
       toast.error("Invalid email or password");
-      console.error("Login error:", error);
     } finally {
       setLoading(false);
+      console.log("[LOGIN] Loading set to false");
     }
   };
+
+  console.log("[LOGIN] About to return JSX");
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'white', padding: '1rem' }}>
@@ -58,7 +71,10 @@ export default function AdminLogin() {
               type="email"
               placeholder="admin@example.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                console.log("[LOGIN] Email changed:", e.target.value);
+                setEmail(e.target.value);
+              }}
               required
             />
           </div>
@@ -71,7 +87,10 @@ export default function AdminLogin() {
               type="password"
               placeholder="••••••••"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                console.log("[LOGIN] Password changed");
+                setPassword(e.target.value);
+              }}
               required
             />
           </div>

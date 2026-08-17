@@ -11,13 +11,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is authenticated
-    const authToken = localStorage.getItem("authToken");
-    if (!authToken) {
-      router.push("/login");
-    } else {
-      setIsLoggedIn(true);
-    }
+    // Check if user is authenticated via cookie
+    // Cookie is set by the login API and checked by middleware
+    // We just need to verify we're on the admin side
+    setIsLoggedIn(true);
     setLoading(false);
   }, [router]);
 
@@ -33,8 +30,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     return null;
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem("authToken");
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
     router.push("/login");
   };
 

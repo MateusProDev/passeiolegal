@@ -30,7 +30,7 @@ function LoginForm() {
       }
 
       const { token } = await response.json();
-      localStorage.setItem("authToken", token);
+      // Cookie is set by the API, no need for localStorage
       window.location.href = redirect;
     } catch (error) {
       console.error("Login error:", error);

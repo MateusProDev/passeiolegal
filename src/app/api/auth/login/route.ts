@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     // For now, return a mock token
     const token = Buffer.from(email).toString("base64");
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         token,
         user: {
@@ -27,6 +27,16 @@ export async function POST(request: NextRequest) {
       },
       { status: 200 }
     );
+
+    // Set cookie for middleware to read
+    response.cookies.set("authToken", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    });
+
+    return response;
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json(

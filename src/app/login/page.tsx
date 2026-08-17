@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function AdminLogin() {
+function LoginForm() {
   console.log("[LOGIN] Component rendering");
 
   const searchParams = useSearchParams();
@@ -90,5 +91,13 @@ export default function AdminLogin() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function AdminLogin() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'sans-serif' }}>Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

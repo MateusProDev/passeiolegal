@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
 
 function LoginForm() {
@@ -9,6 +9,7 @@ function LoginForm() {
 
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/admin/dashboard";
+  const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,23 +18,33 @@ function LoginForm() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    console.log("[LOGIN] Starting login process for:", email);
+    console.log("[LOGIN] Redirect target:", redirect);
 
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
+        credentials: "include",
       });
+
+      console.log("[LOGIN] Response status:", response.status);
 
       if (!response.ok) {
         throw new Error("Login failed");
       }
 
-      const { token: _token } = await response.json();
-      // Cookie is set by the API, no need for localStorage
-      window.location.href = redirect;
+      const data = await response.json();
+      console.log("[LOGIN] Login successful, received:", data);
+      console.log("[LOGIN] Redirecting to:", redirect);
+
+      // Small delay to ensure cookie is set
+      setTimeout(() => {
+        window.location.href = redirect;
+      }, 100);
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("[LOGIN] Login error:", error);
       alert("Invalid email or password");
     } finally {
       setLoading(false);

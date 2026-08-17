@@ -1,78 +1,38 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Paths that require authentication
-const protectedPaths = ["/admin"];
-
-// List of known search engine bots
-const botUserAgents = [
-  'googlebot',
-  'bingbot',
-  'slurp',
-  'duckduckbot',
-  'baiduspider',
-  'yandexbot',
-  'sogou',
-  'exabot',
-  'facebot',
-  'facebookexternalhit',
-  'twitterbot',
-  'linkedinbot',
-  'whatsapp',
-  'telegrambot',
-];
-
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const userAgent = request.headers.get('user-agent')?.toLowerCase() || '';
+  console.log("[MIDDLEWARE] Processing request:", pathname);
 
-  // Check if the request is from a known bot
-  const isBot = botUserAgents.some(bot => userAgent.includes(bot));
-
-  // Allow bots to access public pages without authentication
-  if (isBot && !pathname.startsWith('/admin')) {
-    const response = NextResponse.next();
-    response.headers.set('X-Bot-Access', 'allowed');
-    return response;
+  // Allow all API routes to pass through
+  if (pathname.startsWith('/api')) {
+    console.log("[MIDDLEWARE] Allowing API route:", pathname);
+    return NextResponse.next();
   }
 
-  // Check if the path requires authentication
-  const isProtectedPath = protectedPaths.some((path) =>
-    pathname.startsWith(path)
-  );
-
-  // Allow access to login page without authentication
+  // Allow login page without authentication
   if (pathname === '/login') {
+    console.log("[MIDDLEWARE] Allowing login page");
     return NextResponse.next();
   }
 
-  // Allow auth API endpoints without authentication
-  if (pathname === '/api/auth/login' || pathname === '/api/auth/logout') {
-    return NextResponse.next();
-  }
-
-  if (isProtectedPath) {
-    // Check for auth token in cookies
+  // Protect /admin routes
+  if (pathname.startsWith('/admin')) {
     const authToken = request.cookies.get("authToken")?.value;
+    console.log("[MIDDLEWARE] Admin route check:", pathname, "Auth token:", authToken ? "present" : "missing");
 
     if (!authToken) {
-      // Redirect to login if no token
+      console.log("[MIDDLEWARE] No auth token, redirecting to login");
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);
     }
 
-    // Verify token validity (basic check)
-    // In a real app, you'd verify the token with Firebase
-    try {
-      // Token exists, proceed
-      return NextResponse.next();
-    } catch (error) {
-      // Invalid token, redirect to login
-      const loginUrl = new URL("/login", request.url);
-      return NextResponse.redirect(loginUrl);
-    }
+    console.log("[MIDDLEWARE] Auth token present, allowing access");
+    return NextResponse.next();
   }
 
+  console.log("[MIDDLEWARE] Allowing public route:", pathname);
   return NextResponse.next();
 }
 
@@ -83,8 +43,7 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public folder
      */
-    "/((?!_next/static|_next/image|favicon.ico|public).*)",
+    "/((?!_next/static|_next/image|favicon.ico).*)",
   ],
 };

@@ -1,9 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function AdminLogin() {
   console.log("[LOGIN] Component rendering");
+
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/admin/dashboard";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +30,7 @@ export default function AdminLogin() {
 
       const { token } = await response.json();
       localStorage.setItem("authToken", token);
-      window.location.href = "/admin/dashboard";
+      window.location.href = redirect;
     } catch (error) {
       console.error("Login error:", error);
       alert("Invalid email or password");
@@ -54,6 +58,7 @@ export default function AdminLogin() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="email"
               style={{ width: '100%', padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '14px' }}
             />
           </div>
@@ -68,6 +73,7 @@ export default function AdminLogin() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoComplete="current-password"
               style={{ width: '100%', padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '14px' }}
             />
           </div>

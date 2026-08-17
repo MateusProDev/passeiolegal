@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
 function LoginForm() {
@@ -9,7 +9,6 @@ function LoginForm() {
 
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/admin/dashboard";
-  const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

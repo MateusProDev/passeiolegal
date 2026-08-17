@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Providers } from "./providers";
 import "./globals.css";
+import { LocalBusinessJsonLd, WebSiteJsonLd } from "@/components/seo/JsonLd";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
 
@@ -64,7 +66,24 @@ export default function RootLayout({
         <link rel="canonical" href={baseUrl} />
       </head>
       <body>
-        {children}
+        <LocalBusinessJsonLd
+          name="Passeio Legal"
+          url={baseUrl}
+          description="Descubra os melhores passeios e transfers com a Passeio Legal"
+          address={{
+            street: "Rua Principal, 123",
+            city: "São Paulo",
+            state: "SP",
+            zip: "01234-567",
+          }}
+          phone="+5511999999999"
+        />
+        <WebSiteJsonLd
+          name="Passeio Legal"
+          url={baseUrl}
+          description="Descubra os melhores passeios e transfers com a Passeio Legal"
+        />
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

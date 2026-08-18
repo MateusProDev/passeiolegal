@@ -38,7 +38,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
-      <aside className="w-64 bg-card border-r border-border shadow-lg">
+      <aside className="w-64 bg-card border-r border-border shadow-lg relative">
         <div className="p-6 border-b border-border">
           <h1 className="text-2xl font-bold text-primary">Passeio Legal</h1>
           <p className="text-sm text-muted-foreground">Admin Dashboard</p>

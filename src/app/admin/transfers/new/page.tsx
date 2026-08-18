@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import ImageUpload from "@/components/ui/ImageUpload";
 
 export default function NewTransfer() {
   const router = useRouter();
@@ -100,15 +101,11 @@ export default function NewTransfer() {
                 placeholder="Ex: 1 hora"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">URL da Imagem Principal</label>
-              <input
-                type="url"
-                value={formData.mainImageUrl}
-                onChange={(e) => setFormData({ ...formData, mainImageUrl: e.target.value })}
-                className="w-full px-3 py-2 border rounded"
-              />
-            </div>
+            <ImageUpload
+              label="Imagem Principal"
+              currentImage={formData.mainImageUrl}
+              onImageUpload={(url) => setFormData({ ...formData, mainImageUrl: url })}
+            />
             <div>
               <label className="block text-sm font-medium mb-2">Alt da Imagem</label>
               <input

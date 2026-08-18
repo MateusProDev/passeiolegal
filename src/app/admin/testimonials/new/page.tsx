@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import ImageUpload from "@/components/ui/ImageUpload";
 
 export default function NewTestimonial() {
   const router = useRouter();
@@ -86,15 +87,11 @@ export default function NewTestimonial() {
                 className="w-full px-3 py-2 border rounded"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">URL da Imagem</label>
-              <input
-                type="url"
-                value={formData.imageUrl}
-                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                className="w-full px-3 py-2 border rounded"
-              />
-            </div>
+            <ImageUpload
+              label="Foto do Cliente"
+              currentImage={formData.imageUrl}
+              onImageUpload={(url) => setFormData({ ...formData, imageUrl: url })}
+            />
             <div>
               <label className="block text-sm font-medium mb-2">Alt da Imagem</label>
               <input

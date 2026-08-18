@@ -12,10 +12,11 @@ export default function NewBanner() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
-    description: "",
+    subtitle: "",
     imageUrl: "",
     imageAlt: "",
-    link: "",
+    buttonText: "",
+    buttonLink: "",
     active: true,
   });
 
@@ -66,10 +67,10 @@ export default function NewBanner() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Descrição</label>
+              <label className="block text-sm font-medium mb-2">Subtítulo</label>
               <textarea
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                value={formData.subtitle}
+                onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
                 className="w-full px-3 py-2 border rounded"
                 rows={4}
               />
@@ -89,11 +90,23 @@ export default function NewBanner() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Link</label>
+              <label className="block text-sm font-medium mb-2">Texto do Botão</label>
+              <input
+                type="text"
+                value={formData.buttonText}
+                onChange={(e) => setFormData({ ...formData, buttonText: e.target.value })}
+                required
+                className="w-full px-3 py-2 border rounded"
+                placeholder="Ex: Saiba mais"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Link do Botão</label>
               <input
                 type="url"
-                value={formData.link}
-                onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+                value={formData.buttonLink}
+                onChange={(e) => setFormData({ ...formData, buttonLink: e.target.value })}
+                required
                 className="w-full px-3 py-2 border rounded"
                 placeholder="https://..."
               />

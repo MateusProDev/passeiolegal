@@ -12,12 +12,33 @@ export default function NewBlogPost() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
+    slug: "",
+    summary: "",
     content: "",
-    author: "",
     imageUrl: "",
     imageAlt: "",
     published: true,
   });
+
+  const generateSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .trim();
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const title = e.target.value;
+    setFormData({
+      ...formData,
+      title,
+      slug: generateSlug(title),
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,19 +81,31 @@ export default function NewBlogPost() {
               <input
                 type="text"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={handleTitleChange}
                 required
                 className="w-full px-3 py-2 border rounded"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Autor</label>
+              <label className="block text-sm font-medium mb-2">Slug (URL)</label>
               <input
                 type="text"
-                value={formData.author}
-                onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+                value={formData.slug}
+                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                 required
                 className="w-full px-3 py-2 border rounded"
+                placeholder="ex: minha-nova-publicacao"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Resumo</label>
+              <textarea
+                value={formData.summary}
+                onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
+                required
+                className="w-full px-3 py-2 border rounded"
+                rows={3}
+                placeholder="Breve descrição do post"
               />
             </div>
             <div>

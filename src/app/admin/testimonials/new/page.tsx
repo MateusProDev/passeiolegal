@@ -11,11 +11,11 @@ export default function NewTestimonial() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    content: "",
+    clientName: "",
+    text: "",
     rating: 5,
-    imageUrl: "",
-    imageAlt: "",
+    clientPhoto: "",
+    clientPhotoAlt: "",
     active: true,
   });
 
@@ -56,20 +56,20 @@ export default function NewTestimonial() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Nome</label>
+              <label className="block text-sm font-medium mb-2">Nome do Cliente</label>
               <input
                 type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                value={formData.clientName}
+                onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
                 required
                 className="w-full px-3 py-2 border rounded"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Conteúdo</label>
+              <label className="block text-sm font-medium mb-2">Depoimento</label>
               <textarea
-                value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                value={formData.text}
+                onChange={(e) => setFormData({ ...formData, text: e.target.value })}
                 required
                 className="w-full px-3 py-2 border rounded"
                 rows={4}
@@ -89,15 +89,15 @@ export default function NewTestimonial() {
             </div>
             <ImageUpload
               label="Foto do Cliente"
-              currentImage={formData.imageUrl}
-              onImageUpload={(url) => setFormData({ ...formData, imageUrl: url })}
+              currentImage={formData.clientPhoto}
+              onImageUpload={(url) => setFormData({ ...formData, clientPhoto: url })}
             />
             <div>
-              <label className="block text-sm font-medium mb-2">Alt da Imagem</label>
+              <label className="block text-sm font-medium mb-2">Alt da Foto</label>
               <input
                 type="text"
-                value={formData.imageAlt}
-                onChange={(e) => setFormData({ ...formData, imageAlt: e.target.value })}
+                value={formData.clientPhotoAlt}
+                onChange={(e) => setFormData({ ...formData, clientPhotoAlt: e.target.value })}
                 className="w-full px-3 py-2 border rounded"
               />
             </div>

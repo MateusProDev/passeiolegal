@@ -11,7 +11,8 @@
     "type-check": "tsc --noEmit",
     "seed": "ts-node scripts/seed-firestore.ts",
     "init-firebase": "ts-node scripts/init-firebase.ts",
-    "init-firebase-local": "ts-node scripts/init-firebase-local.ts"
+    "init-firebase-local": "ts-node scripts/init-firebase-local.ts",
+    "init-collections": "node scripts/initialize-collections.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",

@@ -10,7 +10,8 @@
     "lint": "next lint",
     "type-check": "tsc --noEmit",
     "seed": "ts-node scripts/seed-firestore.ts",
-    "init-firebase": "ts-node scripts/init-firebase.ts"
+    "init-firebase": "ts-node scripts/init-firebase.ts",
+    "init-firebase-local": "ts-node scripts/init-firebase-local.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",

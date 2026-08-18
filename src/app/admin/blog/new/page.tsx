@@ -1,0 +1,131 @@
+"use client";
+
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+
+export default function NewBlogPost() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    content: "",
+    author: "",
+    imageUrl: "",
+    imageAlt: "",
+    published: true,
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/blog", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) throw new Error("Failed to create blog post");
+
+      toast.success("Blog post created successfully");
+      router.push("/admin/blog");
+    } catch (error) {
+      toast.error("Failed to create blog post");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold">Novo Blog Post</h1>
+        <p className="text-muted-foreground">Criar um novo post de blog</p>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Informações do Post</CardTitle>
+          <CardDescription>Preencha os detalhes do post</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Título</label>
+              <input
+                type="text"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                required
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Autor</label>
+              <input
+                type="text"
+                value={formData.author}
+                onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+                required
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Conteúdo</label>
+              <textarea
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                required
+                className="w-full px-3 py-2 border rounded"
+                rows={10}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">URL da Imagem</label>
+              <input
+                type="url"
+                value={formData.imageUrl}
+                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Alt da Imagem</label>
+              <input
+                type="text"
+                value={formData.imageAlt}
+                onChange={(e) => setFormData({ ...formData, imageAlt: e.target.value })}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={formData.published}
+                onChange={(e) => setFormData({ ...formData, published: e.target.checked })}
+                className="w-4 h-4"
+              />
+              <label className="text-sm font-medium">Publicado</label>
+            </div>
+            <div className="flex gap-2">
+              <Button type="submit" disabled={loading}>
+                {loading ? "Criando..." : "Criar Post"}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.push("/admin/blog")}
+              >
+                Cancelar
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

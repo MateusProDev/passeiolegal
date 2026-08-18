@@ -148,6 +148,10 @@ export const tourService = {
     return firebaseService.getMany<Types.Tour>("tours", constraints);
   },
 
+  async getById(id: string) {
+    return firebaseService.get<Types.Tour>("tours", id);
+  },
+
   async getFeatured() {
     return firebaseService.getMany<Types.Tour>("tours", [
       where("active", "==", true),

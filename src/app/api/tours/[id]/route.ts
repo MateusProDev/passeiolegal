@@ -1,6 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tourService } from "@/lib/firestore";
 
+// GET /api/tours/[id] - Get single tour
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const tour = await tourService.getById(params.id);
+    if (!tour) {
+      return NextResponse.json(
+        { error: "Tour not found" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(tour);
+  } catch (error) {
+    console.error("Error fetching tour:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch tour" },
+      { status: 500 }
+    );
+  }
+}
+
 // PUT /api/tours/[id] - Update tour
 export async function PUT(
   request: NextRequest,

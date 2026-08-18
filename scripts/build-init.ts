@@ -3,15 +3,15 @@
  * This script runs during the build process to initialize Firebase collections
  */
 
-const admin = require('firebase-admin');
+const firebaseAdmin = require('firebase-admin');
 const { readFileSync } = require('fs');
 const path = require('path');
-const { initializeFirebaseCollections } = require('../src/lib/firebase-init.js');
+const firebaseInit = require('../src/lib/firebase-init.js');
 
 async function initializeFirebaseAdmin() {
   try {
     // Try to load the service account key from environment variable or file
-    const serviceAccountKey = process.env.FIREBASE_ADMIN_SDK 
+    const serviceAccountKey = process.env.FIREBASE_ADMIN_SDK
       ? JSON.parse(process.env.FIREBASE_ADMIN_SDK)
       : (() => {
           try {
@@ -25,9 +25,9 @@ async function initializeFirebaseAdmin() {
         })();
 
     if (serviceAccountKey) {
-      if (!admin.apps.length) {
-        admin.initializeApp({
-          credential: admin.credential.cert(serviceAccountKey),
+      if (!firebaseAdmin.apps.length) {
+        firebaseAdmin.initializeApp({
+          credential: firebaseAdmin.credential.cert(serviceAccountKey),
           projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'passeiolegal',
         });
       }
@@ -57,7 +57,7 @@ async function runBuildInit() {
       return;
     }
 
-    const success = await initializeFirebaseCollections();
+    const success = await firebaseInit.initializeFirebaseCollections();
     
     if (success) {
       console.log('✅ Firebase collections initialized successfully during build');

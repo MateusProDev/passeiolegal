@@ -35,19 +35,26 @@ export default function Transfers({ transfers }: TransfersProps) {
           {displayTransfers.map((transfer) => (
             <article
               key={transfer.id}
-              className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow"
+              className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow flex flex-col"
             >
-              <div className="relative h-40 mb-4">
-                <Image
-                  src={transfer.imageUrl}
-                  alt={transfer.imageAlt}
-                  fill
-                  className="object-cover rounded-lg"
-                />
+              <div className="relative h-40 mb-4 w-full">
+                {transfer.imageUrl ? (
+                  <Image
+                    src={transfer.imageUrl}
+                    alt={transfer.imageAlt || transfer.name}
+                    fill
+                    className="object-cover rounded-lg"
+                    unoptimized
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center">
+                    <span className="text-gray-400">Sem imagem</span>
+                  </div>
+                )}
               </div>
 
               <h3 className="text-lg font-bold text-gray-900 mb-2">{transfer.name}</h3>
-              <p className="text-gray-600 text-sm mb-4 line-clamp-2">{transfer.description}</p>
+              <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-1">{transfer.description}</p>
 
               <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
                 <div className="flex items-center space-x-1">

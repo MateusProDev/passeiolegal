@@ -60,13 +60,18 @@ export default function Hero({ banners }: HeroProps) {
     <section className="relative h-[600px] overflow-hidden" aria-label="Banner principal">
       {/* Banner Image */}
       <div className="absolute inset-0">
-        <Image
-          src={currentBanner.imageUrl}
-          alt={currentBanner.imageAlt}
-          fill
-          className="object-cover"
-          priority
-        />
+        {currentBanner.imageUrl ? (
+          <Image
+            src={currentBanner.imageUrl}
+            alt={currentBanner.imageAlt || currentBanner.title}
+            fill
+            className="object-cover"
+            priority
+            unoptimized
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-r from-primary-600 to-secondary-600" />
+        )}
         <div className="absolute inset-0 bg-black/40" />
       </div>
 

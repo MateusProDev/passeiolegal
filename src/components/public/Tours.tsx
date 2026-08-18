@@ -37,15 +37,22 @@ export default function Tours({ tours }: ToursProps) {
           {displayTours.map((tour) => (
             <article
               key={tour.id}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col"
             >
-              <div className="relative h-48">
-                <Image
-                  src={tour.mainImageUrl}
-                  alt={tour.mainImageAlt}
-                  fill
-                  className="object-cover"
-                />
+              <div className="relative h-48 w-full">
+                {tour.mainImageUrl ? (
+                  <Image
+                    src={tour.mainImageUrl}
+                    alt={tour.mainImageAlt || tour.name}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400">Sem imagem</span>
+                  </div>
+                )}
                 {tour.featured && (
                   <span className="absolute top-4 right-4 bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
                     Destaque
@@ -53,9 +60,9 @@ export default function Tours({ tours }: ToursProps) {
                 )}
               </div>
 
-              <div className="p-6">
+              <div className="p-6 flex flex-col flex-1">
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{tour.name}</h3>
-                <p className="text-gray-600 mb-4 line-clamp-2">{tour.description}</p>
+                <p className="text-gray-600 mb-4 line-clamp-2 flex-1">{tour.description}</p>
 
                 <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
                   <div className="flex items-center space-x-1">

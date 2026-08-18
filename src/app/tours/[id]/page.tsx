@@ -10,6 +10,9 @@ interface PageProps {
   params: { id: string };
 }
 
+// Force dynamic rendering for real-time updates
+export const dynamic = 'force-dynamic';
+
 async function getTour(id: string) {
   try {
     const tour = await tourService.getById(id);

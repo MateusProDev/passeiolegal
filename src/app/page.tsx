@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   description: "Bem-vindo à Passeio Legal - Descubra os melhores passeios e transfers",
 };
 
+// Force dynamic rendering for real-time updates
+export const dynamic = 'force-dynamic';
+
 async function getPageData() {
   try {
     const [banners, tours, transfers, testimonials, blogPosts, faqs] = await Promise.all([
@@ -63,7 +66,7 @@ export default async function Home() {
               Sobre a Passeio Legal
             </h2>
             <p className="text-gray-600 max-w-3xl mx-auto text-lg">
-              Há mais de 10 anos no mercado de turismo, oferecemos experiências únicas e memoráveis para nossos clientes. Nossa missão é proporcionar momentos inesquecíveis com segurança, conforto e profissionalismo.
+              Há mais de 10 anos no mercado de turismo, oferecendo experiências únicas e memoráveis para nossos clientes. Nossa missão é proporcionar momentos inesquecíveis com segurança, conforto e profissionalismo.
             </p>
           </div>
 

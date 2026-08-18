@@ -35,18 +35,25 @@ export default function Blog({ posts }: BlogProps) {
           {displayPosts.map((post) => (
             <article
               key={post.id}
-              className="bg-gray-50 rounded-xl overflow-hidden hover:shadow-lg transition-shadow"
+              className="bg-gray-50 rounded-xl overflow-hidden hover:shadow-lg transition-shadow flex flex-col"
             >
-              <div className="relative h-48">
-                <Image
-                  src={post.imageUrl}
-                  alt={post.imageAlt}
-                  fill
-                  className="object-cover"
-                />
+              <div className="relative h-48 w-full">
+                {post.imageUrl ? (
+                  <Image
+                    src={post.imageUrl}
+                    alt={post.imageAlt || post.title}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400">Sem imagem</span>
+                  </div>
+                )}
               </div>
 
-              <div className="p-6">
+              <div className="p-6 flex flex-col flex-1">
                 <div className="flex items-center space-x-2 text-sm text-gray-500 mb-3">
                   <Calendar size={16} />
                   <time dateTime={post.publishedAt.toISOString()}>
@@ -57,7 +64,7 @@ export default function Blog({ posts }: BlogProps) {
                 <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
                   {post.title}
                 </h3>
-                <p className="text-gray-600 mb-4 line-clamp-3">{post.summary}</p>
+                <p className="text-gray-600 mb-4 line-clamp-3 flex-1">{post.summary}</p>
 
                 <Link
                   href={`/blog/${post.slug}`}

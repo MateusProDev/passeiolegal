@@ -65,13 +65,20 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
             </blockquote>
 
             <div className="flex items-center justify-center space-x-4">
-              <div className="relative w-16 h-16 rounded-full overflow-hidden">
-                <Image
-                  src={currentTestimonial.clientPhoto}
-                  alt={currentTestimonial.clientPhotoAlt}
-                  fill
-                  className="object-cover"
-                />
+              <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-200">
+                {currentTestimonial.clientPhoto ? (
+                  <Image
+                    src={currentTestimonial.clientPhoto}
+                    alt={currentTestimonial.clientPhotoAlt || currentTestimonial.clientName}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="text-gray-400 text-sm">Sem foto</span>
+                  </div>
+                )}
               </div>
               <div>
                 <cite className="not-italic font-semibold text-gray-900">

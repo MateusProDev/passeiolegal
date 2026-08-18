@@ -5,7 +5,7 @@ import { v2 as cloudinary } from "cloudinary";
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
-  api_secret: process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
+  api_secret: process.env.CLOUDINARY_API_SECRET || process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
 });
 
 export async function POST(request: NextRequest) {
@@ -46,6 +46,19 @@ export async function POST(request: NextRequest) {
     const base64 = buffer.toString("base64");
     const dataURI = `data:${file.type};base64,${base64}`;
 
+    // Check Cloudinary configuration
+    if (!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || !process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY) {
+      console.error("Missing Cloudinary configuration:", {
+        cloud_name: !!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+        api_key: !!process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+        api_secret: !!process.env.CLOUDINARY_API_SECRET || !!process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
+      });
+      return NextResponse.json(
+        { error: "Cloudinary configuration missing" },
+        { status: 500 }
+      );
+    }
+
     // Upload to Cloudinary
     const result = await cloudinary.uploader.upload(dataURI, {
       folder: "passeiolegal/tours",
@@ -63,7 +76,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error uploading file:", error);
     return NextResponse.json(
-      { error: "Failed to upload file" },
+      { error: "Failed to upload file", details: error instanceof Error ? error.message : "Unknown error" },
       { status: 500 }
     );
   }

@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "@/lib/firebase";
-import { v4 as uuidv4 } from "uuid";
+import { v2 as cloudinary } from "cloudinary";
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+  api_secret: process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,21 +42,23 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Generate unique filename
-    const fileName = `${uuidv4()}-${file.name}`;
-    const storageRef = ref(storage, `tours/${fileName}`);
+    // Convert buffer to base64
+    const base64 = buffer.toString("base64");
+    const dataURI = `data:${file.type};base64,${base64}`;
 
-    // Upload file to Firebase Storage
-    await uploadBytes(storageRef, buffer, {
-      contentType: file.type,
+    // Upload to Cloudinary
+    const result = await cloudinary.uploader.upload(dataURI, {
+      folder: "passeiolegal/tours",
+      transformation: [
+        { quality: "auto", fetch_format: "auto" },
+        { width: 1200, crop: "limit" },
+      ],
     });
 
-    // Get download URL
-    const downloadURL = await getDownloadURL(storageRef);
-
     return NextResponse.json({
-      url: downloadURL,
-      fileName: fileName,
+      url: result.secure_url,
+      publicId: result.public_id,
+      fileName: result.original_filename,
     });
   } catch (error) {
     console.error("Error uploading file:", error);

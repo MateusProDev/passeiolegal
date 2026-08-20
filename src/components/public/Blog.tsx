@@ -9,7 +9,8 @@ interface BlogPost {
   summary: string;
   imageUrl: string;
   imageAlt: string;
-  publishedAt: Date;
+  published: boolean;
+  createdAt: any;
 }
 
 interface BlogProps {
@@ -17,7 +18,17 @@ interface BlogProps {
 }
 
 export default function Blog({ posts }: BlogProps) {
-  const displayPosts = posts.slice(0, 3);
+  const displayPosts = posts.filter(post => post.published).slice(0, 3);
+
+  const formatDate = (date: any) => {
+    if (!date) return '';
+    const d = date.toDate ? date.toDate() : new Date(date);
+    return d.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
 
   return (
     <section id="blog" className="py-20 bg-white">
@@ -56,9 +67,7 @@ export default function Blog({ posts }: BlogProps) {
               <div className="p-6 flex flex-col flex-1">
                 <div className="flex items-center space-x-2 text-sm text-gray-500 mb-3">
                   <Calendar size={16} />
-                  <time dateTime={post.publishedAt.toISOString()}>
-                    {new Date(post.publishedAt).toLocaleDateString('pt-BR')}
-                  </time>
+                  <span>{formatDate(post.createdAt)}</span>
                 </div>
 
                 <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
@@ -78,16 +87,14 @@ export default function Blog({ posts }: BlogProps) {
           ))}
         </div>
 
-        {posts.length > 3 && (
-          <div className="text-center mt-12">
-            <Link
-              href="/blog"
-              className="inline-block bg-secondary-600 hover:bg-secondary-700 text-white px-8 py-3 rounded-lg transition-colors font-semibold"
-            >
-              Ver Todos os Artigos
-            </Link>
-          </div>
-        )}
+        <div className="text-center mt-12">
+          <Link
+            href="/blog"
+            className="inline-block bg-secondary-600 hover:bg-secondary-700 text-white px-8 py-3 rounded-lg transition-colors font-semibold"
+          >
+            Ver Todos os Artigos
+          </Link>
+        </div>
       </div>
     </section>
   );

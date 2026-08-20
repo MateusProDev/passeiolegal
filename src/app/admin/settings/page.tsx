@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import ImageUpload from "@/components/ui/ImageUpload";
 
 export default function SettingsAdmin() {
   const [settings, setSettings] = useState<any>(null);
@@ -67,6 +68,40 @@ export default function SettingsAdmin() {
           Gerenciar configurações gerais do site
         </p>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Logo</CardTitle>
+          <CardDescription>Configure a logo do site</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <label className="text-sm font-medium mb-2 block">Logo do Cabeçalho</label>
+            <ImageUpload
+              currentImage={settings?.headerLogo}
+              onImageUpload={(url) =>
+                setSettings({
+                  ...settings,
+                  headerLogo: url,
+                })
+              }
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium">Texto Alternativo da Logo</label>
+            <Input
+              placeholder="Passeio Legal"
+              value={settings?.headerLogoAlt || ""}
+              onChange={(e) =>
+                setSettings({
+                  ...settings,
+                  headerLogoAlt: e.target.value,
+                })
+              }
+            />
+          </div>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

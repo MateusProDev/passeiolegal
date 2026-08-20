@@ -20,13 +20,24 @@ interface HeroProps {
 
 export default function Hero({ banners }: HeroProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (banners.length === 0) return;
     
+    const interval = 50; // Update progress every 50ms
+    const duration = 5000; // 5 seconds per slide
+    const increment = 100 / (duration / interval);
+
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % banners.length);
-    }, 5000);
+      setProgress((prev) => {
+        if (prev >= 100) {
+          setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
+          return 0;
+        }
+        return prev + increment;
+      });
+    }, interval);
 
     return () => clearInterval(timer);
   }, [banners.length]);
@@ -114,13 +125,26 @@ export default function Hero({ banners }: HeroProps) {
         </>
       )}
 
+      {/* Progress Bar */}
+      {banners.length > 1 && (
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/30">
+          <div 
+            className="h-full bg-white transition-all duration-50 ease-linear"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      )}
+
       {/* Dots */}
       {banners.length > 1 && (
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-2">
           {banners.map((_, index) => (
             <button
               key={index}
-              onClick={() => goToSlide(index)}
+              onClick={() => {
+                goToSlide(index);
+                setProgress(0);
+              }}
               className={`w-3 h-3 rounded-full transition-colors ${
                 index === currentIndex ? 'bg-white' : 'bg-white/50'
               }`}

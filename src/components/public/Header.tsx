@@ -1,17 +1,35 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch('/api/settings');
+        if (response.ok) {
+          const data = await response.json();
+          setSettings(data);
+        }
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      }
+    };
+
+    fetchSettings();
+  }, []);
 
   const menuItems = [
     { label: 'Início', href: '/' },
-    { label: 'Passeios', href: '#tours' },
-    { label: 'Transfers', href: '#transfers' },
-    { label: 'Blog', href: '#blog' },
+    { label: 'Passeios', href: '/tours' },
+    { label: 'Transfers', href: '/transfers' },
+    { label: 'Blog', href: '/blog' },
     { label: 'Sobre', href: '#about' },
     { label: 'Contato', href: '#contact' },
   ];
@@ -22,9 +40,21 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2" aria-label="Passeio Legal - Página inicial">
-            <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">PL</span>
-            </div>
+            {settings?.headerLogo ? (
+              <div className="relative w-10 h-10">
+                <Image
+                  src={settings.headerLogo}
+                  alt={settings.headerLogoAlt || 'Passeio Legal'}
+                  fill
+                  className="object-contain"
+                  unoptimized
+                />
+              </div>
+            ) : (
+              <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xl">PL</span>
+              </div>
+            )}
             <span className="text-xl font-bold text-gray-900">Passeio Legal</span>
           </Link>
 

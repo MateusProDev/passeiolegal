@@ -1,8 +1,29 @@
+"use client";
+
 import Link from 'next/link';
 import { Facebook, Instagram, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch('/api/settings');
+        if (response.ok) {
+          const data = await response.json();
+          setSettings(data);
+        }
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      }
+    };
+
+    fetchSettings();
+  }, []);
 
   const socialLinks = [
     { icon: Facebook, href: '#', label: 'Facebook' },
@@ -26,9 +47,21 @@ export default function Footer() {
           {/* About Section */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">PL</span>
-              </div>
+              {settings?.headerLogo ? (
+                <div className="relative w-10 h-10">
+                  <Image
+                    src={settings.headerLogo}
+                    alt={settings.headerLogoAlt || 'Passeio Legal'}
+                    fill
+                    className="object-contain"
+                    unoptimized
+                  />
+                </div>
+              ) : (
+                <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">PL</span>
+                </div>
+              )}
               <span className="text-xl font-bold">Passeio Legal</span>
             </div>
             <p className="text-gray-400 text-sm">

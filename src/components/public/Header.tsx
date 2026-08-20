@@ -39,7 +39,7 @@ export default function Header() {
       <nav className="container mx-auto px-4 py-4" role="navigation" aria-label="Navegação principal">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2" aria-label="Passeio Legal - Página inicial">
+          <Link href="/" className="flex items-center" aria-label="Passeio Legal - Página inicial">
             {settings?.headerLogo ? (
               <div className="relative w-10 h-10">
                 <Image
@@ -55,7 +55,6 @@ export default function Header() {
                 <span className="text-white font-bold text-xl">PL</span>
               </div>
             )}
-            <span className="text-xl font-bold text-gray-900">Passeio Legal</span>
           </Link>
 
           {/* Desktop Menu */}

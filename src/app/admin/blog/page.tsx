@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import Image from "next/image";
 
 export default function BlogAdmin() {
-  const { blogs, loading, refetch } = useBlogs(false);
+  const { data: blogs, loading, refetch } = useBlogs(false);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Tem certeza que deseja excluir este artigo?")) return;
@@ -54,7 +54,7 @@ export default function BlogAdmin() {
       </div>
 
       <div className="grid gap-4">
-        {blogs.length === 0 ? (
+        {!blogs || blogs.length === 0 ? (
           <Card>
             <CardContent className="pt-6">
               <p className="text-center text-muted-foreground">

@@ -283,6 +283,9 @@ export const settingsService = {
         settings.id,
         data
       );
+    } else {
+      // Create settings if they don't exist
+      return firebaseService.create<Types.SiteSettings>("settings", data as Types.SiteSettings);
     }
   },
 };

@@ -29,3 +29,18 @@ export async function PUT(request: NextRequest) {
     );
   }
 }
+
+// POST /api/settings - Create/update site settings (alternative method)
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    await settingsService.update(body);
+    return NextResponse.json({ message: "Settings updated successfully" });
+  } catch (error) {
+    console.error("Error updating settings:", error);
+    return NextResponse.json(
+      { error: "Failed to update settings" },
+      { status: 500 }
+    );
+  }
+}

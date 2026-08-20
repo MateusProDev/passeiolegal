@@ -57,7 +57,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
   const currentTestimonial = testimonials[currentIndex];
   const isExpanded = expandedIndex === currentIndex;
   const textLines = currentTestimonial.text.split('\n');
-  const shouldTruncate = textLines.length > 5;
+  const shouldTruncate = textLines.length > 2;
 
   return (
     <section className="py-20 bg-gray-50">
@@ -85,7 +85,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
 
             <blockquote className="text-center mb-8">
               <p className="text-xl text-gray-700 italic leading-relaxed whitespace-pre-line">
-                &ldquo;{isExpanded ? currentTestimonial.text : truncateText(currentTestimonial.text, 5)}&rdquo;
+                &ldquo;{isExpanded ? currentTestimonial.text : truncateText(currentTestimonial.text, 2)}&rdquo;
               </p>
               {shouldTruncate && (
                 <button

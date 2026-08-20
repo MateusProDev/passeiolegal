@@ -90,18 +90,30 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contato</h3>
             <ul className="space-y-3">
-              <li className="flex items-center space-x-3 text-gray-400 text-sm">
-                <Phone size={18} />
-                <span>+55 11 99999-9999</span>
-              </li>
-              <li className="flex items-center space-x-3 text-gray-400 text-sm">
-                <Mail size={18} />
-                <span>contato@passeiolegal.com</span>
-              </li>
-              <li className="flex items-center space-x-3 text-gray-400 text-sm">
-                <MapPin size={18} />
-                <span>São Paulo, SP</span>
-              </li>
+              {settings?.phone && (
+                <li className="flex items-center space-x-3 text-gray-400 text-sm">
+                  <Phone size={18} />
+                  <span>{settings.phone}</span>
+                </li>
+              )}
+              {settings?.email && (
+                <li className="flex items-center space-x-3 text-gray-400 text-sm">
+                  <Mail size={18} />
+                  <span>{settings.email}</span>
+                </li>
+              )}
+              {settings?.whatsapp && (
+                <li className="flex items-center space-x-3 text-gray-400 text-sm">
+                  <MessageCircle size={18} />
+                  <span>{settings.whatsapp}</span>
+                </li>
+              )}
+              {settings?.address && (
+                <li className="flex items-center space-x-3 text-gray-400 text-sm">
+                  <MapPin size={18} />
+                  <span>{settings.address}</span>
+                </li>
+              )}
             </ul>
           </div>
 

@@ -46,7 +46,7 @@ export default async function TransferDetailPage({ params }: PageProps) {
   }
 
   return (
-    <main className="min-h-screen pt-32">
+    <main className="min-h-screen pt-28">
       <Header />
 
       <div className="bg-white">

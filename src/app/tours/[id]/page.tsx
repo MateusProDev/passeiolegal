@@ -46,7 +46,7 @@ export default async function TourDetailPage({ params }: PageProps) {
   }
 
   return (
-    <main className="min-h-screen pt-32">
+    <main className="min-h-screen pt-28">
       <Header />
 
       <div className="bg-white">
@@ -97,9 +97,11 @@ export default async function TourDetailPage({ params }: PageProps) {
                   <Clock size={20} />
                   <span>{tour.duration}</span>
                 </div>
-                <div className="text-3xl font-bold text-primary-600">
-                  R$ {tour.price.toFixed(2)}
-                </div>
+                {tour.price && tour.price > 0 && (
+                  <div className="text-3xl font-bold text-primary-600">
+                    R$ {tour.price.toFixed(2)}
+                  </div>
+                )}
               </div>
 
               <p className="text-gray-600 mb-8">{tour.description}</p>

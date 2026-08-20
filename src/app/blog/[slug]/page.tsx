@@ -71,7 +71,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   };
 
   return (
-    <main className="min-h-screen pt-32">
+    <main className="min-h-screen pt-28">
       <Header />
 
       <div className="min-h-screen bg-gray-50">

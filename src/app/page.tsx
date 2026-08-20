@@ -49,7 +49,7 @@ export default async function Home() {
   const { banners, tours, transfers, testimonials, blogPosts, faqs } = await getPageData();
 
   return (
-    <main className="min-h-screen pt-32">
+    <main className="min-h-screen pt-28">
       <Header />
       
       <Hero banners={banners} />

@@ -145,7 +145,7 @@ export const bannerService = {
 };
 
 export const tourService = {
-  async getAll(onlyActive = true) {
+  async getAll(onlyActive = false) {
     const constraints: QueryConstraint[] = [orderBy("name", "asc")];
     if (onlyActive) constraints.push(where("active", "==", true));
     return firebaseService.getMany<Types.Tour>("tours", constraints);
@@ -177,7 +177,7 @@ export const tourService = {
 };
 
 export const transferService = {
-  async getAll(onlyActive = true) {
+  async getAll(onlyActive = false) {
     const constraints: QueryConstraint[] = [orderBy("name", "asc")];
     if (onlyActive) constraints.push(where("active", "==", true));
     return firebaseService.getMany<Types.Transfer>("transfers", constraints);
@@ -204,9 +204,7 @@ export const transferService = {
 
 export const testimonialService = {
   async getAll() {
-    return firebaseService.getMany<Types.Testimonial>("testimonials", [
-      where("active", "==", true),
-    ]);
+    return firebaseService.getMany<Types.Testimonial>("testimonials", []);
   },
 
   async create(
@@ -225,7 +223,7 @@ export const testimonialService = {
 };
 
 export const blogService = {
-  async getAll(onlyPublished = true) {
+  async getAll(onlyPublished = false) {
     const constraints: QueryConstraint[] = [orderBy("createdAt", "desc")];
     if (onlyPublished) constraints.push(where("published", "==", true));
     return firebaseService.getMany<Types.BlogPost>("blog", constraints);

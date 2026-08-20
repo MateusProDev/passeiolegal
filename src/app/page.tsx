@@ -23,10 +23,10 @@ async function getPageData() {
   try {
     const [banners, tours, transfers, testimonials, blogPosts, faqs] = await Promise.all([
       bannerService.getAll(),
-      tourService.getAll(true),
-      transferService.getAll(true),
+      tourService.getAll(false),
+      transferService.getAll(false),
       testimonialService.getAll(),
-      blogService.getAll(true),
+      blogService.getAll(false),
       faqService.getAll(),
     ]);
 

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import { transferService } from "@/lib/firestore";
-import { Car, Users, Check, X } from "lucide-react";
+import { Car, Users, Check } from "lucide-react";
 import Link from "next/link";
 
 interface PageProps {

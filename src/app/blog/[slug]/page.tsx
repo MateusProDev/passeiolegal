@@ -39,22 +39,28 @@ export default async function BlogPostPage({ params }: PageProps) {
   }
 
   const formatDate = (date: any) => {
-    if (!date) return '';
-    const d = date.toDate ? date.toDate() : new Date(date);
-    return d.toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
-    });
+    if (!date) return 'Data não disponível';
+    try {
+      const d = date.toDate ? date.toDate() : new Date(date);
+      return d.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      });
+    } catch (error) {
+      return 'Data não disponível';
+    }
   };
 
   const readTime = (content: string) => {
+    if (!content) return 0;
     const wordsPerMinute = 200;
     const words = content.split(/\s+/).length;
     return Math.ceil(words / wordsPerMinute);
   };
 
   const formatContent = (content: string) => {
+    if (!content) return '';
     // Convert line breaks to paragraphs
     return content.split('\n\n').map((paragraph, index) => {
       if (paragraph.trim()) {
@@ -65,7 +71,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   };
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen pt-32">
       <Header />
 
       <div className="min-h-screen bg-gray-50">
@@ -87,7 +93,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               </div>
               <div className="flex items-center gap-1">
                 <Clock size={18} />
-                <span>{readTime(post.content)} min de leitura</span>
+                <span>{readTime(post.content || '')} min de leitura</span>
               </div>
             </div>
           </div>

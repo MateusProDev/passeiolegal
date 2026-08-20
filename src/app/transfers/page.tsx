@@ -3,86 +3,80 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Clock, Users, Search, SlidersHorizontal } from 'lucide-react';
-import { tourService } from '@/lib/firestore';
+import { Car, Users, Search, SlidersHorizontal } from 'lucide-react';
+import { transferService } from '@/lib/firestore';
 
-interface Tour {
+interface Transfer {
   id: string;
   name: string;
   description: string;
-  mainImageUrl: string;
-  mainImageAlt: string;
+  imageUrl: string;
+  imageAlt: string;
   price: number;
-  duration: string;
-  featured: boolean;
+  vehicleType: string;
+  capacity: number;
   active: boolean;
 }
 
-export default function ToursPage() {
-  const [tours, setTours] = useState<Tour[]>([]);
-  const [filteredTours, setFilteredTours] = useState<Tour[]>([]);
+export default function TransfersPage() {
+  const [transfers, setTransfers] = useState<Transfer[]>([]);
+  const [filteredTransfers, setFilteredTransfers] = useState<Transfer[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState<'all' | 'low' | 'medium' | 'high'>('all');
-  const [durationFilter, setDurationFilter] = useState<'all' | 'short' | 'medium' | 'long'>('all');
-  const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
+  const [capacityFilter, setCapacityFilter] = useState<'all' | 'small' | 'medium' | 'large'>('all');
 
   useEffect(() => {
-    const fetchTours = async () => {
+    const fetchTransfers = async () => {
       try {
-        const allTours = await tourService.getAll(false);
-        setTours(allTours);
-        setFilteredTours(allTours);
+        const allTransfers = await transferService.getAll(false);
+        setTransfers(allTransfers);
+        setFilteredTransfers(allTransfers);
       } catch (error) {
-        console.error('Error fetching tours:', error);
+        console.error('Error fetching transfers:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTours();
+    fetchTransfers();
   }, []);
 
   useEffect(() => {
-    let filtered = tours;
+    let filtered = transfers;
 
     // Search filter
     if (searchTerm) {
-      filtered = filtered.filter(tour =>
-        tour.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        tour.description.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(transfer =>
+        transfer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        transfer.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     // Price range filter
     if (priceRange !== 'all') {
-      filtered = filtered.filter(tour => {
-        if (priceRange === 'low') return tour.price <= 200;
-        if (priceRange === 'medium') return tour.price > 200 && tour.price <= 500;
-        if (priceRange === 'high') return tour.price > 500;
+      filtered = filtered.filter(transfer => {
+        if (!transfer.price) return false;
+        if (priceRange === 'low') return transfer.price <= 200;
+        if (priceRange === 'medium') return transfer.price > 200 && transfer.price <= 500;
+        if (priceRange === 'high') return transfer.price > 500;
         return true;
       });
     }
 
-    // Duration filter
-    if (durationFilter !== 'all') {
-      filtered = filtered.filter(tour => {
-        const duration = tour.duration.toLowerCase();
-        if (durationFilter === 'short') return duration.includes('hora') && !duration.includes('dia');
-        if (durationFilter === 'medium') return duration.includes('dia') && !duration.includes('semana');
-        if (durationFilter === 'long') return duration.includes('semana') || duration.includes('mês');
+    // Capacity filter
+    if (capacityFilter !== 'all') {
+      filtered = filtered.filter(transfer => {
+        if (capacityFilter === 'small') return transfer.capacity <= 4;
+        if (capacityFilter === 'medium') return transfer.capacity > 4 && transfer.capacity <= 8;
+        if (capacityFilter === 'large') return transfer.capacity > 8;
         return true;
       });
     }
 
-    // Featured filter
-    if (showFeaturedOnly) {
-      filtered = filtered.filter(tour => tour.featured);
-    }
-
-    setFilteredTours(filtered);
-  }, [searchTerm, priceRange, durationFilter, showFeaturedOnly, tours]);
+    setFilteredTransfers(filtered);
+  }, [searchTerm, priceRange, capacityFilter, transfers]);
 
   if (loading) {
     return (
@@ -97,9 +91,9 @@ export default function ToursPage() {
       {/* Header */}
       <div className="bg-primary-600 text-white py-16">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Nossos Passeios</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Nossos Transfers</h1>
           <p className="text-xl max-w-2xl">
-            Descubra experiências únicas e memoráveis com nossos passeios cuidadosamente selecionados
+            Serviços de transfer confortáveis e seguros para todos os seus destinos
           </p>
         </div>
       </div>
@@ -113,7 +107,7 @@ export default function ToursPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
               <input
                 type="text"
-                placeholder="Buscar passeios..."
+                placeholder="Buscar transfers..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600"
@@ -132,7 +126,7 @@ export default function ToursPage() {
 
           {/* Filters */}
           {showFilters && (
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 pt-6 border-t">
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 pt-6 border-t">
               {/* Price Range */}
               <div>
                 <label className="block text-sm font-medium mb-2">Faixa de Preço</label>
@@ -148,53 +142,38 @@ export default function ToursPage() {
                 </select>
               </div>
 
-              {/* Duration */}
+              {/* Capacity */}
               <div>
-                <label className="block text-sm font-medium mb-2">Duração</label>
+                <label className="block text-sm font-medium mb-2">Capacidade</label>
                 <select
-                  value={durationFilter}
-                  onChange={(e) => setDurationFilter(e.target.value as any)}
+                  value={capacityFilter}
+                  onChange={(e) => setCapacityFilter(e.target.value as any)}
                   className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600"
                 >
                   <option value="all">Todas</option>
-                  <option value="short">Até 1 dia</option>
-                  <option value="medium">1-3 dias</option>
-                  <option value="long">Mais de 3 dias</option>
+                  <option value="small">Até 4 pessoas</option>
+                  <option value="medium">4-8 pessoas</option>
+                  <option value="large">Mais de 8 pessoas</option>
                 </select>
-              </div>
-
-              {/* Featured */}
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="featured"
-                  checked={showFeaturedOnly}
-                  onChange={(e) => setShowFeaturedOnly(e.target.checked)}
-                  className="w-4 h-4 text-primary-600 rounded focus:ring-primary-600"
-                />
-                <label htmlFor="featured" className="ml-2 text-sm font-medium">
-                  Apenas Destaques
-                </label>
               </div>
             </div>
           )}
 
           {/* Results Count */}
           <div className="mt-4 text-sm text-gray-600">
-            {filteredTours.length} {filteredTours.length === 1 ? 'passeio encontrado' : 'passeios encontrados'}
+            {filteredTransfers.length} {filteredTransfers.length === 1 ? 'transfer encontrado' : 'transfers encontrados'}
           </div>
         </div>
 
-        {/* Tours Grid */}
-        {filteredTours.length === 0 ? (
+        {/* Transfers Grid */}
+        {filteredTransfers.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600 text-lg">Nenhum passeio encontrado com os filtros selecionados.</p>
+            <p className="text-gray-600 text-lg">Nenhum transfer encontrado com os filtros selecionados.</p>
             <button
               onClick={() => {
                 setSearchTerm('');
                 setPriceRange('all');
-                setDurationFilter('all');
-                setShowFeaturedOnly(false);
+                setCapacityFilter('all');
               }}
               className="mt-4 text-primary-600 hover:text-primary-700 font-medium"
             >
@@ -203,16 +182,16 @@ export default function ToursPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredTours.map((tour) => (
+            {filteredTransfers.map((transfer) => (
               <article
-                key={tour.id}
+                key={transfer.id}
                 className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col"
               >
                 <div className="relative h-48 w-full">
-                  {tour.mainImageUrl ? (
+                  {transfer.imageUrl ? (
                     <Image
-                      src={tour.mainImageUrl}
-                      alt={tour.mainImageAlt || tour.name}
+                      src={transfer.imageUrl}
+                      alt={transfer.imageAlt || transfer.name}
                       fill
                       className="object-cover"
                       unoptimized
@@ -222,12 +201,7 @@ export default function ToursPage() {
                       <span className="text-gray-400">Sem imagem</span>
                     </div>
                   )}
-                  {tour.featured && (
-                    <span className="absolute top-4 right-4 bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                      Destaque
-                    </span>
-                  )}
-                  {!tour.active && (
+                  {!transfer.active && (
                     <span className="absolute top-4 left-4 bg-gray-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
                       Inativo
                     </span>
@@ -235,28 +209,32 @@ export default function ToursPage() {
                 </div>
 
                 <div className="p-6 flex flex-col flex-1">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{tour.name}</h3>
-                  <p className="text-gray-600 mb-4 line-clamp-2 flex-1">{tour.description}</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{transfer.name}</h3>
+                  <p className="text-gray-600 mb-4 line-clamp-2 flex-1">{transfer.description}</p>
 
                   <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
                     <div className="flex items-center space-x-1">
-                      <Clock size={16} />
-                      <span>{tour.duration}</span>
+                      <Car size={16} />
+                      <span>{transfer.vehicleType}</span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <Users size={16} />
-                      <span>Gr pequenos</span>
+                      <span>{transfer.capacity} pessoas</span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="text-2xl font-bold text-primary-600">
-                      R$ {tour.price.toFixed(2)}
-                    </div>
+                    {transfer.price && transfer.price > 0 ? (
+                      <div className="text-2xl font-bold text-primary-600">
+                        R$ {transfer.price.toFixed(2)}
+                      </div>
+                    ) : (
+                      <div></div>
+                    )}
                     <Link
-                      href={`/tours/${tour.id}`}
+                      href={`/transfers/${transfer.id}`}
                       className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"
-                      aria-label={`Ver detalhes de ${tour.name}`}
+                      aria-label={`Ver detalhes de ${transfer.name}`}
                     >
                       Ver Detalhes
                     </Link>

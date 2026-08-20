@@ -51,56 +51,101 @@ async function getPageData() {
   }
 }
 
-export default async function Home() {
-  const { banners, tours, transfers, testimonials, blogPosts, faqs } = await getPageData();
-
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <main className="min-h-screen">
-      <Header />
-      
-      <Hero banners={banners} />
-      
-      <section id="about" className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Sobre a Passeio Legal
-            </h2>
-            <p className="text-gray-600 max-w-3xl mx-auto text-lg">
-              Há mais de 10 anos no mercado de turismo, oferecendo experiências únicas e memoráveis para nossos clientes. Nossa missão é proporcionar momentos inesquecíveis com segurança, conforto e profissionalismo.
-            </p>
-          </div>
+    <html lang="pt-BR" suppressHydrationWarning>
+      <head>
+        <link rel="canonical" href={baseUrl} />
+        <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png" />
+        <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="msapplication-TileColor" content="#ffffff" />
+        <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
+        <meta name="theme-color" content="#ffffff" />
+      </head>
+      <body>
+        <LocalBusinessJsonLd
+          name="Passeio Legal"
+          url={baseUrl}
+          description="Descubra os melhores passeios e transfers com a Passeio Legal"
+          address={{
+            street: "Rua Principal, 123",
+            city: "São Paulo",
+            state: "SP",
+            zip: "01234-567",
+          }}
+          phone="+5511999999999"
+        />
+        <WebSiteJsonLd
+          name="Passeio Legal"
+          url={baseUrl}
+          description="Descubra os melhores passeios e transfers com a Passeio Legal"
+        />
+        <Providers>
+          <main className="min-h-screen pt-32">
+            <Header />
+            
+            <Hero banners={banners} />
+            
+            <section id="about" className="py-20 bg-white">
+              <div className="container mx-auto px-4">
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Sobre a Passeio Legal
+                  </h2>
+                  <p className="text-gray-600 max-w-3xl mx-auto text-lg">
+                    Há mais de 10 anos no mercado de turismo, oferecendo experiências únicas e memoráveis para nossos clientes. Nossa missão é proporcionar momentos inesquecíveis com segurança, conforto e profissionalismo.
+                  </p>
+                </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <AnimatedCounter target={10} suffix="+" />
-              <div className="text-gray-600">Anos de Experiência</div>
-            </div>
-            <div className="text-center">
-              <AnimatedCounter target={5000} suffix="+" />
-              <div className="text-gray-600">Clientes Satisfeitos</div>
-            </div>
-            <div className="text-center">
-              <AnimatedCounter target={100} suffix="+" />
-              <div className="text-gray-600">Destinos</div>
-            </div>
-          </div>
-        </div>
-      </section>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                  <div className="text-center">
+                    <AnimatedCounter target={10} suffix="+" />
+                    <div className="text-gray-600">Anos de Experiência</div>
+                  </div>
+                  <div className="text-center">
+                    <AnimatedCounter target={5000} suffix="+" />
+                    <div className="text-gray-600">Clientes Satisfeitos</div>
+                  </div>
+                  <div className="text-center">
+                    <AnimatedCounter target={100} suffix="+" />
+                    <div className="text-gray-600">Destinos</div>
+                  </div>
+                </div>
+              </div>
+            </section>
 
-      <Tours tours={tours} />
-      
-      <Transfers transfers={transfers} />
-      
-      <Testimonials testimonials={testimonials} />
-      
-      <Blog posts={blogPosts} />
-      
-      <FAQ faqs={faqs} />
-      
-      <Contact />
-      
-      <Footer />
-    </main>
+            <Tours tours={tours} />
+            
+            <Transfers transfers={transfers} />
+            
+            <Testimonials testimonials={testimonials} />
+            
+            <Blog posts={blogPosts} />
+            
+            <FAQ faqs={faqs} />
+            
+            <Contact />
+            
+            <Footer />
+          </main>
+        </Providers>
+      </body>
+    </html>
   );
 }

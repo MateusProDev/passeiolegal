@@ -88,8 +88,9 @@ export interface FAQ {
   id: string;
   question: string;
   answer: string;
-  order: number;
+  order?: number;
   active: boolean;
+  category?: string;
   createdAt: Date;
   updatedAt: Date;
 }

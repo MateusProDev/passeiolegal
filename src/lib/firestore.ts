@@ -251,9 +251,7 @@ export const blogService = {
 
 export const faqService = {
   async getAll() {
-    return firebaseService.getMany<Types.FAQ>("faq", [
-      orderBy("order", "asc"),
-    ]);
+    return firebaseService.getMany<Types.FAQ>("faq", []);
   },
 
   async create(data: Omit<Types.FAQ, "id" | "createdAt" | "updatedAt">) {

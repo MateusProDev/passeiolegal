@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/Button";
 import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
+import { useTours } from "@/hooks/useApi";
 
 export default function EditTour() {
   const router = useRouter();
   const params = useParams();
+  const { refetch } = useTours(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
@@ -89,10 +91,11 @@ export default function EditTour() {
 
       if (!response.ok) throw new Error("Failed to update tour");
 
-      toast.success("Tour atualizado com sucesso");
+      toast.success("Passeio atualizado com sucesso");
+      refetch();
       router.push("/admin/tours");
     } catch (error) {
-      toast.error("Erro ao atualizar tour");
+      toast.error("Erro ao atualizar passeio");
     } finally {
       setSaving(false);
     }

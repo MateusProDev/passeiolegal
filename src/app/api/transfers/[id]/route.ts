@@ -1,6 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { transferService } from "@/lib/firestore";
 
+// GET /api/transfers/[id] - Get single transfer
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const transfer = await transferService.getById(params.id);
+    if (!transfer) {
+      return NextResponse.json(
+        { error: "Transfer not found" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(transfer);
+  } catch (error) {
+    console.error("Error fetching transfer:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch transfer" },
+      { status: 500 }
+    );
+  }
+}
+
 // PUT /api/transfers/[id] - Update transfer
 export async function PUT(
   request: NextRequest,

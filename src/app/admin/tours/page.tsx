@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { useTours } from "@/hooks/useApi";
 
 export default function ToursAdmin() {
-  const { data: tours, loading, error } = useTours(false);
+  const { data: tours, loading, error, refetch } = useTours(false);
 
   if (loading) {
     return (
@@ -76,10 +76,10 @@ export default function ToursAdmin() {
                             method: "DELETE",
                           });
                           if (!response.ok) throw new Error("Delete failed");
-                          toast.success("Tour deleted successfully");
-                          window.location.reload();
+                          toast.success("Passeio deletado com sucesso");
+                          refetch();
                         } catch (error) {
-                          toast.error("Failed to delete tour");
+                          toast.error("Erro ao deletar passeio");
                         }
                       }}
                     >

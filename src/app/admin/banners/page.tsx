@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { useBanners } from "@/hooks/useApi";
 
 export default function BannersAdmin() {
-  const { data: banners, loading, error } = useBanners();
+  const { data: banners, loading, error, refetch } = useBanners();
 
   const handleDelete = async (id: string) => {
     try {
@@ -19,7 +19,7 @@ export default function BannersAdmin() {
 
       toast.success("Banner deleted successfully");
       // Refetch banners
-      window.location.reload();
+      refetch();
     } catch (error) {
       toast.error("Failed to delete banner");
     }

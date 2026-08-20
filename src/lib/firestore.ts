@@ -128,6 +128,10 @@ export const bannerService = {
     ]);
   },
 
+  async getById(id: string) {
+    return firebaseService.get<Types.Banner>("banners", id);
+  },
+
   async create(data: Omit<Types.Banner, "id" | "createdAt" | "updatedAt">) {
     return firebaseService.create<Types.Banner>("banners", data);
   },
@@ -178,6 +182,10 @@ export const transferService = {
     const constraints: QueryConstraint[] = [orderBy("name", "asc")];
     if (onlyActive) constraints.push(where("active", "==", true));
     return firebaseService.getMany<Types.Transfer>("transfers", constraints);
+  },
+
+  async getById(id: string) {
+    return firebaseService.get<Types.Transfer>("transfers", id);
   },
 
   async create(

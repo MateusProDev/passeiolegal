@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
+import { useTours } from "@/hooks/useApi";
 
 export default function NewTour() {
   const router = useRouter();
+  const { refetch } = useTours(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -36,10 +38,11 @@ export default function NewTour() {
 
       if (!response.ok) throw new Error("Failed to create tour");
 
-      toast.success("Tour created successfully");
+      toast.success("Passeio criado com sucesso");
+      refetch();
       router.push("/admin/tours");
     } catch (error) {
-      toast.error("Failed to create tour");
+      toast.error("Erro ao criar passeio");
     } finally {
       setLoading(false);
     }

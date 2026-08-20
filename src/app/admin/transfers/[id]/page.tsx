@@ -1,17 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
 import { useTransfers } from "@/hooks/useApi";
 
-export default function NewTransfer() {
+export default function EditTransfer() {
   const router = useRouter();
+  const params = useParams();
   const { refetch } = useTransfers(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -23,49 +25,88 @@ export default function NewTransfer() {
     imageAlt: "",
   });
 
+  useEffect(() => {
+    const fetchTransfer = async () => {
+      try {
+        const response = await fetch(`/api/transfers/${params.id}`);
+        if (!response.ok) {
+          if (response.status === 404) {
+            toast.error("Transfer não encontrado");
+            router.push("/admin/transfers");
+            return;
+          }
+          throw new Error("Failed to fetch transfer");
+        }
+        const transfer = await response.json();
+        setFormData({
+          name: transfer.name || "",
+          description: transfer.description || "",
+          price: transfer.price ? transfer.price.toString() : "",
+          capacity: transfer.capacity ? transfer.capacity.toString() : "",
+          vehicleType: transfer.vehicleType || "",
+          active: transfer.active ?? true,
+          imageUrl: transfer.imageUrl || "",
+          imageAlt: transfer.imageAlt || "",
+        });
+      } catch (error) {
+        toast.error("Erro ao carregar transfer");
+        router.push("/admin/transfers");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTransfer();
+  }, [params.id, router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setSaving(true);
 
     try {
-      const response = await fetch("/api/transfers", {
-        method: "POST",
+      const payload = {
+        ...formData,
+        price: parseFloat(formData.price),
+        capacity: parseInt(formData.capacity),
+      };
+
+      const response = await fetch(`/api/transfers/${params.id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          description: formData.description,
-          price: parseFloat(formData.price),
-          capacity: parseInt(formData.capacity),
-          vehicleType: formData.vehicleType,
-          imageUrl: formData.imageUrl,
-          imageAlt: formData.imageAlt,
-          active: formData.active,
-        }),
+        body: JSON.stringify(payload),
       });
 
-      if (!response.ok) throw new Error("Failed to create transfer");
+      if (!response.ok) throw new Error("Failed to update transfer");
 
-      toast.success("Transfer criado com sucesso");
+      toast.success("Transfer atualizado com sucesso");
       refetch();
       router.push("/admin/transfers");
     } catch (error) {
-      toast.error("Erro ao criar transfer");
+      toast.error("Erro ao atualizar transfer");
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Novo Transfer</h1>
-        <p className="text-muted-foreground">Criar um novo transfer</p>
+        <h1 className="text-3xl font-bold">Editar Transfer</h1>
+        <p className="text-muted-foreground">Editar informações do transfer</p>
       </div>
 
       <Card>
         <CardHeader>
           <CardTitle>Informações do Transfer</CardTitle>
-          <CardDescription>Preencha os detalhes do transfer</CardDescription>
+          <CardDescription>Atualize os detalhes do transfer</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -146,8 +187,8 @@ export default function NewTransfer() {
               <label className="text-sm font-medium">Ativo</label>
             </div>
             <div className="flex gap-2">
-              <Button type="submit" disabled={loading}>
-                {loading ? "Criando..." : "Criar Transfer"}
+              <Button type="submit" disabled={saving}>
+                {saving ? "Salvando..." : "Salvar Alterações"}
               </Button>
               <Button
                 type="button"

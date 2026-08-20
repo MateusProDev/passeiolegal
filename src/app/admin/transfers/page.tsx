@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { useTransfers } from "@/hooks/useApi";
 
 export default function TransfersAdmin() {
-  const { data: transfers, loading, error } = useTransfers(false);
+  const { data: transfers, loading, error, refetch } = useTransfers(false);
 
   if (loading) {
     return (
@@ -76,10 +76,10 @@ export default function TransfersAdmin() {
                             method: "DELETE",
                           });
                           if (!response.ok) throw new Error("Delete failed");
-                          toast.success("Transfer deleted successfully");
-                          window.location.reload();
+                          toast.success("Transfer deletado com sucesso");
+                          refetch();
                         } catch (error) {
-                          toast.error("Failed to delete transfer");
+                          toast.error("Erro ao deletar transfer");
                         }
                       }}
                     >

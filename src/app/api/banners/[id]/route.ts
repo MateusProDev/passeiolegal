@@ -4,10 +4,16 @@ import { bannerService } from "@/lib/firestore";
 // GET /api/banners/[id] - Get single banner
 export async function GET(
   _request: NextRequest,
-  { params: _params }: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const banner = await bannerService.getAll(); // In real app, get by ID
+    const banner = await bannerService.getById(params.id);
+    if (!banner) {
+      return NextResponse.json(
+        { error: "Banner not found" },
+        { status: 404 }
+      );
+    }
     return NextResponse.json(banner);
   } catch (error) {
     console.error("Error fetching banner:", error);

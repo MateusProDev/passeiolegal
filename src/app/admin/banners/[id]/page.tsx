@@ -1,17 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
 import { useBanners } from "@/hooks/useApi";
 
-export default function NewBanner() {
+export default function EditBanner() {
   const router = useRouter();
+  const params = useParams();
   const { refetch } = useBanners();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     subtitle: "",
@@ -22,40 +24,81 @@ export default function NewBanner() {
     active: true,
   });
 
+  useEffect(() => {
+    const fetchBanner = async () => {
+      try {
+        const response = await fetch(`/api/banners/${params.id}`);
+        if (!response.ok) {
+          if (response.status === 404) {
+            toast.error("Banner não encontrado");
+            router.push("/admin/banners");
+            return;
+          }
+          throw new Error("Failed to fetch banner");
+        }
+        const banner = await response.json();
+        setFormData({
+          title: banner.title || "",
+          subtitle: banner.subtitle || "",
+          imageUrl: banner.imageUrl || "",
+          imageAlt: banner.imageAlt || "",
+          buttonText: banner.buttonText || "",
+          buttonLink: banner.buttonLink || "",
+          active: banner.active ?? true,
+        });
+      } catch (error) {
+        toast.error("Erro ao carregar banner");
+        router.push("/admin/banners");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBanner();
+  }, [params.id, router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setSaving(true);
 
     try {
-      const response = await fetch("/api/banners", {
-        method: "POST",
+      const response = await fetch(`/api/banners/${params.id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) throw new Error("Failed to create banner");
+      if (!response.ok) throw new Error("Failed to update banner");
 
-      toast.success("Banner criado com sucesso");
+      toast.success("Banner atualizado com sucesso");
       refetch();
       router.push("/admin/banners");
     } catch (error) {
-      toast.error("Erro ao criar banner");
+      toast.error("Erro ao atualizar banner");
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Novo Banner</h1>
-        <p className="text-muted-foreground">Criar um novo banner</p>
+        <h1 className="text-3xl font-bold">Editar Banner</h1>
+        <p className="text-muted-foreground">Editar informações do banner</p>
       </div>
 
       <Card>
         <CardHeader>
           <CardTitle>Informações do Banner</CardTitle>
-          <CardDescription>Preencha os detalhes do banner</CardDescription>
+          <CardDescription>Atualize os detalhes do banner</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -124,8 +167,8 @@ export default function NewBanner() {
               <label className="text-sm font-medium">Ativo</label>
             </div>
             <div className="flex gap-2">
-              <Button type="submit" disabled={loading}>
-                {loading ? "Criando..." : "Criar Banner"}
+              <Button type="submit" disabled={saving}>
+                {saving ? "Salvando..." : "Salvar Alterações"}
               </Button>
               <Button
                 type="button"

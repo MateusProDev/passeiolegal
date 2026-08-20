@@ -226,7 +226,7 @@ export const testimonialService = {
 
 export const blogService = {
   async getAll(onlyPublished = true) {
-    const constraints: QueryConstraint[] = [orderBy("publishedAt", "desc")];
+    const constraints: QueryConstraint[] = [orderBy("createdAt", "desc")];
     if (onlyPublished) constraints.push(where("published", "==", true));
     return firebaseService.getMany<Types.BlogPost>("blog", constraints);
   },

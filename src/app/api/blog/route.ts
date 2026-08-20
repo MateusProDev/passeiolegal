@@ -4,8 +4,8 @@ import { blogService } from "@/lib/firestore";
 // GET /api/blog - Get all blog posts
 export async function GET(request: NextRequest) {
   try {
-    const onlyPublished =
-      request.nextUrl.searchParams.get("published") === "true";
+    const publishedParam = request.nextUrl.searchParams.get("published");
+    const onlyPublished = publishedParam === "true" || publishedParam === null;
     const posts = await blogService.getAll(onlyPublished);
     return NextResponse.json(posts);
   } catch (error) {

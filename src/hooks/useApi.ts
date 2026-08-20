@@ -114,6 +114,11 @@ export function useTransfers(onlyActive = true) {
   return useQuery<any[]>(`/api/transfers?active=${onlyActive}`);
 }
 
+// Hook for fetching blogs
+export function useBlogs(onlyPublished = true) {
+  return useQuery<any[]>(`/api/blog?published=${onlyPublished}`);
+}
+
 // Hook for creating/updating items
 export function useCreateItem<T>(entityType: string) {
   const [loading, setLoading] = useState(false);

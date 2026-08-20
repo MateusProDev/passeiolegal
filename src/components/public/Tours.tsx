@@ -1,6 +1,9 @@
+"use client";
+
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Clock, Users } from 'lucide-react';
+import { Clock, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Tour {
   id: string;
@@ -18,8 +21,56 @@ interface ToursProps {
 }
 
 export default function Tours({ tours }: ToursProps) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(1);
+
   const featuredTours = tours.filter((tour) => tour.featured);
   const displayTours = featuredTours.length > 0 ? featuredTours : tours.slice(0, 6);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setItemsPerPage(3);
+      } else if (window.innerWidth >= 768) {
+        setItemsPerPage(2);
+      } else {
+        setItemsPerPage(1);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (displayTours.length <= itemsPerPage) return;
+
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => {
+        const maxIndex = Math.max(0, displayTours.length - itemsPerPage);
+        return prev >= maxIndex ? 0 : prev + 1;
+      });
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, [displayTours.length, itemsPerPage]);
+
+  const goToSlide = (index: number) => {
+    const maxIndex = Math.max(0, displayTours.length - itemsPerPage);
+    setCurrentIndex(Math.min(index, maxIndex));
+  };
+
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => Math.max(0, prev - 1));
+  };
+
+  const goToNext = () => {
+    const maxIndex = Math.max(0, displayTours.length - itemsPerPage);
+    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
+  };
+
+  const visibleTours = displayTours.slice(currentIndex, currentIndex + itemsPerPage);
 
   return (
     <section id="tours" className="py-20 bg-gray-50">
@@ -33,75 +84,112 @@ export default function Tours({ tours }: ToursProps) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayTours.map((tour) => (
-            <article
-              key={tour.id}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col"
-            >
-              <div className="relative h-48 w-full">
-                {tour.mainImageUrl ? (
-                  <Image
-                    src={tour.mainImageUrl}
-                    alt={tour.mainImageAlt || tour.name}
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-400">Sem imagem</span>
-                  </div>
-                )}
-                {tour.featured && (
-                  <span className="absolute top-4 right-4 bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    Destaque
-                  </span>
-                )}
-              </div>
+        <div className="relative">
+          {/* Navigation Arrows */}
+          {displayTours.length > itemsPerPage && (
+            <>
+              <button
+                onClick={goToPrevious}
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 bg-white hover:bg-gray-100 shadow-lg p-3 rounded-full transition-colors z-10"
+                aria-label="Passeio anterior"
+              >
+                <ChevronLeft size={24} className="text-gray-700" />
+              </button>
+              <button
+                onClick={goToNext}
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 bg-white hover:bg-gray-100 shadow-lg p-3 rounded-full transition-colors z-10"
+                aria-label="Próximo passeio"
+              >
+                <ChevronRight size={24} className="text-gray-700" />
+              </button>
+            </>
+          )}
 
-              <div className="p-6 flex flex-col flex-1">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{tour.name}</h3>
-                <p className="text-gray-600 mb-4 line-clamp-2 flex-1">{tour.description}</p>
-
-                <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
-                  <div className="flex items-center space-x-1">
-                    <Clock size={16} />
-                    <span>{tour.duration}</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Users size={16} />
-                    <span>Gr pequenos</span>
-                  </div>
+          {/* Carousel */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {visibleTours.map((tour) => (
+              <article
+                key={tour.id}
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col"
+              >
+                <div className="relative h-48 w-full">
+                  {tour.mainImageUrl ? (
+                    <Image
+                      src={tour.mainImageUrl}
+                      alt={tour.mainImageAlt || tour.name}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                      <span className="text-gray-400">Sem imagem</span>
+                    </div>
+                  )}
+                  {tour.featured && (
+                    <span className="absolute top-4 right-4 bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                      Destaque
+                    </span>
+                  )}
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="text-2xl font-bold text-primary-600">
-                    R$ {tour.price.toFixed(2)}
+                <div className="p-6 flex flex-col flex-1">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{tour.name}</h3>
+                  <p className="text-gray-600 mb-4 line-clamp-2 flex-1">{tour.description}</p>
+
+                  <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
+                    <div className="flex items-center space-x-1">
+                      <Clock size={16} />
+                      <span>{tour.duration}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Users size={16} />
+                      <span>Gr pequenos</span>
+                    </div>
                   </div>
-                  <Link
-                    href={`/tours/${tour.id}`}
-                    className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"
-                    aria-label={`Ver detalhes de ${tour.name}`}
-                  >
-                    Ver Detalhes
-                  </Link>
+
+                  <div className="flex items-center justify-between">
+                    <div className="text-2xl font-bold text-primary-600">
+                      R$ {tour.price.toFixed(2)}
+                    </div>
+                    <Link
+                      href={`/tours/${tour.id}`}
+                      className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"
+                      aria-label={`Ver detalhes de ${tour.name}`}
+                    >
+                      Ver Detalhes
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            ))}
+          </div>
+
+          {/* Dots */}
+          {displayTours.length > itemsPerPage && (
+            <div className="flex justify-center space-x-2 mt-8">
+              {Array.from({ length: Math.ceil(displayTours.length / itemsPerPage) }).map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index * itemsPerPage)}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    Math.floor(currentIndex / itemsPerPage) === index ? 'bg-primary-600' : 'bg-gray-300'
+                  }`}
+                  aria-label={`Ir para grupo ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
-        {tours.length > 6 && (
-          <div className="text-center mt-12">
-            <Link
-              href="/tours"
-              className="inline-block bg-secondary-600 hover:bg-secondary-700 text-white px-8 py-3 rounded-lg transition-colors font-semibold"
-            >
-              Ver Todos os Passeios
-            </Link>
-          </div>
-        )}
+        <div className="text-center mt-12">
+          <Link
+            href="/tours"
+            className="inline-block bg-secondary-600 hover:bg-secondary-700 text-white px-8 py-3 rounded-lg transition-colors font-semibold"
+          >
+            Ver Todos os Passeios
+          </Link>
+        </div>
       </div>
     </section>
   );

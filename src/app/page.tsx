@@ -8,6 +8,7 @@ import Testimonials from "@/components/public/Testimonials";
 import Blog from "@/components/public/Blog";
 import FAQ from "@/components/public/FAQ";
 import Contact from "@/components/public/Contact";
+import AnimatedCounter from "@/components/public/AnimatedCounter";
 import { bannerService, tourService, transferService, testimonialService, blogService, faqService } from "@/lib/firestore";
 
 export const metadata: Metadata = {
@@ -72,15 +73,15 @@ export default async function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary-600 mb-2">10+</div>
+              <AnimatedCounter target={10} suffix="+" />
               <div className="text-gray-600">Anos de Experiência</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary-600 mb-2">5000+</div>
+              <AnimatedCounter target={5000} suffix="+" />
               <div className="text-gray-600">Clientes Satisfeitos</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary-600 mb-2">100+</div>
+              <AnimatedCounter target={100} suffix="+" />
               <div className="text-gray-600">Destinos</div>
             </div>
           </div>

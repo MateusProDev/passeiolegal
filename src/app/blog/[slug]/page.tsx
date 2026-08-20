@@ -5,19 +5,6 @@ import { Calendar, Clock, ArrowLeft, Share2 } from 'lucide-react';
 import { blogService } from '@/lib/firestore';
 import { notFound } from 'next/navigation';
 
-interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  summary: string;
-  content: string;
-  imageUrl: string;
-  imageAlt: string;
-  published: boolean;
-  createdAt: any;
-  updatedAt: any;
-}
-
 interface PageProps {
   params: {
     slug: string;

@@ -108,9 +108,11 @@ export default function Tours({ tours }: ToursProps) {
           {/* Carousel */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {visibleTours.map((tour) => (
-              <article
+              <Link
                 key={tour.id}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col"
+                href={`/tours/${tour.id}`}
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col group"
+                aria-label={`Ver detalhes de ${tour.name}`}
               >
                 <div className="relative h-48 w-full">
                   {tour.mainImageUrl ? (
@@ -118,7 +120,7 @@ export default function Tours({ tours }: ToursProps) {
                       src={tour.mainImageUrl}
                       alt={tour.mainImageAlt || tour.name}
                       fill
-                      className="object-cover"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                       unoptimized
                     />
                   ) : (
@@ -134,7 +136,7 @@ export default function Tours({ tours }: ToursProps) {
                 </div>
 
                 <div className="p-6 flex flex-col flex-1">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{tour.name}</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">{tour.name}</h3>
                   <p className="text-gray-600 mb-4 line-clamp-2 flex-1">{tour.description}</p>
 
                   <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
@@ -152,16 +154,12 @@ export default function Tours({ tours }: ToursProps) {
                     <div className="text-2xl font-bold text-primary-600">
                       R$ {tour.price.toFixed(2)}
                     </div>
-                    <Link
-                      href={`/tours/${tour.id}`}
-                      className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"
-                      aria-label={`Ver detalhes de ${tour.name}`}
-                    >
+                    <span className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium">
                       Ver Detalhes
-                    </Link>
+                    </span>
                   </div>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
 

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface Testimonial {
   id: string;
@@ -19,6 +19,7 @@ interface TestimonialsProps {
 
 export default function Testimonials({ testimonials }: TestimonialsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   const goToPrevious = () => {
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
@@ -26,6 +27,16 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
 
   const goToNext = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const toggleExpand = (index: number) => {
+    setExpandedIndex(expandedIndex === index ? null : index);
+  };
+
+  const truncateText = (text: string, maxLines: number) => {
+    const lines = text.split('\n');
+    if (lines.length <= maxLines) return text;
+    return lines.slice(0, maxLines).join('\n') + '...';
   };
 
   if (testimonials.length === 0) {
@@ -44,6 +55,9 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
   }
 
   const currentTestimonial = testimonials[currentIndex];
+  const isExpanded = expandedIndex === currentIndex;
+  const textLines = currentTestimonial.text.split('\n');
+  const shouldTruncate = textLines.length > 5;
 
   return (
     <section className="py-20 bg-gray-50">
@@ -70,9 +84,25 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
             </div>
 
             <blockquote className="text-center mb-8">
-              <p className="text-xl text-gray-700 italic leading-relaxed">
-                &ldquo;{currentTestimonial.text}&rdquo;
+              <p className="text-xl text-gray-700 italic leading-relaxed whitespace-pre-line">
+                &ldquo;{isExpanded ? currentTestimonial.text : truncateText(currentTestimonial.text, 5)}&rdquo;
               </p>
+              {shouldTruncate && (
+                <button
+                  onClick={() => toggleExpand(currentIndex)}
+                  className="mt-4 text-primary-600 hover:text-primary-700 font-medium flex items-center justify-center gap-1 mx-auto"
+                >
+                  {isExpanded ? (
+                    <>
+                      Ver menos <ChevronUp size={16} />
+                    </>
+                  ) : (
+                    <>
+                      Ver mais <ChevronDown size={16} />
+                    </>
+                  )}
+                </button>
+              )}
             </blockquote>
 
             <div className="flex items-center justify-center space-x-4">

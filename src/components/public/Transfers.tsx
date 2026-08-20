@@ -109,9 +109,11 @@ export default function Transfers({ transfers }: TransfersProps) {
           {/* Carousel */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {visibleTransfers.map((transfer) => (
-              <article
+              <Link
                 key={transfer.id}
-                className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow flex flex-col"
+                href={`/transfers/${transfer.id}`}
+                className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow flex flex-col group"
+                aria-label={`Ver detalhes de ${transfer.name}`}
               >
                 <div className="relative h-40 mb-4 w-full">
                   {transfer.imageUrl ? (
@@ -119,7 +121,7 @@ export default function Transfers({ transfers }: TransfersProps) {
                       src={transfer.imageUrl}
                       alt={transfer.imageAlt || transfer.name}
                       fill
-                      className="object-cover rounded-lg"
+                      className="object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
                       unoptimized
                     />
                   ) : (
@@ -129,7 +131,7 @@ export default function Transfers({ transfers }: TransfersProps) {
                   )}
                 </div>
 
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{transfer.name}</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">{transfer.name}</h3>
                 <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-1">{transfer.description}</p>
 
                 <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
@@ -143,10 +145,15 @@ export default function Transfers({ transfers }: TransfersProps) {
                   </div>
                 </div>
 
-                <div className="text-xl font-bold text-primary-600">
-                  R$ {transfer.price.toFixed(2)}
+                <div className="flex items-center justify-between">
+                  <div className="text-xl font-bold text-primary-600">
+                    R$ {transfer.price.toFixed(2)}
+                  </div>
+                  <span className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium text-sm">
+                    Ver Detalhes
+                  </span>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
 

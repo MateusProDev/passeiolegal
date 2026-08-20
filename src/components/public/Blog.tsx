@@ -44,9 +44,11 @@ export default function Blog({ posts }: BlogProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {displayPosts.map((post) => (
-            <article
+            <Link
               key={post.id}
-              className="bg-gray-50 rounded-xl overflow-hidden hover:shadow-lg transition-shadow flex flex-col"
+              href={`/blog/${post.slug}`}
+              className="bg-gray-50 rounded-xl overflow-hidden hover:shadow-lg transition-shadow flex flex-col group"
+              aria-label={`Ler artigo: ${post.title}`}
             >
               <div className="relative h-48 w-full">
                 {post.imageUrl ? (
@@ -54,7 +56,7 @@ export default function Blog({ posts }: BlogProps) {
                     src={post.imageUrl}
                     alt={post.imageAlt || post.title}
                     fill
-                    className="object-cover"
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
                     unoptimized
                   />
                 ) : (
@@ -70,20 +72,16 @@ export default function Blog({ posts }: BlogProps) {
                   <span>{formatDate(post.createdAt)}</span>
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
                   {post.title}
                 </h3>
                 <p className="text-gray-600 mb-4 line-clamp-3 flex-1">{post.summary}</p>
 
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="text-primary-600 hover:text-primary-700 font-medium inline-flex items-center"
-                  aria-label={`Ler artigo: ${post.title}`}
-                >
+                <span className="text-primary-600 hover:text-primary-700 font-medium inline-flex items-center">
                   Ler mais
-                </Link>
+                </span>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
 

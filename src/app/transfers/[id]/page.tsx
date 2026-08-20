@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import { transferService } from "@/lib/firestore";
-import { Car, Users, Check } from "lucide-react";
+import { Car, Users } from "lucide-react";
 import Link from "next/link";
 
 interface PageProps {
@@ -89,20 +89,6 @@ export default async function TransferDetailPage({ params }: PageProps) {
               </div>
 
               <p className="text-gray-600 mb-8">{transfer.description}</p>
-
-              {transfer.features && transfer.features.length > 0 && (
-                <div className="mb-8">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Características</h2>
-                  <ul className="space-y-2">
-                    {transfer.features.map((feature, index) => (
-                      <li key={index} className="flex items-center gap-2 text-gray-600">
-                        <Check size={20} className="text-green-600" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
 
               <div className="flex gap-4">
                 <Link

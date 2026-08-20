@@ -41,7 +41,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center" aria-label="Passeio Legal - Página inicial">
             {settings?.headerLogo ? (
-              <div className="relative w-10 h-10">
+              <div className="relative w-20 h-20">
                 <Image
                   src={settings.headerLogo}
                   alt={settings.headerLogoAlt || 'Passeio Legal'}
@@ -51,8 +51,8 @@ export default function Header() {
                 />
               </div>
             ) : (
-              <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">PL</span>
+              <div className="w-20 h-20 bg-primary-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-2xl">PL</span>
               </div>
             )}
           </Link>

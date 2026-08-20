@@ -252,7 +252,6 @@ export const blogService = {
 export const faqService = {
   async getAll() {
     return firebaseService.getMany<Types.FAQ>("faq", [
-      where("active", "==", true),
       orderBy("order", "asc"),
     ]);
   },

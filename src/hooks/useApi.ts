@@ -119,6 +119,16 @@ export function useBlogs(onlyPublished = true) {
   return useQuery<any[]>(`/api/blog?published=${onlyPublished}`);
 }
 
+// Hook for fetching FAQs
+export function useFAQs() {
+  return useQuery<any[]>("/api/faq");
+}
+
+// Hook for fetching testimonials
+export function useTestimonials() {
+  return useQuery<any[]>("/api/testimonials");
+}
+
 // Hook for creating/updating items
 export function useCreateItem<T>(entityType: string) {
   const [loading, setLoading] = useState(false);

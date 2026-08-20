@@ -123,7 +123,6 @@ export const firebaseService = {
 export const bannerService = {
   async getAll() {
     return firebaseService.getMany<Types.Banner>("banners", [
-      orderBy("order", "asc"),
       where("active", "==", true),
     ]);
   },

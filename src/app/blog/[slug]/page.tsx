@@ -76,8 +76,14 @@ export default async function BlogPostPage({ params }: PageProps) {
       { name: post.title || 'Post', url: `${baseUrl}/blog/${params.slug}` },
     ];
 
-    const publishedDate = post.createdAt ? (typeof post.createdAt.toDate === 'function' ? post.createdAt.toDate().toISOString() : new Date(post.createdAt).toISOString()) : new Date().toISOString();
-    const modifiedDate = post.updatedAt ? (typeof post.updatedAt.toDate === 'function' ? post.updatedAt.toDate().toISOString() : new Date(post.updatedAt).toISOString()) : publishedDate;
+    const publishedDate = post.createdAt ? 
+      (post.createdAt instanceof Date ? post.createdAt.toISOString() : 
+      typeof post.createdAt === 'object' && 'toDate' in post.createdAt ? (post.createdAt as any).toDate().toISOString() : 
+      new Date(post.createdAt).toISOString()) : new Date().toISOString();
+    const modifiedDate = post.updatedAt ? 
+      (post.updatedAt instanceof Date ? post.updatedAt.toISOString() : 
+      typeof post.updatedAt === 'object' && 'toDate' in post.updatedAt ? (post.updatedAt as any).toDate().toISOString() : 
+      new Date(post.updatedAt).toISOString()) : publishedDate;
 
     return (
       <main className="min-h-screen pt-24">

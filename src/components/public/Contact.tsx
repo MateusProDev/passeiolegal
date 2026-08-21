@@ -63,72 +63,58 @@ export default function Contact() {
         </div>
 
         <div className="max-w-6xl mx-auto space-y-12">
-          {/* Map */}
-          <div className="w-full h-80 rounded-lg overflow-hidden shadow-lg">
-            <iframe
-              src="https://www.bing.com/maps/embed?h=400&w=600&cp=-3.847030~-38.391151&lvl=15&typ=d&sty=r&src=SHELL&FORM=MBEDV8"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Passeio Legal - Localização"
-            />
+          {/* Contact Info */}
+          <div className="space-y-8">
+            {contactInfo.phone && (
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Phone className="text-primary-600" size={24} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-1">Telefone</h3>
+                  <p className="text-gray-600">{contactInfo.phone}</p>
+                </div>
+              </div>
+            )}
+
+            {contactInfo.email && (
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Mail className="text-primary-600" size={24} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-1">E-mail</h3>
+                  <p className="text-gray-600">{contactInfo.email}</p>
+                </div>
+              </div>
+            )}
+
+            {contactInfo.whatsapp && (
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <MessageCircle className="text-primary-600" size={24} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-1">WhatsApp</h3>
+                  <p className="text-gray-600">{contactInfo.whatsapp}</p>
+                </div>
+              </div>
+            )}
+
+            {contactInfo.address && (
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <MapPin className="text-primary-600" size={24} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-1">Endereço</h3>
+                  <p className="text-gray-600">{contactInfo.address}</p>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Info */}
-            <div className="space-y-8">
-              {contactInfo.phone && (
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Phone className="text-primary-600" size={24} />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Telefone</h3>
-                    <p className="text-gray-600">{contactInfo.phone}</p>
-                  </div>
-                </div>
-              )}
-
-              {contactInfo.email && (
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Mail className="text-primary-600" size={24} />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">E-mail</h3>
-                    <p className="text-gray-600">{contactInfo.email}</p>
-                  </div>
-                </div>
-              )}
-
-              {contactInfo.whatsapp && (
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <MessageCircle className="text-primary-600" size={24} />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">WhatsApp</h3>
-                    <p className="text-gray-600">{contactInfo.whatsapp}</p>
-                  </div>
-                </div>
-              )}
-
-              {contactInfo.address && (
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <MapPin className="text-primary-600" size={24} />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Endereço</h3>
-                    <p className="text-gray-600">{contactInfo.address}</p>
-                  </div>
-                </div>
-              )}
-            </div>
-
             {/* Contact Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
@@ -203,6 +189,20 @@ export default function Contact() {
                 <span>{isSubmitting ? 'Enviando...' : 'Enviar Mensagem'}</span>
               </button>
             </form>
+
+            {/* Map */}
+            <div className="w-full h-80 rounded-lg overflow-hidden shadow-lg">
+              <iframe
+                src="https://www.bing.com/maps/embed?h=400&w=600&cp=-3.847030~-38.391151&lvl=15&typ=d&sty=r&src=SHELL&FORM=MBEDV8"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Passeio Legal - Localização"
+              />
+            </div>
           </div>
         </div>
       </div>

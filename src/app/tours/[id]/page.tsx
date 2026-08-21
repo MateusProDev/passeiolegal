@@ -46,7 +46,7 @@ export default async function TourDetailPage({ params }: PageProps) {
   }
 
   return (
-    <main className="min-h-screen pt-28">
+    <main className="min-h-screen pt-24">
       <Header />
 
       <div className="bg-white">

@@ -64,7 +64,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     // Convert line breaks to paragraphs
     return content.split('\n\n').map((paragraph, index) => {
       if (paragraph.trim()) {
-        return `<p key=${index} class="mb-4 text-gray-700 leading-relaxed">${paragraph}</p>`;
+        return `<p class="mb-4 text-gray-700 leading-relaxed">${paragraph}</p>`;
       }
       return null;
     }).join('');
@@ -85,7 +85,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               <ArrowLeft size={20} />
               Voltar ao Blog
             </Link>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{post.title}</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">{post.title || 'Título não disponível'}</h1>
             <div className="flex items-center gap-4 text-white/80">
               <div className="flex items-center gap-1">
                 <Calendar size={18} />
@@ -106,7 +106,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               <div className="relative h-96 w-full mb-8 rounded-xl overflow-hidden">
                 <Image
                   src={post.imageUrl}
-                  alt={post.imageAlt || post.title}
+                  alt={post.imageAlt || post.title || 'Imagem do post'}
                   fill
                   className="object-cover"
                   unoptimized
@@ -118,7 +118,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             <article className="bg-white rounded-xl shadow-lg p-8 md:p-12">
               <div 
                 className="prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: formatContent(post.content) }}
+                dangerouslySetInnerHTML={{ __html: formatContent(post.content || '') }}
               />
 
               {/* Share */}
@@ -141,7 +141,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   <button
                     onClick={() => {
                       if (typeof window !== 'undefined') {
-                        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(post.title)}`, '_blank');
+                        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(post.title || '')}`, '_blank');
                       }
                     }}
                     className="px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors"
@@ -151,7 +151,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   <button
                     onClick={() => {
                       if (typeof window !== 'undefined') {
-                        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(`${post.title} - ${window.location.href}`)}`, '_blank');
+                        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(`${post.title || ''} - ${window.location.href}`)}`, '_blank');
                       }
                     }}
                     className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"

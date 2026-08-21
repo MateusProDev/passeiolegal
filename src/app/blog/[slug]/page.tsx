@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
 import ShareButtons from '@/components/public/ShareButtons';
+import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 
 interface PageProps {
   params: {
@@ -67,10 +68,34 @@ export default async function BlogPostPage({ params }: PageProps) {
     };
 
     const content = post.content || '';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+
+    const breadcrumbItems = [
+      { name: "Início", url: baseUrl },
+      { name: "Blog", url: `${baseUrl}/blog` },
+      { name: post.title || 'Post', url: `${baseUrl}/blog/${params.slug}` },
+    ];
+
+    const publishedDate = post.createdAt ? (post.createdAt.toDate ? post.createdAt.toDate().toISOString() : new Date(post.createdAt).toISOString()) : new Date().toISOString();
+    const modifiedDate = post.updatedAt ? (post.updatedAt.toDate ? post.updatedAt.toDate().toISOString() : new Date(post.updatedAt).toISOString()) : publishedDate;
 
     return (
       <main className="min-h-screen pt-24">
         <Header />
+        
+        <BreadcrumbJsonLd items={breadcrumbItems} />
+        
+        {post.imageUrl && (
+          <ArticleJsonLd
+            title={post.title || 'Post'}
+            description={post.summary || ''}
+            image={post.imageUrl}
+            url={`${baseUrl}/blog/${params.slug}`}
+            publishedTime={publishedDate}
+            modifiedTime={modifiedDate}
+            author="Passeio Legal"
+          />
+        )}
 
         <div className="min-h-screen bg-gray-50">
           {/* Header */}

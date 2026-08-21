@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Clock, ArrowRight } from 'lucide-react';
 import { blogService } from '@/lib/firestore';
+import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 
 interface BlogPost {
   id: string;
@@ -22,6 +23,12 @@ interface BlogPost {
 export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+  const breadcrumbItems = [
+    { name: "Início", url: baseUrl },
+    { name: "Blog", url: `${baseUrl}/blog` },
+  ];
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -65,6 +72,8 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-24">
+      <BreadcrumbJsonLd items={breadcrumbItems} />
+      
       {/* Header */}
       <div className="bg-primary-600 text-white py-16">
         <div className="container mx-auto px-4">

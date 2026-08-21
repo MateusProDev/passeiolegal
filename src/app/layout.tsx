@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Providers } from "./providers";
 import "./globals.css";
 import { LocalBusinessJsonLd, WebSiteJsonLd } from "@/components/seo/JsonLd";
+import Script from "next/script";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
     template: "%s | Passeio Legal",
   },
   description: "Descubra os melhores passeios e transfers com a Passeio Legal. Experiências únicas de turismo com conforto e segurança.",
-  keywords: ["tours", "transfers", "travel", "passeios", "turismo", "viagens", "excursões"],
+  keywords: ["tours", "transfers", "travel", "passeios", "turismo", "viagens", "excursões", "passeio legal", "turismo brasil"],
   authors: [{ name: "Passeio Legal" }],
   creator: "Passeio Legal",
   publisher: "Passeio Legal",
@@ -83,17 +84,53 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body>
+        {/* Google Analytics 4 */}
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+              `}
+            </Script>
+          </>
+        )}
+
+        {/* Meta Pixel (Facebook) */}
+        {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
+          <Script id="meta-pixel" strategy="afterInteractive">
+            {`
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '${process.env.NEXT_PUBLIC_META_PIXEL_ID}');
+              fbq('track', 'PageView');
+            `}
+          </Script>
+        )}
+
         <LocalBusinessJsonLd
           name="Passeio Legal"
           url={baseUrl}
           description="Descubra os melhores passeios e transfers com a Passeio Legal"
           address={{
-            street: "Rua Principal, 123",
-            city: "São Paulo",
-            state: "SP",
-            zip: "01234-567",
+            street: process.env.NEXT_PUBLIC_BUSINESS_STREET || "Rua Principal, 123",
+            city: process.env.NEXT_PUBLIC_BUSINESS_CITY || "São Paulo",
+            state: process.env.NEXT_PUBLIC_BUSINESS_STATE || "SP",
+            zip: process.env.NEXT_PUBLIC_BUSINESS_ZIP || "01234-567",
           }}
-          phone="+5511999999999"
+          phone={process.env.NEXT_PUBLIC_BUSINESS_PHONE || "+5511999999999"}
         />
         <WebSiteJsonLd
           name="Passeio Legal"

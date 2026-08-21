@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Clock, Users, Search, SlidersHorizontal } from 'lucide-react';
 import { tourService } from '@/lib/firestore';
+import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 
 interface Tour {
   id: string;
@@ -27,6 +28,12 @@ export default function ToursPage() {
   const [priceRange, setPriceRange] = useState<'all' | 'low' | 'medium' | 'high'>('all');
   const [durationFilter, setDurationFilter] = useState<'all' | 'short' | 'medium' | 'long'>('all');
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
+  
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+  const breadcrumbItems = [
+    { name: "Início", url: baseUrl },
+    { name: "Passeios", url: `${baseUrl}/tours` },
+  ];
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -94,6 +101,8 @@ export default function ToursPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-24">
+      <BreadcrumbJsonLd items={breadcrumbItems} />
+      
       {/* Header */}
       <div className="bg-primary-600 text-white py-16">
         <div className="container mx-auto px-4">

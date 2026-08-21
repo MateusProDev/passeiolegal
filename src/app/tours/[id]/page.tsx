@@ -5,6 +5,7 @@ import Footer from "@/components/public/Footer";
 import { tourService } from "@/lib/firestore";
 import { Clock, Check, X, Star } from "lucide-react";
 import Link from "next/link";
+import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
 interface PageProps {
   params: { id: string };
@@ -45,14 +46,33 @@ export default async function TourDetailPage({ params }: PageProps) {
     notFound();
   }
 
+  const breadcrumbItems = [
+    { name: "Início", url: baseUrl },
+    { name: "Passeios", url: `${baseUrl}/tours` },
+    { name: tour.name, url: `${baseUrl}/tours/${params.id}` },
+  ];
+
   return (
     <main className="min-h-screen pt-24">
       <Header />
+      
+      <BreadcrumbJsonLd items={breadcrumbItems} />
+      
+      {tour.price && tour.mainImageUrl && (
+        <ProductJsonLd
+          name={tour.name}
+          description={tour.description}
+          image={tour.mainImageUrl}
+          price={tour.price}
+          currency="BRL"
+          url={`${baseUrl}/tours/${params.id}`}
+        />
+      )}
 
       <div className="bg-white">
         <div className="container mx-auto px-4 py-8">
           <Link
-            href="/#tours"
+            href="/tours"
             className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-6"
           >
             ← Voltar para passeios

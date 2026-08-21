@@ -33,11 +33,11 @@ export default function Footer() {
 
   const quickLinks = [
     { label: 'Início', href: '/' },
-    { label: 'Passeios', href: '#tours' },
-    { label: 'Transfers', href: '#transfers' },
-    { label: 'Blog', href: '#blog' },
-    { label: 'Sobre', href: '#about' },
-    { label: 'Contato', href: '#contact' },
+    { label: 'Passeios', href: '/tours' },
+    { label: 'Transfers', href: '/transfers' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'Sobre', href: '/about' },
+    { label: 'Contato', href: '/contact' },
   ];
 
   return (

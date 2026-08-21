@@ -30,8 +30,8 @@ export default function Header() {
     { label: 'Passeios', href: '/tours' },
     { label: 'Transfers', href: '/transfers' },
     { label: 'Blog', href: '/blog' },
-    { label: 'Sobre', href: '#about' },
-    { label: 'Contato', href: '#contact' },
+    { label: 'Sobre', href: '/about' },
+    { label: 'Contato', href: '/contact' },
   ];
 
   return (

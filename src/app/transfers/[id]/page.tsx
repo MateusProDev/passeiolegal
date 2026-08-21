@@ -5,6 +5,7 @@ import Footer from "@/components/public/Footer";
 import { transferService } from "@/lib/firestore";
 import { Car, Users } from "lucide-react";
 import Link from "next/link";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
 interface PageProps {
   params: { id: string };
@@ -45,14 +46,23 @@ export default async function TransferDetailPage({ params }: PageProps) {
     notFound();
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+  const breadcrumbItems = [
+    { name: "Início", url: baseUrl },
+    { name: "Transfers", url: `${baseUrl}/transfers` },
+    { name: transfer.name, url: `${baseUrl}/transfers/${params.id}` },
+  ];
+
   return (
     <main className="min-h-screen pt-24">
       <Header />
+      
+      <BreadcrumbJsonLd items={breadcrumbItems} />
 
       <div className="bg-white">
         <div className="container mx-auto px-4 py-8">
           <Link
-            href="/#transfers"
+            href="/transfers"
             className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-6"
           >
             ← Voltar para transfers

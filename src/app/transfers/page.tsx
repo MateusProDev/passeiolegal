@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Car, Users, Search, SlidersHorizontal } from 'lucide-react';
 import { transferService } from '@/lib/firestore';
+import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 
 interface Transfer {
   id: string;
@@ -26,6 +27,12 @@ export default function TransfersPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState<'all' | 'low' | 'medium' | 'high'>('all');
   const [capacityFilter, setCapacityFilter] = useState<'all' | 'small' | 'medium' | 'large'>('all');
+  
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+  const breadcrumbItems = [
+    { name: "Início", url: baseUrl },
+    { name: "Transfers", url: `${baseUrl}/transfers` },
+  ];
 
   useEffect(() => {
     const fetchTransfers = async () => {
@@ -88,6 +95,8 @@ export default function TransfersPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-24">
+      <BreadcrumbJsonLd items={breadcrumbItems} />
+      
       {/* Header */}
       <div className="bg-primary-600 text-white py-16">
         <div className="container mx-auto px-4">

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from 'react';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -11,6 +11,23 @@ export default function Contact() {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch('/api/settings');
+        if (response.ok) {
+          const data = await response.json();
+          setSettings(data);
+        }
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      }
+    };
+
+    fetchSettings();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +48,8 @@ export default function Contact() {
     });
   };
 
+  const contactInfo = settings?.contactInfo || {};
+
   return (
     <section id="contact" className="py-14 bg-white">
       <div className="container mx-auto px-4">
@@ -46,38 +65,53 @@ export default function Contact() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Info */}
           <div className="space-y-8">
-            <div className="flex items-start space-x-4">
-              <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Phone className="text-primary-600" size={24} />
+            {contactInfo.phone && (
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Phone className="text-primary-600" size={24} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-1">Telefone</h3>
+                  <p className="text-gray-600">{contactInfo.phone}</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-1">Telefone</h3>
-                <p className="text-gray-600">+55 11 99999-9999</p>
-                <p className="text-gray-600">+55 11 3333-3333</p>
-              </div>
-            </div>
+            )}
 
-            <div className="flex items-start space-x-4">
-              <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Mail className="text-primary-600" size={24} />
+            {contactInfo.email && (
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Mail className="text-primary-600" size={24} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-1">E-mail</h3>
+                  <p className="text-gray-600">{contactInfo.email}</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-1">E-mail</h3>
-                <p className="text-gray-600">contato@passeiolegal.com</p>
-                <p className="text-gray-600">reservas@passeiolegal.com</p>
-              </div>
-            </div>
+            )}
 
-            <div className="flex items-start space-x-4">
-              <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <MapPin className="text-primary-600" size={24} />
+            {contactInfo.whatsapp && (
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <MessageCircle className="text-primary-600" size={24} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-1">WhatsApp</h3>
+                  <p className="text-gray-600">{contactInfo.whatsapp}</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-1">Endereço</h3>
-                <p className="text-gray-600">Rua Principal, 123</p>
-                <p className="text-gray-600">São Paulo, SP - 01234-567</p>
+            )}
+
+            {contactInfo.address && (
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <MapPin className="text-primary-600" size={24} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-1">Endereço</h3>
+                  <p className="text-gray-600">{contactInfo.address}</p>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Contact Form */}

@@ -62,7 +62,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   const formatContent = (content: string) => {
     if (!content) return '';
     // Convert line breaks to paragraphs
-    return content.split('\n\n').map((paragraph, index) => {
+    return content.split('\n\n').map((paragraph) => {
       if (paragraph.trim()) {
         return `<p class="mb-4 text-gray-700 leading-relaxed">${paragraph}</p>`;
       }

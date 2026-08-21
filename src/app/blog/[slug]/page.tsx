@@ -1,11 +1,12 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar, Clock, ArrowLeft, Share2 } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft } from 'lucide-react';
 import { blogService } from '@/lib/firestore';
 import { notFound } from 'next/navigation';
 import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
+import ShareButtons from '@/components/public/ShareButtons';
 
 interface PageProps {
   params: {
@@ -124,44 +125,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 </div>
 
                 {/* Share */}
-                <div className="mt-12 pt-8 border-t flex items-center justify-between flex-wrap gap-4">
-                  <div className="flex items-center gap-2">
-                    <Share2 size={20} className="text-gray-600" />
-                    <span className="text-gray-600 font-medium">Compartilhar</span>
-                  </div>
-                  <div className="flex gap-2 flex-wrap">
-                    <button
-                      onClick={() => {
-                        if (typeof window !== 'undefined') {
-                          window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
-                        }
-                      }}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Facebook
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (typeof window !== 'undefined') {
-                          window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(post.title || '')}`, '_blank');
-                        }
-                      }}
-                      className="px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors"
-                    >
-                      Twitter
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (typeof window !== 'undefined') {
-                          window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(`${post.title || ''} - ${window.location.href}`)}`, '_blank');
-                        }
-                      }}
-                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                    >
-                      WhatsApp
-                    </button>
-                  </div>
-                </div>
+                <ShareButtons title={post.title || ''} />
               </article>
 
               {/* Back to Blog */}

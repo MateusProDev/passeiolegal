@@ -28,7 +28,7 @@ export default function TourConversionBar({ tourName, tourPrice, whatsappNumber 
 
   if (!isScrolled) return null;
 
-  const whatsappMessage = encodeURIComponent(`Olá! Gostaria de reservar o passeio: ${tourName}${tourPrice ? ` - R$ ${tourPrice.toFixed(2)}` : ''}`);
+  const whatsappMessage = encodeURIComponent(`Olá! Gostaria de reservar o passeio: ${tourName}${tourPrice && tourPrice > 0 ? ` - R$ ${tourPrice.toFixed(2)}` : ''}`);
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
   return (
@@ -41,7 +41,7 @@ export default function TourConversionBar({ tourName, tourPrice, whatsappNumber 
               <p className="text-xs text-gray-500 font-medium">Passeio selecionado</p>
               <p className="text-sm font-semibold text-gray-900 truncate max-w-[200px]">{tourName}</p>
             </div>
-            {tourPrice && (
+            {tourPrice && tourPrice > 0 && (
               <div className="bg-green-50 px-3 py-1.5 rounded-lg">
                 <span className="text-lg font-bold text-green-700">R$ {tourPrice.toFixed(2)}</span>
               </div>

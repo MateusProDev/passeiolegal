@@ -323,7 +323,7 @@ export default async function TourDetailPage({ params }: PageProps) {
               {/* CTA Principal */}
               <div className="sticky top-24 bg-white border border-gray-200 rounded-xl p-6 shadow-lg mb-8">
                 <a
-                  href={`https://wa.me/5585997314093?text=Olá! Gostaria de reservar o passeio: ${encodeURIComponent(tour.name)}${tour.price ? ` - R$ ${tour.price.toFixed(2)}` : ''}`}
+                  href={`https://wa.me/5585997314093?text=Olá! Gostaria de reservar o passeio: ${encodeURIComponent(tour.name)}${tour.price && tour.price > 0 ? ` - R$ ${tour.price.toFixed(2)}` : ''}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-3 w-full bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-lg font-bold text-lg transition-all transform hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-green-300 min-h-[52px]"

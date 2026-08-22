@@ -10,7 +10,6 @@ interface TourConversionBarProps {
 }
 
 export default function TourConversionBar({ tourName, tourPrice, whatsappNumber = "5585997314093" }: TourConversionBarProps) {
-  const [isVisible, setIsVisible] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {

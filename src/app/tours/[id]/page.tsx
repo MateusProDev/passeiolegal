@@ -25,17 +25,42 @@ async function getTour(id: string) {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
   const tour = await getTour(params.id);
 
   if (!tour) {
     return {
-      title: "Tour não encontrado",
+      title: "Tour não encontrado | Passeio Legal",
     };
   }
 
   return {
-    title: tour.name,
-    description: tour.description,
+    title: `${tour.name} | Passeio Legal`,
+    description: tour.description || `Reserve ${tour.name} com a Passeio Legal. Passeios turísticos em Fortaleza e região com conforto e segurança.`,
+    openGraph: {
+      type: "website",
+      locale: "pt_BR",
+      url: `${baseUrl}/tours/${params.id}`,
+      title: tour.name,
+      description: tour.description,
+      images: tour.mainImageUrl ? [
+        {
+          url: tour.mainImageUrl,
+          width: 1200,
+          height: 630,
+          alt: tour.mainImageAlt || tour.name,
+        },
+      ] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: tour.name,
+      description: tour.description,
+      images: tour.mainImageUrl ? [tour.mainImageUrl] : [],
+    },
+    alternates: {
+      canonical: `${baseUrl}/tours/${params.id}`,
+    },
   };
 }
 

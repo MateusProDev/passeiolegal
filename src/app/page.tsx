@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import Hero from "@/components/public/Hero";
@@ -12,6 +13,41 @@ import { bannerService, tourService, transferService, testimonialService, blogSe
 
 // Force dynamic rendering for real-time updates
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+
+  return {
+    title: "Passeio Legal - Tours e Transfers em Fortaleza e Região",
+    description: "Descubra os melhores passeios turísticos e serviços de transfer em Fortaleza e região. Experiências únicas de turismo com conforto, segurança e profissionalismo. Passeios para praias, dunas, cachoeiras e muito mais.",
+    keywords: ["passeios fortaleza", "tours fortaleza", "transfer fortaleza", "turismo ceará", "passeio legal", "passeios praias", "transfer aeroporto fortaleza", "turismo nordeste", "excursões fortaleza", "viagens ceará"],
+    openGraph: {
+      type: "website",
+      locale: "pt_BR",
+      url: baseUrl,
+      title: "Passeio Legal - Tours e Transfers em Fortaleza",
+      description: "Descubra os melhores passeios turísticos e serviços de transfer em Fortaleza e região com a Passeio Legal.",
+      siteName: "Passeio Legal",
+      images: [
+        {
+          url: `${baseUrl}/og-image.jpg`,
+          width: 1200,
+          height: 630,
+          alt: "Passeio Legal - Tours e Transfers",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Passeio Legal - Tours e Transfers",
+      description: "Descubra os melhores passeios turísticos e serviços de transfer em Fortaleza",
+      images: [`${baseUrl}/og-image.jpg`],
+    },
+    alternates: {
+      canonical: baseUrl,
+    },
+  };
+}
 
 async function getPageData() {
   try {

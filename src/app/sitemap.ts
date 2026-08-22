@@ -52,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const blogSnapshot = await adminDb.collection('blog')
         .where('published', '==', true)
         .get();
-      
+
       blogSnapshot.docs.forEach((doc) => {
         const data = doc.data();
         dynamicPages.push({
@@ -67,11 +67,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const toursSnapshot = await adminDb.collection('tours')
         .where('active', '==', true)
         .get();
-      
+
       toursSnapshot.docs.forEach((doc) => {
         const data = doc.data();
         dynamicPages.push({
           url: `${baseUrl}/tours/${doc.id}`,
+          lastModified: data.updatedAt?.toDate() || new Date(),
+          changeFrequency: 'weekly' as const,
+          priority: 0.8,
+        });
+      });
+
+      // Add transfers
+      const transfersSnapshot = await adminDb.collection('transfers')
+        .where('active', '==', true)
+        .get();
+
+      transfersSnapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        dynamicPages.push({
+          url: `${baseUrl}/transfers/${doc.id}`,
           lastModified: data.updatedAt?.toDate() || new Date(),
           changeFrequency: 'weekly' as const,
           priority: 0.8,

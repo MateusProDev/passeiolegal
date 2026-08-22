@@ -16,23 +16,48 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
   try {
     const posts = await blogService.getAll(false);
     const post = posts.find(p => p.slug === params.slug && p.published);
 
     if (!post) {
       return {
-        title: 'Post não encontrado',
+        title: 'Post não encontrado | Passeio Legal',
       };
     }
 
     return {
-      title: post.title || 'Post',
-      description: post.summary || '',
+      title: `${post.title || 'Post'} | Passeio Legal`,
+      description: post.summary || `Leia o artigo completo no blog da Passeio Legal. Dicas de turismo em Fortaleza e região.`,
+      openGraph: {
+        type: "article",
+        locale: "pt_BR",
+        url: `${baseUrl}/blog/${params.slug}`,
+        title: post.title,
+        description: post.summary,
+        images: post.imageUrl ? [
+          {
+            url: post.imageUrl,
+            width: 1200,
+            height: 630,
+            alt: post.imageAlt || post.title,
+          },
+        ] : [],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: post.title,
+        description: post.summary,
+        images: post.imageUrl ? [post.imageUrl] : [],
+      },
+      alternates: {
+        canonical: `${baseUrl}/blog/${params.slug}`,
+      },
     };
   } catch (error) {
     return {
-      title: 'Post não encontrado',
+      title: 'Post não encontrado | Passeio Legal',
     };
   }
 }

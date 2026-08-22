@@ -25,17 +25,42 @@ async function getTransfer(id: string) {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
   const transfer = await getTransfer(params.id);
 
   if (!transfer) {
     return {
-      title: "Transfer não encontrado",
+      title: "Transfer não encontrado | Passeio Legal",
     };
   }
 
   return {
-    title: transfer.name,
-    description: transfer.description,
+    title: `${transfer.name} | Passeio Legal`,
+    description: transfer.description || `Reserve ${transfer.name} com a Passeio Legal. Serviços de transfer em Fortaleza e região com conforto e segurança.`,
+    openGraph: {
+      type: "website",
+      locale: "pt_BR",
+      url: `${baseUrl}/transfers/${params.id}`,
+      title: transfer.name,
+      description: transfer.description,
+      images: transfer.imageUrl ? [
+        {
+          url: transfer.imageUrl,
+          width: 1200,
+          height: 630,
+          alt: transfer.imageAlt || transfer.name,
+        },
+      ] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: transfer.name,
+      description: transfer.description,
+      images: transfer.imageUrl ? [transfer.imageUrl] : [],
+    },
+    alternates: {
+      canonical: `${baseUrl}/transfers/${params.id}`,
+    },
   };
 }
 

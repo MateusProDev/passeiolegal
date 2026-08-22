@@ -123,19 +123,19 @@ export default function RootLayout({
         <LocalBusinessJsonLd
           name="Passeio Legal"
           url={baseUrl}
-          description="Descubra os melhores passeios e transfers com a Passeio Legal"
+          description="Descubra os melhores passeios turísticos e serviços de transfer em Fortaleza e região com a Passeio Legal. Experiências únicas de turismo com conforto, segurança e profissionalismo."
           address={{
-            street: process.env.NEXT_PUBLIC_BUSINESS_STREET || "Rua Principal, 123",
-            city: process.env.NEXT_PUBLIC_BUSINESS_CITY || "São Paulo",
-            state: process.env.NEXT_PUBLIC_BUSINESS_STATE || "SP",
-            zip: process.env.NEXT_PUBLIC_BUSINESS_ZIP || "01234-567",
+            street: process.env.NEXT_PUBLIC_BUSINESS_STREET || "Porto das Dunas",
+            city: process.env.NEXT_PUBLIC_BUSINESS_CITY || "Aquiraz",
+            state: process.env.NEXT_PUBLIC_BUSINESS_STATE || "CE",
+            zip: process.env.NEXT_PUBLIC_BUSINESS_ZIP || "61700-000",
           }}
-          phone={process.env.NEXT_PUBLIC_BUSINESS_PHONE || "+5511999999999"}
+          phone={process.env.NEXT_PUBLIC_BUSINESS_PHONE || "+5585997314093"}
         />
         <WebSiteJsonLd
           name="Passeio Legal"
           url={baseUrl}
-          description="Descubra os melhores passeios e transfers com a Passeio Legal"
+          description="Descubra os melhores passeios turísticos e serviços de transfer em Fortaleza e região com a Passeio Legal"
         />
         <Providers>{children}</Providers>
       </body>

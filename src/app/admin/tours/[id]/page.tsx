@@ -18,7 +18,6 @@ export default function EditTour() {
     name: "",
     description: "",
     longDescription: "",
-    price: "",
     duration: "",
     active: true,
     featured: false,
@@ -45,7 +44,6 @@ export default function EditTour() {
           name: tour.name || "",
           description: tour.description || "",
           longDescription: tour.longDescription || "",
-          price: tour.price ? tour.price.toString() : "",
           duration: tour.duration || "",
           active: tour.active ?? true,
           featured: tour.featured ?? false,
@@ -72,7 +70,6 @@ export default function EditTour() {
     try {
       const payload = {
         ...formData,
-        price: parseFloat(formData.price),
         includesItems: formData.includesItems
           .split(",")
           .map((item) => item.trim())
@@ -150,17 +147,6 @@ export default function EditTour() {
                 onChange={(e) => setFormData({ ...formData, longDescription: e.target.value })}
                 className="w-full px-3 py-2 border rounded"
                 rows={6}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">Preço (R$)</label>
-              <input
-                type="number"
-                step="0.01"
-                value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                required
-                className="w-full px-3 py-2 border rounded"
               />
             </div>
             <div>

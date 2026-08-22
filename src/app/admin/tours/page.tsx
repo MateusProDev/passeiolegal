@@ -95,11 +95,7 @@ export default function ToursAdmin() {
                     alt={tour.mainImageAlt}
                     className="w-32 h-20 object-cover rounded"
                   />
-                  <div className="flex-1 grid grid-cols-3 gap-4">
-                    <div>
-                      <p className="text-xs text-muted-foreground">Preço</p>
-                      <p className="font-semibold">{tour.price && tour.price > 0 ? `R$ ${tour.price.toFixed(2)}` : 'Consulte'}</p>
-                    </div>
+                  <div className="flex-1 grid grid-cols-2 gap-4">
                     <div>
                       <p className="text-xs text-muted-foreground">Duração</p>
                       <p className="font-semibold">{tour.duration || 'Consulte'}</p>

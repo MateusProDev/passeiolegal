@@ -140,24 +140,19 @@ export default async function TourDetailPage({ params }: PageProps) {
       <BreadcrumbJsonLd items={breadcrumbItems} />
       
       {/* SEO: JSON-LD Product Schema enriquecido */}
-      {tour.price && tour.price > 0 && tour.mainImageUrl && (
+      {tour.mainImageUrl && (
         <ProductJsonLd
           name={tour.name}
           description={tour.description}
           image={tour.mainImageUrl}
-          price={tour.price}
-          currency="BRL"
           url={`${baseUrl}/tours/${params.id}`}
         />
       )}
 
       {/* CTA Sticky Bar - aparece após scroll */}
-      {tour.price && tour.price > 0 && (
-        <TourConversionBar 
-          tourName={tour.name}
-          tourPrice={tour.price}
-        />
-      )}
+      <TourConversionBar 
+        tourName={tour.name}
+      />
 
       <div className="bg-white">
         <div className="container mx-auto px-4 py-6">
@@ -235,28 +230,6 @@ export default async function TourDetailPage({ params }: PageProps) {
                 </div>
               </div>
 
-              {/* Preço com destaque */}
-              {tour.price && tour.price > 0 && (
-                <div className="bg-gradient-to-r from-blue-50 to-green-50 p-6 rounded-xl mb-6 border border-blue-100">
-                  <div className="flex items-baseline gap-3 mb-2">
-                    <span className="text-sm text-gray-600">em até 12x de</span>
-                    <span className="text-2xl font-bold text-blue-600">
-                      {calculateInstallment(tour.price)}
-                    </span>
-                  </div>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold text-gray-900">
-                      {formatPrice(tour.price)}
-                    </span>
-                    <span className="text-sm text-gray-600">à vista</span>
-                  </div>
-                  <p className="text-xs text-green-700 mt-2 font-medium flex items-center gap-1">
-                    <Check size={14} />
-                    Desconto de 5% no pagamento à vista
-                  </p>
-                </div>
-              )}
-
               {/* Gatilho de escassez */}
               <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg mb-6 flex items-start gap-3">
                 <AlertCircle size={20} className="text-orange-600 flex-shrink-0 mt-0.5" />
@@ -320,23 +293,16 @@ export default async function TourDetailPage({ params }: PageProps) {
                     ))}
                   </ul>
                 </div>
-              )}
-
-              {/* CTA Principal */}
-              <div className="sticky top-24 bg-white border border-gray-200 rounded-xl p-6 shadow-lg mb-8">
-                <a
-                  href={`https://wa.me/5585997314093?text=Olá! Gostaria de reservar o passeio: ${encodeURIComponent(tour.name)}${tour.price && tour.price > 0 ? ` - R$ ${tour.price.toFixed(2)}` : ''}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-3 w-full bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-lg font-bold text-lg transition-all transform hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-green-300 min-h-[52px]"
-                  aria-label={`Reservar ${tour.name} pelo WhatsApp`}
-                >
-                  <span className="text-2xl">💬</span>
-                  <span>Reservar pelo WhatsApp</span>
-                </a>
-                <p className="text-center text-xs text-gray-500 mt-3">
-                  Resposta em até 10 minutos • Garantia de satisfação
                 </p>
+              </div>
+            )}
+
+            {/* Gatilho de escassez */}
+            <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg mb-6 flex items-start gap-3">
+              <AlertCircle size={20} className="text-orange-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold text-orange-900 text-sm">Últimas vagas disponíveis</p>
+                <p className="text-xs text-orange-700 mt-1">Reserve agora para garantir sua vaga neste passeio exclusivo.</p>
               </div>
             </div>
           </div>

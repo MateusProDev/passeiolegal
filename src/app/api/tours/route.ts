@@ -26,8 +26,7 @@ export async function POST(request: NextRequest) {
     if (
       !body.name ||
       !body.description ||
-      !body.mainImageUrl ||
-      typeof body.price !== "number"
+      !body.mainImageUrl
     ) {
       return NextResponse.json(
         { error: "Missing required fields" },

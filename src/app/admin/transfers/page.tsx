@@ -97,16 +97,18 @@ export default function TransfersAdmin() {
                   />
                   <div className="flex-1 grid grid-cols-3 gap-4">
                     <div>
-                      <p className="text-xs text-muted-foreground">Preço</p>
-                      <p className="font-semibold">{transfer.price && transfer.price > 0 ? `R$ ${transfer.price.toFixed(2)}` : 'Consulte'}</p>
-                    </div>
-                    <div>
                       <p className="text-xs text-muted-foreground">Veículo</p>
                       <p className="font-semibold">{transfer.vehicleType || 'Consulte'}</p>
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground">Capacidade</p>
                       <p className="font-semibold">{transfer.capacity && transfer.capacity > 0 ? `${transfer.capacity} pessoas` : 'Consulte'}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Status</p>
+                      <p className="font-semibold">
+                        {transfer.active ? "Ativo" : "Inativo"}
+                      </p>
                     </div>
                   </div>
                 </div>

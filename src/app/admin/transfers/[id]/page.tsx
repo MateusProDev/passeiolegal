@@ -17,7 +17,6 @@ export default function EditTransfer() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    price: "",
     capacity: "",
     vehicleType: "",
     active: true,
@@ -41,7 +40,6 @@ export default function EditTransfer() {
         setFormData({
           name: transfer.name || "",
           description: transfer.description || "",
-          price: transfer.price ? transfer.price.toString() : "",
           capacity: transfer.capacity ? transfer.capacity.toString() : "",
           vehicleType: transfer.vehicleType || "",
           active: transfer.active ?? true,
@@ -66,7 +64,6 @@ export default function EditTransfer() {
     try {
       const payload = {
         ...formData,
-        price: parseFloat(formData.price),
         capacity: parseInt(formData.capacity),
       };
 
@@ -128,17 +125,6 @@ export default function EditTransfer() {
                 required
                 className="w-full px-3 py-2 border rounded"
                 rows={4}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">Preço (R$)</label>
-              <input
-                type="number"
-                step="0.01"
-                value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                required
-                className="w-full px-3 py-2 border rounded"
               />
             </div>
             <div>

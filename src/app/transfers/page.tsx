@@ -25,7 +25,6 @@ export default function TransfersPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-  const [priceRange, setPriceRange] = useState<'all' | 'low' | 'medium' | 'high'>('all');
   const [capacityFilter, setCapacityFilter] = useState<'all' | 'small' | 'medium' | 'large'>('all');
   
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
@@ -61,17 +60,6 @@ export default function TransfersPage() {
       );
     }
 
-    // Price range filter
-    if (priceRange !== 'all') {
-      filtered = filtered.filter(transfer => {
-        if (!transfer.price) return false;
-        if (priceRange === 'low') return transfer.price <= 200;
-        if (priceRange === 'medium') return transfer.price > 200 && transfer.price <= 500;
-        if (priceRange === 'high') return transfer.price > 500;
-        return true;
-      });
-    }
-
     // Capacity filter
     if (capacityFilter !== 'all') {
       filtered = filtered.filter(transfer => {
@@ -83,7 +71,7 @@ export default function TransfersPage() {
     }
 
     setFilteredTransfers(filtered);
-  }, [searchTerm, priceRange, capacityFilter, transfers]);
+  }, [searchTerm, capacityFilter, transfers]);
 
   if (loading) {
     return (
@@ -135,22 +123,7 @@ export default function TransfersPage() {
 
           {/* Filters */}
           {showFilters && (
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 pt-6 border-t">
-              {/* Price Range */}
-              <div>
-                <label className="block text-sm font-medium mb-2">Faixa de Preço</label>
-                <select
-                  value={priceRange}
-                  onChange={(e) => setPriceRange(e.target.value as any)}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600"
-                >
-                  <option value="all">Todos</option>
-                  <option value="low">Até R$ 200</option>
-                  <option value="medium">R$ 200 - R$ 500</option>
-                  <option value="high">Acima de R$ 500</option>
-                </select>
-              </div>
-
+            <div className="mt-6 grid grid-cols-1 gap-4 pt-6 border-t">
               {/* Capacity */}
               <div>
                 <label className="block text-sm font-medium mb-2">Capacidade</label>
@@ -181,7 +154,6 @@ export default function TransfersPage() {
             <button
               onClick={() => {
                 setSearchTerm('');
-                setPriceRange('all');
                 setCapacityFilter('all');
               }}
               className="mt-4 text-primary-600 hover:text-primary-700 font-medium"
@@ -232,14 +204,7 @@ export default function TransfersPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    {transfer.price && transfer.price > 0 ? (
-                      <div className="text-2xl font-bold text-primary-600">
-                        R$ {transfer.price.toFixed(2)}
-                      </div>
-                    ) : (
-                      <div></div>
-                    )}
+                  <div className="flex items-center justify-end">
                     <Link
                       href={`/transfers/${transfer.id}`}
                       className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"

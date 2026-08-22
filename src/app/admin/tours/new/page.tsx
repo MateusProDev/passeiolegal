@@ -15,7 +15,6 @@ export default function NewTour() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    price: "",
     duration: "",
     active: true,
     mainImageUrl: "",
@@ -30,10 +29,7 @@ export default function NewTour() {
       const response = await fetch("/api/tours", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          price: parseFloat(formData.price),
-        }),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) throw new Error("Failed to create tour");
@@ -80,17 +76,6 @@ export default function NewTour() {
                 required
                 className="w-full px-3 py-2 border rounded"
                 rows={4}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">Preço (R$)</label>
-              <input
-                type="number"
-                step="0.01"
-                value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                required
-                className="w-full px-3 py-2 border rounded"
               />
             </div>
             <div>

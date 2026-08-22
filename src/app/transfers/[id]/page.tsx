@@ -118,12 +118,6 @@ export default async function TransferDetailPage({ params }: PageProps) {
                 </div>
               </div>
 
-              {transfer.price && transfer.price > 0 && (
-                <div className="text-3xl font-bold text-primary-600 mb-6">
-                  R$ {transfer.price.toFixed(2)}
-                </div>
-              )}
-
               <p className="text-gray-600 mb-8">{transfer.description}</p>
 
               <div className="flex gap-4">

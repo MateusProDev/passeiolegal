@@ -5,11 +5,10 @@ import { MessageCircle } from 'lucide-react';
 
 interface TourConversionBarProps {
   tourName: string;
-  tourPrice?: number;
   whatsappNumber?: string;
 }
 
-export default function TourConversionBar({ tourName, tourPrice, whatsappNumber = "5585997314093" }: TourConversionBarProps) {
+export default function TourConversionBar({ tourName, whatsappNumber = "5585997314093" }: TourConversionBarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -28,37 +27,24 @@ export default function TourConversionBar({ tourName, tourPrice, whatsappNumber 
 
   if (!isScrolled) return null;
 
-  const whatsappMessage = encodeURIComponent(`Olá! Gostaria de reservar o passeio: ${tourName}${tourPrice && tourPrice > 0 ? ` - R$ ${tourPrice.toFixed(2)}` : ''}`);
+  const whatsappMessage = encodeURIComponent(`Olá! Gostaria de reservar o passeio: ${tourName}`);
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white shadow-2xl border-t border-gray-200 z-50 animate-slide-up">
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 transition-transform duration-300">
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-4">
-          {/* Preço e info */}
-          <div className="flex items-center gap-3 flex-1">
-            <div className="hidden sm:block">
-              <p className="text-xs text-gray-500 font-medium">Passeio selecionado</p>
-              <p className="text-sm font-semibold text-gray-900 truncate max-w-[200px]">{tourName}</p>
-            </div>
-            {tourPrice && tourPrice > 0 && (
-              <div className="bg-green-50 px-3 py-1.5 rounded-lg">
-                <span className="text-lg font-bold text-green-700">R$ {tourPrice.toFixed(2)}</span>
-              </div>
-            )}
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-gray-900 truncate">{tourName}</p>
           </div>
-
-          {/* Botão CTA */}
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300 min-h-[44px]"
-            aria-label={`Reservar ${tourName} pelo WhatsApp`}
+            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap"
           >
-            <MessageCircle size={20} />
-            <span className="hidden sm:inline">Reservar agora</span>
-            <span className="sm:hidden">Reservar</span>
+            <MessageCircle size={18} />
+            <span>Solicitar Orçamento</span>
           </a>
         </div>
       </div>

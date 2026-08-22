@@ -145,19 +145,16 @@ export default function Transfers({ transfers }: TransfersProps) {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  {transfer.price && transfer.price > 0 ? (
-                    <div className="text-xl font-bold text-primary-600">
-                      R$ {transfer.price.toFixed(2)}
-                    </div>
-                  ) : (
-                    <div></div>
-                  )}
-                  <span className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium text-sm">
+                <div className="flex items-center justify-end">
+                  <Link
+                    href={`/transfers/${transfer.id}`}
+                    className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"
+                    aria-label={`Ver detalhes de ${transfer.name}`}
+                  >
                     Ver Detalhes
-                  </span>
+                  </Link>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
 

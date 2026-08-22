@@ -27,7 +27,6 @@ export async function POST(request: NextRequest) {
       !body.name ||
       !body.description ||
       !body.imageUrl ||
-      typeof body.price !== "number" ||
       typeof body.capacity !== "number"
     ) {
       return NextResponse.json(

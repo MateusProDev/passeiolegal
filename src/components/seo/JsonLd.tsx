@@ -121,24 +121,27 @@ export function ProductJsonLd({ name, description, image, price, currency = 'BRL
   name: string;
   description: string;
   image: string;
-  price: number;
+  price?: number;
   currency?: string;
   url: string;
 }) {
-  const data = {
+  const data: any = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name,
     description,
     image,
-    offers: {
+    url,
+  };
+
+  if (price && price > 0) {
+    data.offers = {
       '@type': 'Offer',
       price,
       priceCurrency: currency,
       availability: 'https://schema.org/InStock',
-      url,
-    },
-  };
+    };
+  }
 
   return <JsonLd data={data} />;
 }

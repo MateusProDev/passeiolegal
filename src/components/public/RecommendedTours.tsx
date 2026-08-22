@@ -78,7 +78,7 @@ export default function RecommendedTours({ tours }: RecommendedToursProps) {
                 </div>
 
                 {/* Preço */}
-                {tour.price && tour.price > 0 && (
+                {tour.price && tour.price > 0 ? (
                   <div className="mb-4">
                     <p className="text-xs text-gray-500 mb-1">
                       em até 12x de {calculateInstallment(tour.price)}
@@ -86,6 +86,10 @@ export default function RecommendedTours({ tours }: RecommendedToursProps) {
                     <p className="text-2xl font-bold text-gray-900">
                       {formatPrice(tour.price)}
                     </p>
+                  </div>
+                ) : (
+                  <div className="mb-4">
+                    <p className="text-sm text-gray-500">Consulte preço</p>
                   </div>
                 )}
 

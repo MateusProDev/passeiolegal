@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Clock, Star, ArrowRight } from 'lucide-react';
 import { Tour } from '@/types';
 

@@ -120,19 +120,6 @@ export default async function TourDetailPage({ params }: PageProps) {
     { name: tour.name, url: `${baseUrl}/tours/${params.id}` },
   ];
 
-  // Formatação de preço
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(price);
-  };
-
-  const calculateInstallment = (price: number) => {
-    const installmentPrice = price / 12;
-    return formatPrice(installmentPrice);
-  };
-
   return (
     <main className="min-h-screen pt-24 pb-20">
       <Header />
@@ -294,14 +281,6 @@ export default async function TourDetailPage({ params }: PageProps) {
                   </ul>
                 </div>
               )}
-
-            {/* Gatilho de escassez */}
-            <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg mb-6 flex items-start gap-3">
-              <AlertCircle size={20} className="text-orange-600 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="font-semibold text-orange-900 text-sm">Últimas vagas disponíveis</p>
-                <p className="text-xs text-orange-700 mt-1">Reserve agora para garantir sua vaga neste passeio exclusivo.</p>
-              </div>
             </div>
           </div>
         </div>

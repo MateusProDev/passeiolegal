@@ -154,7 +154,7 @@ export default function Transfers({ transfers }: TransfersProps) {
                     Ver Detalhes
                   </Link>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 

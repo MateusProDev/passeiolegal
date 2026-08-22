@@ -11,18 +11,6 @@ export default function RecommendedTours({ tours }: RecommendedToursProps) {
     return null;
   }
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(price);
-  };
-
-  const calculateInstallment = (price: number) => {
-    const installmentPrice = price / 12;
-    return formatPrice(installmentPrice);
-  };
-
   return (
     <section className="py-12 bg-gray-50">
       <div className="container mx-auto px-4">

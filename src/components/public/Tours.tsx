@@ -160,7 +160,7 @@ export default function Tours({ tours }: ToursProps) {
                     </Link>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 

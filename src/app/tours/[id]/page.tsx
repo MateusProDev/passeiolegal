@@ -3,9 +3,13 @@ import { notFound } from "next/navigation";
 import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import { tourService } from "@/lib/firestore";
-import { Clock, Check, X, Star } from "lucide-react";
+import { Clock, Check, X, Star, Users, AlertCircle, Sparkles, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import TourConversionBar from "@/components/public/TourConversionBar";
+import TourTrustBadges from "@/components/public/TourTrustBadges";
+import TourFAQ from "@/components/public/TourFAQ";
+import RecommendedTours from "@/components/public/RecommendedTours";
 
 interface PageProps {
   params: { id: string };
@@ -31,31 +35,66 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!tour) {
     return {
       title: "Tour não encontrado | Passeio Legal",
+      robots: "noindex, nofollow",
     };
   }
 
+  // SEO: Title otimizado (até 60 caracteres)
+  const title = tour.name.length > 50 ? tour.name.substring(0, 50) + "..." : tour.name;
+  const fullTitle = `${title} | Passeio Legal - Passeios em Fortaleza`;
+
+  // SEO: Description persuasiva com CTA (até 160 caracteres)
+  const description = tour.description 
+    ? tour.description.length > 140 
+      ? tour.description.substring(0, 140) + "... Reserve agora!" 
+      : tour.description + " Reserve agora!"
+    : `Reserve ${tour.name} em Fortaleza. Passeio turístico com guia, transporte inclusivo. Garantia de satisfação. Reserve agora!`;
+
+  // SEO: Keywords baseadas no nome do tour
+  const keywords = [
+    tour.name.toLowerCase(),
+    "passeios fortaleza",
+    "turismo ceará",
+    "passeio legal",
+    "tour fortaleza",
+    "excursão fortaleza",
+  ].join(", ");
+
   return {
-    title: `${tour.name} | Passeio Legal`,
-    description: tour.description || `Reserve ${tour.name} com a Passeio Legal. Passeios turísticos em Fortaleza e região com conforto e segurança.`,
+    title: fullTitle,
+    description,
+    keywords,
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
     openGraph: {
       type: "website",
       locale: "pt_BR",
       url: `${baseUrl}/tours/${params.id}`,
       title: tour.name,
-      description: tour.description,
+      description,
+      siteName: "Passeio Legal",
       images: tour.mainImageUrl ? [
         {
           url: tour.mainImageUrl,
           width: 1200,
           height: 630,
-          alt: tour.mainImageAlt || tour.name,
+          alt: `${tour.name} - Passeio turístico em Fortaleza`,
         },
       ] : [],
     },
     twitter: {
       card: "summary_large_image",
       title: tour.name,
-      description: tour.description,
+      description,
       images: tour.mainImageUrl ? [tour.mainImageUrl] : [],
     },
     alternates: {
@@ -72,18 +111,35 @@ export default async function TourDetailPage({ params }: PageProps) {
     notFound();
   }
 
+  // Busca tours relacionados para recomendação
+  const relatedTours = await tourService.getRelated(tour.id, 3);
+
   const breadcrumbItems = [
     { name: "Início", url: baseUrl },
     { name: "Passeios", url: `${baseUrl}/tours` },
     { name: tour.name, url: `${baseUrl}/tours/${params.id}` },
   ];
 
+  // Formatação de preço
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(price);
+  };
+
+  const calculateInstallment = (price: number) => {
+    const installmentPrice = price / 12;
+    return formatPrice(installmentPrice);
+  };
+
   return (
-    <main className="min-h-screen pt-24">
+    <main className="min-h-screen pt-24 pb-20">
       <Header />
       
       <BreadcrumbJsonLd items={breadcrumbItems} />
       
+      {/* SEO: JSON-LD Product Schema enriquecido */}
       {tour.price && tour.mainImageUrl && (
         <ProductJsonLd
           name={tour.name}
@@ -95,39 +151,49 @@ export default async function TourDetailPage({ params }: PageProps) {
         />
       )}
 
+      {/* CTA Sticky Bar - aparece após scroll */}
+      <TourConversionBar 
+        tourName={tour.name}
+        tourPrice={tour.price}
+      />
+
       <div className="bg-white">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-6">
           <Link
             href="/tours"
-            className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-6"
+            className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6 font-medium transition-colors"
+            aria-label="Voltar para lista de passeios"
           >
             ← Voltar para passeios
           </Link>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Coluna Esquerda - Imagens */}
             <div>
-              <div className="relative h-96 rounded-xl overflow-hidden mb-6">
+              <div className="relative h-96 lg:h-[500px] rounded-xl overflow-hidden mb-4 shadow-lg">
                 <img
                   src={tour.mainImageUrl}
-                  alt={tour.mainImageAlt}
+                  alt={`${tour.name} - Passeio turístico em Fortaleza e região`}
                   className="w-full h-full object-cover"
+                  loading="eager"
                 />
                 {tour.featured && (
-                  <div className="absolute top-4 right-4 bg-primary-600 text-white px-4 py-2 rounded-full font-semibold flex items-center gap-2">
+                  <div className="absolute top-4 right-4 bg-yellow-500 text-white px-4 py-2 rounded-full font-semibold flex items-center gap-2 shadow-md">
                     <Star size={16} />
-                    Destaque
+                    <span>Destaque</span>
                   </div>
                 )}
               </div>
 
               {tour.galleryImages && tour.galleryImages.length > 0 && (
-                <div className="grid grid-cols-3 gap-4">
-                  {tour.galleryImages.map((image) => (
-                    <div key={image.id} className="relative h-24 rounded-lg overflow-hidden">
+                <div className="grid grid-cols-3 gap-3">
+                  {tour.galleryImages.slice(0, 6).map((image) => (
+                    <div key={image.id} className="relative h-24 rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity">
                       <img
                         src={image.url}
-                        alt={image.alt}
+                        alt={image.alt || `${tour.name} - Foto adicional`}
                         className="w-full h-full object-cover"
+                        loading="lazy"
                       />
                     </div>
                   ))}
@@ -135,78 +201,154 @@ export default async function TourDetailPage({ params }: PageProps) {
               )}
             </div>
 
+            {/* Coluna Direita - Conteúdo */}
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">{tour.name}</h1>
-              
-              <div className="flex items-center gap-4 mb-6">
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Clock size={20} />
-                  <span>{tour.duration}</span>
-                </div>
-                {tour.price && tour.price > 0 && (
-                  <div className="text-3xl font-bold text-primary-600">
-                    R$ {tour.price.toFixed(2)}
-                  </div>
+              {/* Badge de disponibilidade */}
+              <div className="flex items-center gap-2 mb-4">
+                <span className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-1">
+                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                  Disponível para reserva
+                </span>
+                {tour.featured && (
+                  <span className="bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-1">
+                    <Sparkles size={14} />
+                    Mais vendido
+                  </span>
                 )}
               </div>
 
-              <p className="text-gray-600 mb-8">{tour.description}</p>
+              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+                {tour.name}
+              </h1>
+              
+              {/* Informações rápidas */}
+              <div className="flex flex-wrap items-center gap-4 mb-6 text-sm">
+                <div className="flex items-center gap-2 text-gray-600 bg-gray-50 px-3 py-2 rounded-lg">
+                  <Clock size={18} className="text-blue-600" />
+                  <span className="font-medium">{tour.duration}</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-600 bg-gray-50 px-3 py-2 rounded-lg">
+                  <Users size={18} className="text-blue-600" />
+                  <span className="font-medium">Grupo pequeno</span>
+                </div>
+              </div>
+
+              {/* Preço com destaque */}
+              {tour.price && tour.price > 0 && (
+                <div className="bg-gradient-to-r from-blue-50 to-green-50 p-6 rounded-xl mb-6 border border-blue-100">
+                  <div className="flex items-baseline gap-3 mb-2">
+                    <span className="text-sm text-gray-600">em até 12x de</span>
+                    <span className="text-2xl font-bold text-blue-600">
+                      {calculateInstallment(tour.price)}
+                    </span>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-4xl font-bold text-gray-900">
+                      {formatPrice(tour.price)}
+                    </span>
+                    <span className="text-sm text-gray-600">à vista</span>
+                  </div>
+                  <p className="text-xs text-green-700 mt-2 font-medium flex items-center gap-1">
+                    <Check size={14} />
+                    Desconto de 5% no pagamento à vista
+                  </p>
+                </div>
+              )}
+
+              {/* Gatilho de escassez */}
+              <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg mb-6 flex items-start gap-3">
+                <AlertCircle size={20} className="text-orange-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-orange-900 text-sm">Últimas vagas disponíveis</p>
+                  <p className="text-xs text-orange-700 mt-1">Reserve agora para garantir sua vaga neste passeio exclusivo.</p>
+                </div>
+              </div>
+
+              {/* Descrição */}
+              <div className="mb-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-3">Sobre este passeio</h2>
+                <p className="text-gray-600 leading-relaxed">{tour.description}</p>
+              </div>
 
               {tour.longDescription && (
                 <div className="mb-8">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Sobre o passeio</h2>
-                  <p className="text-gray-600 whitespace-pre-line">{tour.longDescription}</p>
+                  <details className="group">
+                    <summary className="cursor-pointer text-blue-600 font-semibold hover:text-blue-700 flex items-center gap-2">
+                      Ler descrição completa
+                      <ChevronDown size={18} className="group-open:rotate-180 transition-transform" />
+                    </summary>
+                    <p className="mt-4 text-gray-600 leading-relaxed whitespace-pre-line">
+                      {tour.longDescription}
+                    </p>
+                  </details>
                 </div>
               )}
 
+              {/* O que está incluído */}
               {tour.includesItems && tour.includesItems.length > 0 && (
                 <div className="mb-8">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">O que está incluído</h2>
-                  <ul className="space-y-2">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <Check size={22} className="text-green-600" />
+                    O que está incluído
+                  </h2>
+                  <ul className="space-y-3">
                     {tour.includesItems.map((item, index) => (
-                      <li key={index} className="flex items-center gap-2 text-gray-600">
-                        <Check size={20} className="text-green-600" />
-                        {item}
+                      <li key={index} className="flex items-start gap-3 text-gray-600">
+                        <Check size={20} className="text-green-600 flex-shrink-0 mt-0.5" />
+                        <span>{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
 
+              {/* O que não está incluído */}
               {tour.excludesItems && tour.excludesItems.length > 0 && (
                 <div className="mb-8">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">O que não está incluído</h2>
-                  <ul className="space-y-2">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <X size={22} className="text-red-600" />
+                    O que não está incluído
+                  </h2>
+                  <ul className="space-y-3">
                     {tour.excludesItems.map((item, index) => (
-                      <li key={index} className="flex items-center gap-2 text-gray-600">
-                        <X size={20} className="text-red-600" />
-                        {item}
+                      <li key={index} className="flex items-start gap-3 text-gray-600">
+                        <X size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
+                        <span>{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
 
-              <div className="flex gap-4">
-                <Link
-                  href="https://wa.me/5511999999999?text=Olá, gostaria de saber mais sobre o passeio: ${encodeURIComponent(tour.name)}"
+              {/* CTA Principal */}
+              <div className="sticky top-24 bg-white border border-gray-200 rounded-xl p-6 shadow-lg mb-8">
+                <a
+                  href={`https://wa.me/5585997314093?text=Olá! Gostaria de reservar o passeio: ${encodeURIComponent(tour.name)}${tour.price ? ` - R$ ${tour.price.toFixed(2)}` : ''}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-colors font-semibold text-center"
+                  className="flex items-center justify-center gap-3 w-full bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-lg font-bold text-lg transition-all transform hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-green-300 min-h-[52px]"
+                  aria-label={`Reservar ${tour.name} pelo WhatsApp`}
                 >
-                  Reservar pelo WhatsApp
-                </Link>
-                <Link
-                  href="#contact"
-                  className="flex-1 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg transition-colors font-semibold text-center"
-                >
-                  Fale Conosco
-                </Link>
+                  <span className="text-2xl">💬</span>
+                  <span>Reservar pelo WhatsApp</span>
+                </a>
+                <p className="text-center text-xs text-gray-500 mt-3">
+                  Resposta em até 10 minutos • Garantia de satisfação
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Selos de Confiança */}
+      <TourTrustBadges />
+
+      {/* FAQ */}
+      <TourFAQ />
+
+      {/* Tours Recomendados */}
+      <RecommendedTours tours={relatedTours} />
 
       <Footer />
     </main>

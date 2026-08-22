@@ -163,6 +163,22 @@ export const tourService = {
     ]);
   },
 
+  // Busca tours relacionados para recomendação (mesma categoria ou featured, excluindo o atual)
+  async getRelated(excludeId: string, limit: number = 3) {
+    try {
+      const allTours = await firebaseService.getMany<Types.Tour>("tours", [
+        where("active", "==", true),
+        where("id", "!=", excludeId),
+        orderBy("featured", "desc"),
+        orderBy("name", "asc"),
+      ]);
+      return allTours.slice(0, limit);
+    } catch (error) {
+      console.error("Error fetching related tours:", error);
+      return [];
+    }
+  },
+
   async create(data: Omit<Types.Tour, "id" | "createdAt" | "updatedAt">) {
     return firebaseService.create<Types.Tour>("tours", data);
   },

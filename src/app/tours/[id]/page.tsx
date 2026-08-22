@@ -140,7 +140,7 @@ export default async function TourDetailPage({ params }: PageProps) {
       <BreadcrumbJsonLd items={breadcrumbItems} />
       
       {/* SEO: JSON-LD Product Schema enriquecido */}
-      {tour.price && tour.mainImageUrl && (
+      {tour.price && tour.price > 0 && tour.mainImageUrl && (
         <ProductJsonLd
           name={tour.name}
           description={tour.description}
@@ -152,10 +152,12 @@ export default async function TourDetailPage({ params }: PageProps) {
       )}
 
       {/* CTA Sticky Bar - aparece após scroll */}
-      <TourConversionBar 
-        tourName={tour.name}
-        tourPrice={tour.price}
-      />
+      {tour.price && tour.price > 0 && (
+        <TourConversionBar 
+          tourName={tour.name}
+          tourPrice={tour.price}
+        />
+      )}
 
       <div className="bg-white">
         <div className="container mx-auto px-4 py-6">

@@ -293,9 +293,7 @@ export default async function TourDetailPage({ params }: PageProps) {
                     ))}
                   </ul>
                 </div>
-                </p>
-              </div>
-            )}
+              )}
 
             {/* Gatilho de escassez */}
             <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg mb-6 flex items-start gap-3">

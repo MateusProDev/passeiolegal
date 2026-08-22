@@ -110,11 +110,11 @@ export default async function TransferDetailPage({ params }: PageProps) {
               <div className="flex items-center gap-4 mb-6">
                 <div className="flex items-center gap-2 text-gray-600">
                   <Car size={20} />
-                  <span>{transfer.vehicleType}</span>
+                  <span>{transfer.vehicleType || 'Consulte'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <Users size={20} />
-                  <span>{transfer.capacity} pessoas</span>
+                  <span>{transfer.capacity && transfer.capacity > 0 ? `${transfer.capacity} pessoas` : 'Consulte'}</span>
                 </div>
               </div>
 

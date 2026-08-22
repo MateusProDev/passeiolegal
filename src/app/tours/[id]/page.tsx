@@ -227,7 +227,7 @@ export default async function TourDetailPage({ params }: PageProps) {
               <div className="flex flex-wrap items-center gap-4 mb-6 text-sm">
                 <div className="flex items-center gap-2 text-gray-600 bg-gray-50 px-3 py-2 rounded-lg">
                   <Clock size={18} className="text-blue-600" />
-                  <span className="font-medium">{tour.duration}</span>
+                  <span className="font-medium">{tour.duration || 'Consulte'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-600 bg-gray-50 px-3 py-2 rounded-lg">
                   <Users size={18} className="text-blue-600" />

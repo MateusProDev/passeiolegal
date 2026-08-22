@@ -137,11 +137,11 @@ export default function Transfers({ transfers }: TransfersProps) {
                 <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
                   <div className="flex items-center space-x-1">
                     <Car size={16} />
-                    <span>{transfer.vehicleType}</span>
+                    <span>{transfer.vehicleType || 'Consulte'}</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <Users size={16} />
-                    <span>{transfer.capacity} pessoas</span>
+                    <span>{transfer.capacity && transfer.capacity > 0 ? `${transfer.capacity} pessoas` : 'Consulte'}</span>
                   </div>
                 </div>
 

@@ -74,7 +74,7 @@ export default function RecommendedTours({ tours }: RecommendedToursProps) {
 
                 <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
                   <Clock size={16} />
-                  <span>{tour.duration}</span>
+                  <span>{tour.duration || 'Consulte'}</span>
                 </div>
 
                 {/* Preço */}

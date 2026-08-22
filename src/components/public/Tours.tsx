@@ -142,7 +142,7 @@ export default function Tours({ tours }: ToursProps) {
                   <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
                     <div className="flex items-center space-x-1">
                       <Clock size={16} />
-                      <span>{tour.duration}</span>
+                      <span>{tour.duration || 'Consulte'}</span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <Users size={16} />

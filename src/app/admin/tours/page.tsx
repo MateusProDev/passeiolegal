@@ -98,11 +98,11 @@ export default function ToursAdmin() {
                   <div className="flex-1 grid grid-cols-3 gap-4">
                     <div>
                       <p className="text-xs text-muted-foreground">Preço</p>
-                      <p className="font-semibold">R$ {tour.price}</p>
+                      <p className="font-semibold">{tour.price && tour.price > 0 ? `R$ ${tour.price.toFixed(2)}` : 'Consulte'}</p>
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground">Duração</p>
-                      <p className="font-semibold">{tour.duration}</p>
+                      <p className="font-semibold">{tour.duration || 'Consulte'}</p>
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground">Status</p>

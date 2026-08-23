@@ -15,13 +15,7 @@ interface PageProps {
 export const dynamic = 'force-dynamic';
 
 async function getTransfer(id: string) {
-  try {
-    const transfer = await transferService.getById(id);
-    return transfer;
-  } catch (error) {
-    console.error("Error fetching transfer:", error);
-    return null;
-  }
+  return transferService.getById(id);
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

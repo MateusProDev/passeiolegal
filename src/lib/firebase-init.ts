@@ -64,83 +64,75 @@ let initializationPromise: Promise<boolean> | null = null;
 
 export async function initializeFirebaseCollections(): Promise<boolean> {
   if (!adminDb) {
-    console.warn('Firebase Admin not initialized, skipping collection creation');
-    return false;
+    throw new Error('Firebase Admin is not initialized');
   }
 
-  // Return existing promise if already initializing
   if (initializationPromise) {
     return initializationPromise;
   }
 
   initializationPromise = (async () => {
-    try {
-      console.log('Starting Firebase collections initialization...');
+    console.log('Starting Firebase collections initialization...');
 
-      const collections = ['banners', 'tours', 'transfers', 'testimonials', 'blog', 'faq'];
-
-      for (const collectionName of collections) {
-        const collectionRef = adminDb.collection(collectionName);
-        const snapshot = await collectionRef.limit(1).get();
-
-        if (snapshot.empty) {
-          console.log(`Creating collection: ${collectionName}`);
-          
-          // Add initial data if available
-          const initialItems = initialData[collectionName as keyof InitialData];
-          if (initialItems && initialItems.length > 0) {
-            for (const item of initialItems) {
-              await collectionRef.doc(item.id).set(item);
-            }
-          }
-          
-          console.log(`Collection ${collectionName} initialized`);
-        } else {
-          console.log(`Collection ${collectionName} already exists, skipping`);
-        }
-      }
-
-      console.log('Firebase collections initialization completed successfully');
-      return true;
-    } catch (error) {
-      console.error('Error initializing Firebase collections:', error);
-      return false;
-    }
-  })();
-
-  return initializationPromise;
-}
-
-export async function checkFirebaseInitialization() {
-  if (!adminDb) {
-    return { initialized: false, collections: [] };
-  }
-
-  try {
     const collections = ['banners', 'tours', 'transfers', 'testimonials', 'blog', 'faq'];
-    const status: Record<string, boolean> = {};
 
     for (const collectionName of collections) {
       const collectionRef = adminDb.collection(collectionName);
       const snapshot = await collectionRef.limit(1).get();
-      status[collectionName] = !snapshot.empty;
+
+      if (snapshot.empty) {
+        console.log(`Creating collection: ${collectionName}`);
+
+        const initialItems = initialData[collectionName as keyof InitialData];
+        if (initialItems && initialItems.length > 0) {
+          for (const item of initialItems) {
+            await collectionRef.doc(item.id).set(item);
+          }
+        }
+
+        console.log(`Collection ${collectionName} initialized`);
+      } else {
+        console.log(`Collection ${collectionName} already exists, skipping`);
+      }
     }
 
-    return {
-      initialized: Object.values(status).some(v => v),
-      collections: status,
-    };
+    console.log('Firebase collections initialization completed successfully');
+    return true;
+  })();
+
+  try {
+    return await initializationPromise;
   } catch (error) {
-    console.error('Error checking Firebase initialization:', error);
-    return { initialized: false, collections: {} };
+    initializationPromise = null;
+    throw error;
   }
+}
+
+export async function checkFirebaseInitialization() {
+  if (!adminDb) {
+    throw new Error('Firebase Admin is not initialized');
+  }
+
+  const collections = ['banners', 'tours', 'transfers', 'testimonials', 'blog', 'faq'];
+  const status: Record<string, boolean> = {};
+
+  for (const collectionName of collections) {
+    const collectionRef = adminDb.collection(collectionName);
+    const snapshot = await collectionRef.limit(1).get();
+    status[collectionName] = !snapshot.empty;
+  }
+
+  return {
+    initialized: Object.values(status).some(v => v),
+    collections: status,
+  };
 }
 
 // Auto-initialize on first import (lazy initialization)
 export function ensureInitialized() {
   if (adminDb && !initializationPromise) {
-    // Initialize in background without blocking
-    initializeFirebaseCollections().catch(console.error);
+    initializeFirebaseCollections().catch((error) => {
+      console.error('Background Firebase initialization failed:', error);
+    });
   }
 }
-

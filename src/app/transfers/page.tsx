@@ -23,6 +23,7 @@ export default function TransfersPage() {
   const [transfers, setTransfers] = useState<Transfer[]>([]);
   const [filteredTransfers, setFilteredTransfers] = useState<Transfer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [capacityFilter, setCapacityFilter] = useState<'all' | 'small' | 'medium' | 'large'>('all');
@@ -39,8 +40,10 @@ export default function TransfersPage() {
         const allTransfers = await transferService.getAll(false);
         setTransfers(allTransfers);
         setFilteredTransfers(allTransfers);
+        setError(null);
       } catch (error) {
         console.error('Error fetching transfers:', error);
+        setError('Não foi possível carregar os transfers.');
       } finally {
         setLoading(false);
       }
@@ -77,6 +80,16 @@ export default function TransfersPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
+        <div className="max-w-lg rounded-xl border border-red-200 bg-red-50 p-6 text-center text-red-700">
+          <p className="font-semibold">{error}</p>
+        </div>
       </div>
     );
   }

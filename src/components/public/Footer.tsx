@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Facebook, Instagram, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { getResponseError } from '@/lib/errors';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -13,10 +14,11 @@ export default function Footer() {
     const fetchSettings = async () => {
       try {
         const response = await fetch('/api/settings');
-        if (response.ok) {
-          const data = await response.json();
-          setSettings(data);
+        if (!response.ok) {
+          throw await getResponseError(response, 'Failed to fetch settings');
         }
+        const data = await response.json();
+        setSettings(data);
       } catch (error) {
         console.error('Error fetching settings:', error);
       }

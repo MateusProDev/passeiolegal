@@ -23,6 +23,7 @@ interface BlogPost {
 export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
   const breadcrumbItems = [
@@ -36,8 +37,10 @@ export default function BlogPage() {
         const allPosts = await blogService.getAll(false);
         const publishedPosts = allPosts.filter(post => post.published);
         setPosts(publishedPosts);
+        setError(null);
       } catch (error) {
         console.error('Error fetching blog posts:', error);
+        setError('Não foi possível carregar os artigos.');
       } finally {
         setLoading(false);
       }
@@ -66,6 +69,16 @@ export default function BlogPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
+        <div className="max-w-lg rounded-xl border border-red-200 bg-red-50 p-6 text-center text-red-700">
+          <p className="font-semibold">{error}</p>
+        </div>
       </div>
     );
   }

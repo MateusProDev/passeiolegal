@@ -50,35 +50,23 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function getPageData() {
-  try {
-    const [banners, tours, transfers, testimonials, blogPosts, faqs] = await Promise.all([
-      bannerService.getAll(),
-      tourService.getAll(false),
-      transferService.getAll(false),
-      testimonialService.getAll(),
-      blogService.getAll(false),
-      faqService.getAll(),
-    ]);
+  const [banners, tours, transfers, testimonials, blogPosts, faqs] = await Promise.all([
+    bannerService.getAll(),
+    tourService.getAll(false),
+    transferService.getAll(false),
+    testimonialService.getAll(),
+    blogService.getAll(false),
+    faqService.getAll(),
+  ]);
 
-    return {
-      banners,
-      tours,
-      transfers,
-      testimonials,
-      blogPosts,
-      faqs,
-    };
-  } catch (error) {
-    console.error("Error fetching page data:", error);
-    return {
-      banners: [],
-      tours: [],
-      transfers: [],
-      testimonials: [],
-      blogPosts: [],
-      faqs: [],
-    };
-  }
+  return {
+    banners,
+    tours,
+    transfers,
+    testimonials,
+    blogPosts,
+    faqs,
+  };
 }
 
 export default async function Home() {

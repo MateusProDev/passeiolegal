@@ -23,6 +23,7 @@ export default function ToursPage() {
   const [tours, setTours] = useState<Tour[]>([]);
   const [filteredTours, setFilteredTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [durationFilter, setDurationFilter] = useState<'all' | 'short' | 'medium' | 'long'>('all');
@@ -40,8 +41,10 @@ export default function ToursPage() {
         const allTours = await tourService.getAll(false);
         setTours(allTours);
         setFilteredTours(allTours);
+        setError(null);
       } catch (error) {
         console.error('Error fetching tours:', error);
+        setError('Não foi possível carregar os passeios.');
       } finally {
         setLoading(false);
       }
@@ -84,6 +87,16 @@ export default function ToursPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
+        <div className="max-w-lg rounded-xl border border-red-200 bg-red-50 p-6 text-center text-red-700">
+          <p className="font-semibold">{error}</p>
+        </div>
       </div>
     );
   }

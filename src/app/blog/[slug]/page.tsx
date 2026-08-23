@@ -17,59 +17,50 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
-  try {
-    const posts = await blogService.getAll(false);
-    const post = posts.find(p => p.slug === params.slug && p.published);
+  const post = await blogService.getBySlug(params.slug);
 
-    if (!post) {
-      return {
-        title: 'Post não encontrado | Passeio Legal',
-      };
-    }
-
-    return {
-      title: `${post.title || 'Post'} | Passeio Legal`,
-      description: post.summary || `Leia o artigo completo no blog da Passeio Legal. Dicas de turismo em Fortaleza e região.`,
-      openGraph: {
-        type: "article",
-        locale: "pt_BR",
-        url: `${baseUrl}/blog/${params.slug}`,
-        title: post.title,
-        description: post.summary,
-        images: post.imageUrl ? [
-          {
-            url: post.imageUrl,
-            width: 1200,
-            height: 630,
-            alt: post.imageAlt || post.title,
-          },
-        ] : [],
-      },
-      twitter: {
-        card: "summary_large_image",
-        title: post.title,
-        description: post.summary,
-        images: post.imageUrl ? [post.imageUrl] : [],
-      },
-      alternates: {
-        canonical: `${baseUrl}/blog/${params.slug}`,
-      },
-    };
-  } catch (error) {
+  if (!post || !post.published) {
     return {
       title: 'Post não encontrado | Passeio Legal',
     };
   }
+
+  return {
+    title: `${post.title || 'Post'} | Passeio Legal`,
+    description: post.summary || `Leia o artigo completo no blog da Passeio Legal. Dicas de turismo em Fortaleza e região.`,
+    openGraph: {
+      type: "article",
+      locale: "pt_BR",
+      url: `${baseUrl}/blog/${params.slug}`,
+      title: post.title,
+      description: post.summary,
+      images: post.imageUrl ? [
+        {
+          url: post.imageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.imageAlt || post.title,
+        },
+      ] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.summary,
+      images: post.imageUrl ? [post.imageUrl] : [],
+    },
+    alternates: {
+      canonical: `${baseUrl}/blog/${params.slug}`,
+    },
+  };
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-  try {
-    const posts = await blogService.getAll(false);
-    const post = posts.find(p => p.slug === params.slug && p.published);
+  const post = await blogService.getBySlug(params.slug);
 
-    if (!post) {
-      notFound();
-    }
+  if (!post || !post.published) {
+    notFound();
+  }
 
     const formatDate = (date: any) => {
       if (!date) return 'Data não disponível';
@@ -110,7 +101,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       typeof post.updatedAt === 'object' && 'toDate' in post.updatedAt ? (post.updatedAt as any).toDate().toISOString() : 
       new Date(post.updatedAt).toISOString()) : publishedDate;
 
-    return (
+  return (
       <main className="min-h-screen pt-24">
         <Header />
         
@@ -200,9 +191,5 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         <Footer />
       </main>
-    );
-  } catch (error) {
-    console.error('Error loading blog post:', error);
-    notFound();
-  }
+  );
 }

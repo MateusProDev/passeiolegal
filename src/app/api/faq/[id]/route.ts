@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { faqService } from "@/lib/firestore";
+import { requireAuth } from "@/lib/auth";
 
 // PUT /api/faq/[id] - Update FAQ item
 export async function PUT(
@@ -7,6 +8,9 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     const body = await request.json();
     await faqService.update(params.id, body);
     return NextResponse.json({ message: "FAQ item updated successfully" });
@@ -21,10 +25,13 @@ export async function PUT(
 
 // DELETE /api/faq/[id] - Delete FAQ item
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     await faqService.delete(params.id);
     return NextResponse.json({ message: "FAQ item deleted successfully" });
   } catch (error) {

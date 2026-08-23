@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { faqService } from "@/lib/firestore";
+import { requireAuth } from "@/lib/auth";
 
 // GET /api/faq - Get all FAQ items
 export async function GET() {
@@ -18,6 +19,9 @@ export async function GET() {
 // POST /api/faq - Create FAQ item
 export async function POST(request: NextRequest) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     const body = await request.json();
 
     if (!body.question || !body.answer) {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { transferService } from "@/lib/firestore";
+import { requireAuth } from "@/lib/auth";
 
 // GET /api/transfers - Get all transfers
 export async function GET(request: NextRequest) {
@@ -20,6 +21,9 @@ export async function GET(request: NextRequest) {
 // POST /api/transfers - Create transfer
 export async function POST(request: NextRequest) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     const body = await request.json();
 
     // Validate required fields

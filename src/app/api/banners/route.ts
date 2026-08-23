@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { bannerService } from "@/lib/firestore";
+import { requireAuth } from "@/lib/auth";
 
 // GET /api/banners - Get all banners
 export async function GET() {
@@ -18,6 +19,9 @@ export async function GET() {
 // POST /api/banners - Create banner
 export async function POST(request: NextRequest) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     const body = await request.json();
 
     // Validate required fields

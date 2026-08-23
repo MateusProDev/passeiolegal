@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { settingsService } from "@/lib/firestore";
+import { requireAuth } from "@/lib/auth";
 
 // GET /api/settings - Get site settings
 export async function GET() {
@@ -18,6 +19,9 @@ export async function GET() {
 // PUT /api/settings - Update site settings
 export async function PUT(request: NextRequest) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     const body = await request.json();
     await settingsService.update(body);
     return NextResponse.json({ message: "Settings updated successfully" });
@@ -33,6 +37,9 @@ export async function PUT(request: NextRequest) {
 // POST /api/settings - Create/update site settings (alternative method)
 export async function POST(request: NextRequest) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     const body = await request.json();
     await settingsService.update(body);
     return NextResponse.json({ message: "Settings updated successfully" });

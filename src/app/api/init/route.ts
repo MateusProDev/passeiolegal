@@ -1,20 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
-import { initializeFirebaseCollections, checkFirebaseInitialization, ensureInitialized } from "@/lib/firebase-init";
+import crypto from "crypto";
+import { initializeFirebaseCollections, checkFirebaseInitialization } from "@/lib/firebase-init";
+import { requireAuth } from "@/lib/auth";
 
-// Auto-initialize Firebase collections on first API call
-ensureInitialized();
+function secretMatches(provided: unknown): boolean {
+  const expected = process.env.INIT_SECRET;
+  if (!expected || typeof provided !== "string") return false;
+
+  const expectedBuffer = Buffer.from(expected);
+  const providedBuffer = Buffer.from(provided);
+  if (expectedBuffer.length !== providedBuffer.length) return false;
+
+  return crypto.timingSafeEqual(expectedBuffer, providedBuffer);
+}
 
 // POST /api/init - Initialize Firebase collections
 export async function POST(request: NextRequest) {
   try {
     const { secret } = await request.json();
 
-    // Simple secret check to prevent unauthorized initialization
-    if (secret !== process.env.INIT_SECRET) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+    if (!secretMatches(secret)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const success = await initializeFirebaseCollections();
@@ -24,12 +30,12 @@ export async function POST(request: NextRequest) {
         { message: "Firebase collections initialized successfully" },
         { status: 200 }
       );
-    } else {
-      return NextResponse.json(
-        { error: "Failed to initialize Firebase collections" },
-        { status: 500 }
-      );
     }
+
+    return NextResponse.json(
+      { error: "Failed to initialize Firebase collections" },
+      { status: 500 }
+    );
   } catch (error) {
     console.error("Error in init API:", error);
     return NextResponse.json(
@@ -39,9 +45,12 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET /api/init - Check initialization status
-export async function GET() {
+// GET /api/init - Check initialization status (admin only)
+export async function GET(request: NextRequest) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     const status = await checkFirebaseInitialization();
     return NextResponse.json(status, { status: 200 });
   } catch (error) {

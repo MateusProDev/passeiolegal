@@ -4,11 +4,16 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
-function LoginForm() {
-  console.log("[LOGIN] Component rendering");
+function safeRedirect(target: string | null): string {
+  if (!target || !target.startsWith("/") || target.startsWith("//")) {
+    return "/admin/dashboard";
+  }
+  return target;
+}
 
+function LoginForm() {
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/admin/dashboard";
+  const redirect = safeRedirect(searchParams.get("redirect"));
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,8 +22,6 @@ function LoginForm() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    console.log("[LOGIN] Starting login process for:", email);
-    console.log("[LOGIN] Redirect target:", redirect);
 
     try {
       const response = await fetch("/api/auth/login", {
@@ -28,22 +31,15 @@ function LoginForm() {
         credentials: "include",
       });
 
-      console.log("[LOGIN] Response status:", response.status);
-
       if (!response.ok) {
         throw new Error("Login failed");
       }
-
-      const data = await response.json();
-      console.log("[LOGIN] Login successful, received:", data);
-      console.log("[LOGIN] Redirecting to:", redirect);
 
       // Small delay to ensure cookie is set
       setTimeout(() => {
         window.location.href = redirect;
       }, 100);
-    } catch (error) {
-      console.error("[LOGIN] Login error:", error);
+    } catch {
       alert("Invalid email or password");
     } finally {
       setLoading(false);

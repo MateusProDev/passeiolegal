@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
+import { requireAuth } from "@/lib/auth";
 
 // POST /api/cloudinary/delete - Delete image from Cloudinary
 export async function POST(request: NextRequest) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     const { publicId } = await request.json();
 
     if (!publicId) {

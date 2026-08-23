@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { bannerService } from "@/lib/firestore";
+import { requireAuth } from "@/lib/auth";
 
 // GET /api/banners/[id] - Get single banner
 export async function GET(
@@ -30,6 +31,9 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     const body = await request.json();
     await bannerService.update(params.id, body);
     return NextResponse.json({ message: "Banner updated successfully" });
@@ -44,10 +48,13 @@ export async function PUT(
 
 // DELETE /api/banners/[id] - Delete banner
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     await bannerService.delete(params.id);
     return NextResponse.json({ message: "Banner deleted successfully" });
   } catch (error) {

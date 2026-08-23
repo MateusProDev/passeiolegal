@@ -1,15 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
+import { requireAuth } from "@/lib/auth";
 
 // Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY || process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET || process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 export async function POST(request: NextRequest) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     const formData = await request.formData();
     const file = formData.get("file") as File;
 
@@ -47,12 +51,12 @@ export async function POST(request: NextRequest) {
     const dataURI = `data:${file.type};base64,${base64}`;
 
     // Check Cloudinary configuration
-    if (!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || !process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY) {
-      console.error("Missing Cloudinary configuration:", {
-        cloud_name: !!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-        api_key: !!process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
-        api_secret: !!process.env.CLOUDINARY_API_SECRET || !!process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
-      });
+    if (
+      !process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ||
+      !process.env.CLOUDINARY_API_KEY ||
+      !process.env.CLOUDINARY_API_SECRET
+    ) {
+      console.error("Missing Cloudinary configuration");
       return NextResponse.json(
         { error: "Cloudinary configuration missing" },
         { status: 500 }
@@ -76,7 +80,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error uploading file:", error);
     return NextResponse.json(
-      { error: "Failed to upload file", details: error instanceof Error ? error.message : "Unknown error" },
+      { error: "Failed to upload file" },
       { status: 500 }
     );
   }

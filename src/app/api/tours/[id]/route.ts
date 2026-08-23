@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tourService } from "@/lib/firestore";
+import { requireAuth } from "@/lib/auth";
 
 // GET /api/tours/[id] - Get single tour
 export async function GET(
@@ -30,6 +31,9 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     const body = await request.json();
     await tourService.update(params.id, body);
     return NextResponse.json({ message: "Tour updated successfully" });
@@ -44,10 +48,13 @@ export async function PUT(
 
 // DELETE /api/tours/[id] - Delete tour
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     await tourService.delete(params.id);
     return NextResponse.json({ message: "Tour deleted successfully" });
   } catch (error) {

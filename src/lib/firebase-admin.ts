@@ -6,8 +6,10 @@ import path from 'path';
 if (typeof window === 'undefined') {
   try {
     // Try to load the service account key from environment variable or file
-    const serviceAccountKey = process.env.FIREBASE_ADMIN_SDK 
-      ? JSON.parse(process.env.FIREBASE_ADMIN_SDK)
+    const serviceAccountJson =
+      process.env.FIREBASE_ADMIN_SDK || process.env.FIREBASE_ADMIN_SDK_KEY;
+    const serviceAccountKey = serviceAccountJson
+      ? JSON.parse(serviceAccountJson)
       : (() => {
           try {
             const filePath = path.join(process.cwd(), 'passeiolegal-firebase-adminsdk-fbsvc-c63c5e50d2.json');

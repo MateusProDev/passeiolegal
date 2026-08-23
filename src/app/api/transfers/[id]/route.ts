@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { transferService } from "@/lib/firestore";
+import { requireAuth } from "@/lib/auth";
 
 // GET /api/transfers/[id] - Get single transfer
 export async function GET(
@@ -30,6 +31,9 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     const body = await request.json();
     await transferService.update(params.id, body);
     return NextResponse.json({ message: "Transfer updated successfully" });
@@ -44,10 +48,13 @@ export async function PUT(
 
 // DELETE /api/transfers/[id] - Delete transfer
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     await transferService.delete(params.id);
     return NextResponse.json({ message: "Transfer deleted successfully" });
   } catch (error) {

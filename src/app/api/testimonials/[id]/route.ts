@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { testimonialService } from "@/lib/firestore";
+import { requireAuth } from "@/lib/auth";
 
 // PUT /api/testimonials/[id] - Update testimonial
 export async function PUT(
@@ -7,6 +8,9 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     const body = await request.json();
     await testimonialService.update(params.id, body);
     return NextResponse.json({ message: "Testimonial updated successfully" });
@@ -21,10 +25,13 @@ export async function PUT(
 
 // DELETE /api/testimonials/[id] - Delete testimonial
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    const unauthorized = await requireAuth(request);
+    if (unauthorized) return unauthorized;
+
     await testimonialService.delete(params.id);
     return NextResponse.json({ message: "Testimonial deleted successfully" });
   } catch (error) {

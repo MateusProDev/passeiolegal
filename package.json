@@ -10,7 +10,11 @@
     "seed": "ts-node scripts/seed-firestore.ts",
     "init-firebase": "ts-node scripts/init-firebase.ts",
     "init-firebase-local": "ts-node scripts/init-firebase-local.ts",
-    "init-collections": "node scripts/initialize-collections.js"
+    "init-collections": "node scripts/initialize-collections.js",
+    "lint": "next lint",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage --runInBand"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",
@@ -48,11 +52,16 @@
     "zustand": "^4.4.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/react": "14.3.1",
+    "@types/jest": "29.5.14",
     "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.50.0",
     "eslint-config-next": "^14.2.0",
+    "jest": "29.7.0",
+    "jest-environment-jsdom": "29.7.0",
     "ts-node": "^10.9.0"
   }
 }

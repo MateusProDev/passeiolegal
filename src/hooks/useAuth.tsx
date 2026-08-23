@@ -43,22 +43,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(
     async (email: string, password: string) => {
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-      } catch (error) {
-        throw new Error("Login failed");
-      }
+      await signInWithEmailAndPassword(auth, email, password);
     },
     []
   );
 
   const logout = useCallback(async () => {
-    try {
-      await signOut(auth);
-      setUser(null);
-    } catch (error) {
-      throw new Error("Logout failed");
-    }
+    await signOut(auth);
+    setUser(null);
   }, []);
 
   const value: AuthContextType = {

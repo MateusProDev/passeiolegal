@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
+import { getResponseError } from '@/lib/errors';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,10 +14,11 @@ export default function Header() {
     const fetchSettings = async () => {
       try {
         const response = await fetch('/api/settings');
-        if (response.ok) {
-          const data = await response.json();
-          setSettings(data);
+        if (!response.ok) {
+          throw await getResponseError(response, 'Failed to fetch settings');
         }
+        const data = await response.json();
+        setSettings(data);
       } catch (error) {
         console.error('Error fetching settings:', error);
       }

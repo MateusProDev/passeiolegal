@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { Upload, X, Loader2 } from "lucide-react";
+import { getResponseError } from "@/lib/errors";
 
 interface ImageUploadProps {
   onImageUpload: (url: string) => void;
@@ -30,7 +31,7 @@ export default function ImageUpload({ onImageUpload, currentImage, label = "Imag
       });
 
       if (!response.ok) {
-        throw new Error("Upload failed");
+        throw await getResponseError(response, "Upload failed");
       }
 
       const data = await response.json();

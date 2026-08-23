@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
+import { getErrorMessage, getResponseError } from "@/lib/errors";
 
 interface DashboardStats {
   banners: number;
@@ -23,6 +24,7 @@ export default function AdminDashboard() {
     blogPosts: 0,
     faqItems: 0,
   });
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -37,15 +39,24 @@ export default function AdminDashboard() {
         const results: Partial<DashboardStats> = {};
         for (const endpoint of endpoints) {
           const res = await fetch(endpoint.url);
+          if (!res.ok) {
+            throw await getResponseError(
+              res,
+              `Failed to fetch ${endpoint.key}`
+            );
+          }
           const data = await res.json();
-          results[endpoint.key as keyof DashboardStats] = Array.isArray(data)
-            ? data.length
-            : 0;
+          if (!Array.isArray(data)) {
+            throw new Error(`Invalid response for ${endpoint.key}`);
+          }
+          results[endpoint.key as keyof DashboardStats] = data.length;
         }
 
         setStats((prev) => ({ ...prev, ...results }));
+        setError(null);
       } catch (error) {
         console.error("Error fetching stats:", error);
+        setError(getErrorMessage(error, "Failed to load dashboard stats"));
       }
     };
 
@@ -78,6 +89,14 @@ export default function AdminDashboard() {
           Bem-vindo ao painel administrativo da Passeio Legal
         </p>
       </div>
+
+      {error && (
+        <Card className="border-destructive bg-destructive/10">
+          <CardContent className="pt-6">
+            <p className="text-destructive">{error}</p>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

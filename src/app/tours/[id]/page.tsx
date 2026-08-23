@@ -19,13 +19,7 @@ interface PageProps {
 export const dynamic = 'force-dynamic';
 
 async function getTour(id: string) {
-  try {
-    const tour = await tourService.getById(id);
-    return tour;
-  } catch (error) {
-    console.error("Error fetching tour:", error);
-    return null;
-  }
+  return tourService.getById(id);
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

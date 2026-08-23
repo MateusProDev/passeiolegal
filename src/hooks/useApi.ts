@@ -1,7 +1,27 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
+import { RequestError, getErrorMessage } from "@/lib/errors";
+
+interface ApiErrorPayload {
+  error?: string;
+  message?: string;
+}
+
+function getAxiosError(error: unknown, fallback: string): RequestError {
+  if (!axios.isAxiosError<ApiErrorPayload>(error)) {
+    return new RequestError(getErrorMessage(error, fallback), undefined, error);
+  }
+
+  const message =
+    error.response?.data?.error ||
+    error.response?.data?.message ||
+    error.message ||
+    fallback;
+
+  return new RequestError(message, error.response?.status, error);
+}
 
 interface UseQueryOptions {
   skip?: boolean;
@@ -33,8 +53,7 @@ export function useQuery<T>(
       setData(response.data);
       setError(null);
     } catch (err) {
-      const axiosError = err as AxiosError;
-      setError(new Error(axiosError.message));
+      setError(getAxiosError(err, "Failed to fetch data"));
     } finally {
       setLoading(false);
     }
@@ -85,10 +104,9 @@ export function useMutation<T, D = unknown>(
         setError(null);
         return response.data;
       } catch (err) {
-        const axiosError = err as AxiosError;
-        const errorMessage = new Error(axiosError.message);
-        setError(errorMessage);
-        throw errorMessage;
+        const requestError = getAxiosError(err, "Request failed");
+        setError(requestError);
+        throw requestError;
       } finally {
         setLoading(false);
       }
@@ -142,10 +160,9 @@ export function useCreateItem<T>(entityType: string) {
         setError(null);
         return response.data;
       } catch (err) {
-        const axiosError = err as AxiosError;
-        const errorMessage = new Error(axiosError.message);
-        setError(errorMessage);
-        throw errorMessage;
+        const requestError = getAxiosError(err, "Failed to create item");
+        setError(requestError);
+        throw requestError;
       } finally {
         setLoading(false);
       }
@@ -169,10 +186,9 @@ export function useUpdateItem<T>(entityType: string, id: string) {
         setError(null);
         return response.data;
       } catch (err) {
-        const axiosError = err as AxiosError;
-        const errorMessage = new Error(axiosError.message);
-        setError(errorMessage);
-        throw errorMessage;
+        const requestError = getAxiosError(err, "Failed to update item");
+        setError(requestError);
+        throw requestError;
       } finally {
         setLoading(false);
       }
@@ -195,10 +211,9 @@ export function useDeleteItem(entityType: string, id: string) {
       setError(null);
       return response.data;
     } catch (err) {
-      const axiosError = err as AxiosError;
-      const errorMessage = new Error(axiosError.message);
-      setError(errorMessage);
-      throw errorMessage;
+      const requestError = getAxiosError(err, "Failed to delete item");
+      setError(requestError);
+      throw requestError;
     } finally {
       setLoading(false);
     }

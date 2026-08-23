@@ -1,3 +1,5 @@
+import { getResponseError } from "./errors";
+
 export const cloudinaryConfig = {
   cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "",
   uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "",
@@ -41,7 +43,7 @@ export async function uploadImageToCloudinary(
     );
 
     if (!response.ok) {
-      throw new Error("Upload failed");
+      throw await getResponseError(response, "Upload failed");
     }
 
     return await response.json();
@@ -65,7 +67,7 @@ export async function deleteImageFromCloudinary(
     });
 
     if (!response.ok) {
-      throw new Error("Delete failed");
+      throw await getResponseError(response, "Delete failed");
     }
 
     return await response.json();

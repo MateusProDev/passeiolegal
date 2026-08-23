@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
+import { getResponseError } from '@/lib/errors';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -17,10 +18,11 @@ export default function Contact() {
     const fetchSettings = async () => {
       try {
         const response = await fetch('/api/settings');
-        if (response.ok) {
-          const data = await response.json();
-          setSettings(data);
+        if (!response.ok) {
+          throw await getResponseError(response, 'Failed to fetch settings');
         }
+        const data = await response.json();
+        setSettings(data);
       } catch (error) {
         console.error('Error fetching settings:', error);
       }

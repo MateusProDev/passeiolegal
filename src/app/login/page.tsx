@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { getResponseError } from "@/lib/errors";
 
 function LoginForm() {
   console.log("[LOGIN] Component rendering");
@@ -31,7 +32,7 @@ function LoginForm() {
       console.log("[LOGIN] Response status:", response.status);
 
       if (!response.ok) {
-        throw new Error("Login failed");
+        throw await getResponseError(response, "Login failed");
       }
 
       const data = await response.json();

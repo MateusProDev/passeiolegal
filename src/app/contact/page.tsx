@@ -5,6 +5,7 @@ import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import { Mail, Phone, MapPin, MessageCircle, Send } from "lucide-react";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { getResponseError } from "@/lib/errors";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
 
@@ -23,10 +24,11 @@ export default function ContactPage() {
     const fetchSettings = async () => {
       try {
         const response = await fetch("/api/settings");
-        if (response.ok) {
-          const data = await response.json();
-          setSettings(data);
+        if (!response.ok) {
+          throw await getResponseError(response, "Failed to fetch settings");
         }
+        const data = await response.json();
+        setSettings(data);
       } catch (error) {
         console.error("Error fetching settings:", error);
       }

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 export default function EditTestimonial() {
   const router = useRouter();
@@ -71,9 +72,7 @@ export default function EditTestimonial() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+      <LoadingSpinner />
     );
   }
 

@@ -4,31 +4,24 @@ import { Card, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { useFAQs } from "@/hooks/useApi";
-import toast from "react-hot-toast";
+import { useDeleteEntity } from "@/hooks/useDeleteEntity";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export default function FAQAdmin() {
   const { data: faqs, loading, refetch } = useFAQs();
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Tem certeza que deseja excluir esta pergunta?")) return;
-
-    try {
-      const response = await fetch(`/api/faq/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Delete failed");
-      toast.success("Pergunta excluída com sucesso");
-      refetch();
-    } catch (error) {
-      toast.error("Erro ao excluir pergunta");
-    }
-  };
+  const handleDelete = useDeleteEntity({
+    entityType: "faq",
+    confirmMessage: "Tem certeza que deseja excluir esta pergunta?",
+    successMessage: "Pergunta excluída com sucesso",
+    errorMessage: "Erro ao excluir pergunta",
+    onDeleted: refetch,
+  });
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+      <LoadingSpinner />
     );
   }
 
@@ -48,13 +41,7 @@ export default function FAQAdmin() {
 
       <div className="grid gap-4">
         {!faqs || faqs.length === 0 ? (
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-center text-muted-foreground">
-                Nenhuma pergunta encontrada. Crie a primeira pergunta!
-              </p>
-            </CardContent>
-          </Card>
+          <EmptyState message="Nenhuma pergunta encontrada. Crie a primeira pergunta!" />
         ) : (
           faqs.map((faq: any) => (
             <Card key={faq.id}>

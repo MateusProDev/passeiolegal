@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { MessageCircle } from 'lucide-react';
+import { buildWhatsAppUrl, DEFAULT_WHATSAPP_NUMBER } from '@/lib/whatsapp';
 
 interface TourConversionBarProps {
   tourName: string;
   whatsappNumber?: string;
 }
 
-export default function TourConversionBar({ tourName, whatsappNumber = "5585997314093" }: TourConversionBarProps) {
+export default function TourConversionBar({ tourName, whatsappNumber = DEFAULT_WHATSAPP_NUMBER }: TourConversionBarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -27,8 +28,10 @@ export default function TourConversionBar({ tourName, whatsappNumber = "55859973
 
   if (!isScrolled) return null;
 
-  const whatsappMessage = encodeURIComponent(`Olá! Gostaria de reservar o passeio: ${tourName}`);
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+  const whatsappUrl = buildWhatsAppUrl({
+    phone: whatsappNumber,
+    message: `Olá! Gostaria de reservar o passeio: ${tourName}`,
+  });
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 transition-transform duration-300">

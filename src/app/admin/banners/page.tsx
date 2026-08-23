@@ -3,33 +3,25 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
-import toast from "react-hot-toast";
 import { useBanners } from "@/hooks/useApi";
+import { useDeleteEntity } from "@/hooks/useDeleteEntity";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ErrorCard } from "@/components/ui/ErrorCard";
 
 export default function BannersAdmin() {
   const { data: banners, loading, error, refetch } = useBanners();
 
-  const handleDelete = async (id: string) => {
-    try {
-      const response = await fetch(`/api/banners/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) throw new Error("Delete failed");
-
-      toast.success("Banner deleted successfully");
-      // Refetch banners
-      refetch();
-    } catch (error) {
-      toast.error("Failed to delete banner");
-    }
-  };
+  const handleDelete = useDeleteEntity({
+    entityType: "banners",
+    successMessage: "Banner deleted successfully",
+    errorMessage: "Failed to delete banner",
+    onDeleted: refetch,
+  });
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+      <LoadingSpinner />
     );
   }
 
@@ -47,22 +39,10 @@ export default function BannersAdmin() {
         </Button>
       </div>
 
-      {error && (
-        <Card className="border-destructive bg-destructive/10">
-          <CardContent className="pt-6">
-            <p className="text-destructive">{error.message}</p>
-          </CardContent>
-        </Card>
-      )}
+      {error && <ErrorCard message={error.message} />}
 
       {!banners || banners.length === 0 ? (
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-center text-muted-foreground">
-              Nenhum banner encontrado. Crie o primeiro banner para começar.
-            </p>
-          </CardContent>
-        </Card>
+        <EmptyState message="Nenhum banner encontrado. Crie o primeiro banner para começar." />
       ) : (
         <div className="grid gap-4">
           {banners.map((banner: any) => (

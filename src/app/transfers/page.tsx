@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Car, Users, Search, SlidersHorizontal } from 'lucide-react';
 import { transferService } from '@/lib/firestore';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 interface Transfer {
   id: string;
@@ -75,9 +76,7 @@ export default function TransfersPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+      <LoadingSpinner fullScreen />
     );
   }
 

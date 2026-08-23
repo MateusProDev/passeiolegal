@@ -7,12 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "seed": "ts-node scripts/seed-firestore.ts",
-    "init-firebase": "ts-node scripts/init-firebase.ts",
-    "init-firebase-local": "ts-node scripts/init-firebase-local.ts",
-    "init-collections": "node scripts/initialize-collections.js",
-    "init-site-content": "tsx scripts/initialize-site-content.ts",
-    "postbuild": "tsx scripts/initialize-site-content.ts"
+    "init-site-content": "tsx scripts/initialize-site-content.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",

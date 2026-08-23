@@ -5,6 +5,7 @@ import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import { Mail, Phone, MapPin, MessageCircle, Send } from "lucide-react";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
 
@@ -103,7 +104,7 @@ export default function ContactPage() {
                     <h3 className="font-semibold text-gray-900 mb-1">WhatsApp</h3>
                     <p className="text-gray-600">{contactInfo.whatsapp}</p>
                     <a
-                      href={`https://wa.me/${contactInfo.whatsapp.replace(/\D/g, '')}`}
+                      href={buildWhatsAppUrl({ phone: contactInfo.whatsapp })}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-green-600 hover:text-green-700 font-medium inline-flex items-center gap-1 mt-2"

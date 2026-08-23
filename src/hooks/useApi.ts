@@ -3,6 +3,44 @@
 import { useState, useCallback, useEffect } from "react";
 import axios, { AxiosError } from "axios";
 
+function toError(err: unknown): Error {
+  return new Error((err as AxiosError).message);
+}
+
+interface AsyncAction<A extends unknown[], R> {
+  run: (...args: A) => Promise<R>;
+  loading: boolean;
+  error: Error | null;
+}
+
+/** Wraps an async request with the shared loading/error state handling. */
+function useAsyncAction<A extends unknown[], R>(
+  action: (...args: A) => Promise<R>
+): AsyncAction<A, R> {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const run = useCallback(
+    async (...args: A) => {
+      setLoading(true);
+      try {
+        const result = await action(...args);
+        setError(null);
+        return result;
+      } catch (err) {
+        const requestError = toError(err);
+        setError(requestError);
+        throw requestError;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [action]
+  );
+
+  return { run, loading, error };
+}
+
 interface UseQueryOptions {
   skip?: boolean;
   refetchInterval?: number;
@@ -33,8 +71,7 @@ export function useQuery<T>(
       setData(response.data);
       setError(null);
     } catch (err) {
-      const axiosError = err as AxiosError;
-      setError(new Error(axiosError.message));
+      setError(toError(err));
     } finally {
       setLoading(false);
     }
@@ -85,10 +122,9 @@ export function useMutation<T, D = unknown>(
         setError(null);
         return response.data;
       } catch (err) {
-        const axiosError = err as AxiosError;
-        const errorMessage = new Error(axiosError.message);
-        setError(errorMessage);
-        throw errorMessage;
+        const requestError = toError(err);
+        setError(requestError);
+        throw requestError;
       } finally {
         setLoading(false);
       }
@@ -129,80 +165,37 @@ export function useTestimonials() {
   return useQuery<any[]>("/api/testimonials");
 }
 
-// Hook for creating/updating items
+// Hook for creating items
 export function useCreateItem<T>(entityType: string) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  const create = useCallback(
-    async (data: Partial<T>) => {
-      setLoading(true);
-      try {
-        const response = await axios.post(`/api/${entityType}`, data);
-        setError(null);
-        return response.data;
-      } catch (err) {
-        const axiosError = err as AxiosError;
-        const errorMessage = new Error(axiosError.message);
-        setError(errorMessage);
-        throw errorMessage;
-      } finally {
-        setLoading(false);
-      }
-    },
+  const action = useCallback(
+    async (data: Partial<T>) =>
+      (await axios.post(`/api/${entityType}`, data)).data,
     [entityType]
   );
+  const { run, loading, error } = useAsyncAction(action);
 
-  return { create, loading, error };
+  return { create: run, loading, error };
 }
 
 // Hook for updating items
 export function useUpdateItem<T>(entityType: string, id: string) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  const update = useCallback(
-    async (data: Partial<T>) => {
-      setLoading(true);
-      try {
-        const response = await axios.put(`/api/${entityType}/${id}`, data);
-        setError(null);
-        return response.data;
-      } catch (err) {
-        const axiosError = err as AxiosError;
-        const errorMessage = new Error(axiosError.message);
-        setError(errorMessage);
-        throw errorMessage;
-      } finally {
-        setLoading(false);
-      }
-    },
+  const action = useCallback(
+    async (data: Partial<T>) =>
+      (await axios.put(`/api/${entityType}/${id}`, data)).data,
     [entityType, id]
   );
+  const { run, loading, error } = useAsyncAction(action);
 
-  return { update, loading, error };
+  return { update: run, loading, error };
 }
 
 // Hook for deleting items
 export function useDeleteItem(entityType: string, id: string) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const action = useCallback(
+    async () => (await axios.delete(`/api/${entityType}/${id}`)).data,
+    [entityType, id]
+  );
+  const { run, loading, error } = useAsyncAction(action);
 
-  const deleteItem = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await axios.delete(`/api/${entityType}/${id}`);
-      setError(null);
-      return response.data;
-    } catch (err) {
-      const axiosError = err as AxiosError;
-      const errorMessage = new Error(axiosError.message);
-      setError(errorMessage);
-      throw errorMessage;
-    } finally {
-      setLoading(false);
-    }
-  }, [entityType, id]);
-
-  return { deleteItem, loading, error };
+  return { deleteItem: run, loading, error };
 }

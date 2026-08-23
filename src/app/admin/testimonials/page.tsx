@@ -4,32 +4,25 @@ import { Card, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { useTestimonials } from "@/hooks/useApi";
-import toast from "react-hot-toast";
+import { useDeleteEntity } from "@/hooks/useDeleteEntity";
 import Image from "next/image";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export default function TestimonialsAdmin() {
   const { data: testimonials, loading, refetch } = useTestimonials();
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Tem certeza que deseja excluir este depoimento?")) return;
-
-    try {
-      const response = await fetch(`/api/testimonials/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Delete failed");
-      toast.success("Depoimento excluído com sucesso");
-      refetch();
-    } catch (error) {
-      toast.error("Erro ao excluir depoimento");
-    }
-  };
+  const handleDelete = useDeleteEntity({
+    entityType: "testimonials",
+    confirmMessage: "Tem certeza que deseja excluir este depoimento?",
+    successMessage: "Depoimento excluído com sucesso",
+    errorMessage: "Erro ao excluir depoimento",
+    onDeleted: refetch,
+  });
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+      <LoadingSpinner />
     );
   }
 
@@ -49,13 +42,7 @@ export default function TestimonialsAdmin() {
 
       <div className="grid gap-4">
         {!testimonials || testimonials.length === 0 ? (
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-center text-muted-foreground">
-                Nenhum depoimento encontrado. Crie o primeiro depoimento!
-              </p>
-            </CardContent>
-          </Card>
+          <EmptyState message="Nenhum depoimento encontrado. Crie o primeiro depoimento!" />
         ) : (
           testimonials.map((testimonial: any) => (
             <Card key={testimonial.id}>

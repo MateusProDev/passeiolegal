@@ -119,41 +119,60 @@ export const firebaseService = {
   },
 };
 
+export type EntityInput<T> = Omit<T, "id" | "createdAt" | "updatedAt">;
+
+interface EntityServiceOptions {
+  /** Constraints applied to every listing, e.g. a default ordering. */
+  baseConstraints?: QueryConstraint[];
+  /** Boolean field used by `getAll(true)` to return only visible documents. */
+  visibilityField?: string;
+}
+
+/**
+ * Builds the standard CRUD surface shared by every collection service.
+ * Collections with extra queries spread the result and add their own methods.
+ */
+function createEntityService<T>(
+  collectionName: string,
+  { baseConstraints = [], visibilityField }: EntityServiceOptions = {}
+) {
+  return {
+    async getAll(onlyVisible = false) {
+      const constraints = [...baseConstraints];
+      if (onlyVisible && visibilityField) {
+        constraints.push(where(visibilityField, "==", true));
+      }
+      return firebaseService.getMany<T>(collectionName, constraints);
+    },
+
+    async getById(id: string) {
+      return firebaseService.get<T>(collectionName, id);
+    },
+
+    async create(data: EntityInput<T>) {
+      return firebaseService.create<T>(collectionName, data as Partial<T>);
+    },
+
+    async update(id: string, data: Partial<T>) {
+      return firebaseService.update<T>(collectionName, id, data);
+    },
+
+    async delete(id: string) {
+      return firebaseService.delete(collectionName, id);
+    },
+  };
+}
+
 // Specialized collection services
-export const bannerService = {
-  async getAll() {
-    return firebaseService.getMany<Types.Banner>("banners", [
-      where("active", "==", true),
-    ]);
-  },
-
-  async getById(id: string) {
-    return firebaseService.get<Types.Banner>("banners", id);
-  },
-
-  async create(data: Omit<Types.Banner, "id" | "createdAt" | "updatedAt">) {
-    return firebaseService.create<Types.Banner>("banners", data);
-  },
-
-  async update(id: string, data: Partial<Types.Banner>) {
-    return firebaseService.update<Types.Banner>("banners", id, data);
-  },
-
-  async delete(id: string) {
-    return firebaseService.delete("banners", id);
-  },
-};
+export const bannerService = createEntityService<Types.Banner>("banners", {
+  baseConstraints: [where("active", "==", true)],
+});
 
 export const tourService = {
-  async getAll(onlyActive = false) {
-    const constraints: QueryConstraint[] = [orderBy("name", "asc")];
-    if (onlyActive) constraints.push(where("active", "==", true));
-    return firebaseService.getMany<Types.Tour>("tours", constraints);
-  },
-
-  async getById(id: string) {
-    return firebaseService.get<Types.Tour>("tours", id);
-  },
+  ...createEntityService<Types.Tour>("tours", {
+    baseConstraints: [orderBy("name", "asc")],
+    visibilityField: "active",
+  }),
 
   async getFeatured() {
     return firebaseService.getMany<Types.Tour>("tours", [
@@ -178,72 +197,24 @@ export const tourService = {
       return [];
     }
   },
-
-  async create(data: Omit<Types.Tour, "id" | "createdAt" | "updatedAt">) {
-    return firebaseService.create<Types.Tour>("tours", data);
-  },
-
-  async update(id: string, data: Partial<Types.Tour>) {
-    return firebaseService.update<Types.Tour>("tours", id, data);
-  },
-
-  async delete(id: string) {
-    return firebaseService.delete("tours", id);
-  },
 };
 
-export const transferService = {
-  async getAll(onlyActive = false) {
-    const constraints: QueryConstraint[] = [orderBy("name", "asc")];
-    if (onlyActive) constraints.push(where("active", "==", true));
-    return firebaseService.getMany<Types.Transfer>("transfers", constraints);
-  },
+export const transferService = createEntityService<Types.Transfer>(
+  "transfers",
+  {
+    baseConstraints: [orderBy("name", "asc")],
+    visibilityField: "active",
+  }
+);
 
-  async getById(id: string) {
-    return firebaseService.get<Types.Transfer>("transfers", id);
-  },
-
-  async create(
-    data: Omit<Types.Transfer, "id" | "createdAt" | "updatedAt">
-  ) {
-    return firebaseService.create<Types.Transfer>("transfers", data);
-  },
-
-  async update(id: string, data: Partial<Types.Transfer>) {
-    return firebaseService.update<Types.Transfer>("transfers", id, data);
-  },
-
-  async delete(id: string) {
-    return firebaseService.delete("transfers", id);
-  },
-};
-
-export const testimonialService = {
-  async getAll() {
-    return firebaseService.getMany<Types.Testimonial>("testimonials", []);
-  },
-
-  async create(
-    data: Omit<Types.Testimonial, "id" | "createdAt" | "updatedAt">
-  ) {
-    return firebaseService.create<Types.Testimonial>("testimonials", data);
-  },
-
-  async update(id: string, data: Partial<Types.Testimonial>) {
-    return firebaseService.update<Types.Testimonial>("testimonials", id, data);
-  },
-
-  async delete(id: string) {
-    return firebaseService.delete("testimonials", id);
-  },
-};
+export const testimonialService =
+  createEntityService<Types.Testimonial>("testimonials");
 
 export const blogService = {
-  async getAll(onlyPublished = false) {
-    const constraints: QueryConstraint[] = [orderBy("createdAt", "desc")];
-    if (onlyPublished) constraints.push(where("published", "==", true));
-    return firebaseService.getMany<Types.BlogPost>("blog", constraints);
-  },
+  ...createEntityService<Types.BlogPost>("blog", {
+    baseConstraints: [orderBy("createdAt", "desc")],
+    visibilityField: "published",
+  }),
 
   async getBySlug(slug: string) {
     const result = await firebaseService.getMany<Types.BlogPost>("blog", [
@@ -251,37 +222,9 @@ export const blogService = {
     ]);
     return result[0] || null;
   },
-
-  async create(data: Omit<Types.BlogPost, "id" | "createdAt" | "updatedAt">) {
-    return firebaseService.create<Types.BlogPost>("blog", data);
-  },
-
-  async update(id: string, data: Partial<Types.BlogPost>) {
-    return firebaseService.update<Types.BlogPost>("blog", id, data);
-  },
-
-  async delete(id: string) {
-    return firebaseService.delete("blog", id);
-  },
 };
 
-export const faqService = {
-  async getAll() {
-    return firebaseService.getMany<Types.FAQ>("faq", []);
-  },
-
-  async create(data: Omit<Types.FAQ, "id" | "createdAt" | "updatedAt">) {
-    return firebaseService.create<Types.FAQ>("faq", data);
-  },
-
-  async update(id: string, data: Partial<Types.FAQ>) {
-    return firebaseService.update<Types.FAQ>("faq", id, data);
-  },
-
-  async delete(id: string) {
-    return firebaseService.delete("faq", id);
-  },
-};
+export const faqService = createEntityService<Types.FAQ>("faq");
 
 export const settingsService = {
   async get() {

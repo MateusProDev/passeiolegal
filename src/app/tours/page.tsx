@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Clock, Users, Search, SlidersHorizontal } from 'lucide-react';
 import { tourService } from '@/lib/firestore';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 interface Tour {
   id: string;
@@ -82,9 +83,7 @@ export default function ToursPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+      <LoadingSpinner fullScreen />
     );
   }
 

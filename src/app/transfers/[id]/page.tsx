@@ -6,6 +6,7 @@ import { transferService } from "@/lib/firestore";
 import { Car, Users } from "lucide-react";
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 interface PageProps {
   params: { id: string };
@@ -122,7 +123,9 @@ export default async function TransferDetailPage({ params }: PageProps) {
 
               <div className="flex gap-4">
                 <Link
-                  href="https://wa.me/5511999999999?text=Olá, gostaria de saber mais sobre o transfer: ${encodeURIComponent(transfer.name)}"
+                  href={buildWhatsAppUrl({
+                    message: `Olá, gostaria de saber mais sobre o transfer: ${transfer.name}`,
+                  })}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-colors font-semibold text-center"

@@ -3,17 +3,25 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
-import toast from "react-hot-toast";
 import { useTours } from "@/hooks/useApi";
+import { useDeleteEntity } from "@/hooks/useDeleteEntity";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ErrorCard } from "@/components/ui/ErrorCard";
 
 export default function ToursAdmin() {
   const { data: tours, loading, error, refetch } = useTours(false);
 
+  const handleDelete = useDeleteEntity({
+    entityType: "tours",
+    successMessage: "Passeio deletado com sucesso",
+    errorMessage: "Erro ao deletar passeio",
+    onDeleted: refetch,
+  });
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+      <LoadingSpinner />
     );
   }
 
@@ -31,22 +39,10 @@ export default function ToursAdmin() {
         </Button>
       </div>
 
-      {error && (
-        <Card className="border-destructive bg-destructive/10">
-          <CardContent className="pt-6">
-            <p className="text-destructive">{error.message}</p>
-          </CardContent>
-        </Card>
-      )}
+      {error && <ErrorCard message={error.message} />}
 
       {!tours || tours.length === 0 ? (
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-center text-muted-foreground">
-              Nenhum passeio encontrado. Crie o primeiro passeio para começar.
-            </p>
-          </CardContent>
-        </Card>
+        <EmptyState message="Nenhum passeio encontrado. Crie o primeiro passeio para começar." />
       ) : (
         <div className="grid gap-4">
           {tours.map((tour: any) => (
@@ -70,18 +66,7 @@ export default function ToursAdmin() {
                     <Button
                       variant="destructive"
                       size="sm"
-                      onClick={async () => {
-                        try {
-                          const response = await fetch(`/api/tours/${tour.id}`, {
-                            method: "DELETE",
-                          });
-                          if (!response.ok) throw new Error("Delete failed");
-                          toast.success("Passeio deletado com sucesso");
-                          refetch();
-                        } catch (error) {
-                          toast.error("Erro ao deletar passeio");
-                        }
-                      }}
+                      onClick={() => handleDelete(tour.id)}
                     >
                       Deletar
                     </Button>

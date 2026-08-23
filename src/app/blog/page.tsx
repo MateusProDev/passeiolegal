@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Calendar, Clock, ArrowRight } from 'lucide-react';
 import { blogService } from '@/lib/firestore';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 interface BlogPost {
   id: string;
@@ -64,9 +65,7 @@ export default function BlogPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+      <LoadingSpinner fullScreen />
     );
   }
 

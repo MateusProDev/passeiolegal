@@ -4,26 +4,21 @@ import { Card, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { useBlogs } from "@/hooks/useApi";
-import toast from "react-hot-toast";
+import { useDeleteEntity } from "@/hooks/useDeleteEntity";
 import Image from "next/image";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export default function BlogAdmin() {
   const { data: blogs, loading, refetch } = useBlogs(false);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Tem certeza que deseja excluir este artigo?")) return;
-
-    try {
-      const response = await fetch(`/api/blog/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Delete failed");
-      toast.success("Artigo excluído com sucesso");
-      refetch();
-    } catch (error) {
-      toast.error("Erro ao excluir artigo");
-    }
-  };
+  const handleDelete = useDeleteEntity({
+    entityType: "blog",
+    confirmMessage: "Tem certeza que deseja excluir este artigo?",
+    successMessage: "Artigo excluído com sucesso",
+    errorMessage: "Erro ao excluir artigo",
+    onDeleted: refetch,
+  });
 
   const formatDate = (date: any) => {
     if (!date) return '';
@@ -33,9 +28,7 @@ export default function BlogAdmin() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+      <LoadingSpinner />
     );
   }
 
@@ -55,13 +48,7 @@ export default function BlogAdmin() {
 
       <div className="grid gap-4">
         {!blogs || blogs.length === 0 ? (
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-center text-muted-foreground">
-                Nenhum artigo encontrado. Crie o primeiro artigo!
-              </p>
-            </CardContent>
-          </Card>
+          <EmptyState message="Nenhum artigo encontrado. Crie o primeiro artigo!" />
         ) : (
           blogs.map((post: any) => (
             <Card key={post.id}>

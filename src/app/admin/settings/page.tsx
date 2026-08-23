@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/Input";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 export default function SettingsAdmin() {
   const [settings, setSettings] = useState<any>(null);
@@ -54,9 +55,7 @@ export default function SettingsAdmin() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+      <LoadingSpinner />
     );
   }
 

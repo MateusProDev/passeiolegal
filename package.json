@@ -10,7 +10,9 @@
     "seed": "ts-node scripts/seed-firestore.ts",
     "init-firebase": "ts-node scripts/init-firebase.ts",
     "init-firebase-local": "ts-node scripts/init-firebase-local.ts",
-    "init-collections": "node scripts/initialize-collections.js"
+    "init-collections": "node scripts/initialize-collections.js",
+    "init-site-content": "tsx scripts/initialize-site-content.ts",
+    "postbuild": "tsx scripts/initialize-site-content.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",
@@ -53,6 +55,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.50.0",
     "eslint-config-next": "^14.2.0",
-    "ts-node": "^10.9.0"
+    "ts-node": "^10.9.0",
+    "tsx": "^4.23.12"
   }
 }

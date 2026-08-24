@@ -20,7 +20,11 @@ export const dynamic = 'force-dynamic';
 
 async function getTour(id: string) {
   try {
-    const tour = await tourService.getById(id);
+    // Tenta buscar pelo slug primeiro, se não encontrar tenta pelo ID
+    let tour = await tourService.getBySlug(id);
+    if (!tour) {
+      tour = await tourService.getById(id);
+    }
     return tour;
   } catch (error) {
     console.error("Error fetching tour:", error);

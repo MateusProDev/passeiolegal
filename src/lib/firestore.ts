@@ -155,6 +155,13 @@ export const tourService = {
     return firebaseService.get<Types.Tour>("tours", id);
   },
 
+  async getBySlug(slug: string) {
+    const result = await firebaseService.getMany<Types.Tour>("tours", [
+      where("slug", "==", slug),
+    ]);
+    return result[0] || null;
+  },
+
   async getFeatured() {
     return firebaseService.getMany<Types.Tour>("tours", [
       where("active", "==", true),
@@ -201,6 +208,13 @@ export const transferService = {
 
   async getById(id: string) {
     return firebaseService.get<Types.Transfer>("transfers", id);
+  },
+
+  async getBySlug(slug: string) {
+    const result = await firebaseService.getMany<Types.Transfer>("transfers", [
+      where("slug", "==", slug),
+    ]);
+    return result[0] || null;
   },
 
   async create(

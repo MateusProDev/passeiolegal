@@ -16,7 +16,11 @@ export const dynamic = 'force-dynamic';
 
 async function getTransfer(id: string) {
   try {
-    const transfer = await transferService.getById(id);
+    // Tenta buscar pelo slug primeiro, se não encontrar tenta pelo ID
+    let transfer = await transferService.getBySlug(id);
+    if (!transfer) {
+      transfer = await transferService.getById(id);
+    }
     return transfer;
   } catch (error) {
     console.error("Error fetching transfer:", error);

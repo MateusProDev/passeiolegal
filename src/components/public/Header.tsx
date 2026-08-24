@@ -27,8 +27,8 @@ export default function Header() {
 
   const menuItems = [
     { label: 'Início', href: '/' },
-    { label: 'Passeios', href: '/tours' },
-    { label: 'Transfers', href: '/transfers' },
+    { label: 'Passeios', href: '/passeios' },
+    { label: 'Transfer', href: '/transfer' },
     { label: 'Blog', href: '/blog' },
     { label: 'Sobre', href: '/about' },
     { label: 'Contato', href: '/contact' },

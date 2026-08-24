@@ -10,7 +10,7 @@ if (typeof window === 'undefined') {
       ? JSON.parse(process.env.FIREBASE_ADMIN_SDK)
       : (() => {
           try {
-            const filePath = path.join(process.cwd(), 'passeiolegal-firebase-adminsdk-fbsvc-c63c5e50d2.json');
+            const filePath = path.join(process.cwd(), 'passeiolegal-firebase-adminsdk-fbsvc-6edf8c6e66.json');
             const fileContent = readFileSync(filePath, 'utf8');
             return JSON.parse(fileContent);
           } catch (error) {

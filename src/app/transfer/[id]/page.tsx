@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       type: "website",
       locale: "pt_BR",
-      url: `${baseUrl}/transfers/${params.id}`,
+      url: `${baseUrl}/transfer/${params.id}`,
       title: transfer.name,
       description: transfer.description,
       images: transfer.imageUrl ? [
@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: transfer.imageUrl ? [transfer.imageUrl] : [],
     },
     alternates: {
-      canonical: `${baseUrl}/transfers/${params.id}`,
+      canonical: `${baseUrl}/transfer/${params.id}`,
     },
   };
 }
@@ -74,8 +74,8 @@ export default async function TransferDetailPage({ params }: PageProps) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
   const breadcrumbItems = [
     { name: "Início", url: baseUrl },
-    { name: "Transfers", url: `${baseUrl}/transfers` },
-    { name: transfer.name, url: `${baseUrl}/transfers/${params.id}` },
+    { name: "Transfer", url: `${baseUrl}/transfer` },
+    { name: transfer.name, url: `${baseUrl}/transfer/${params.id}` },
   ];
 
   return (
@@ -87,10 +87,10 @@ export default async function TransferDetailPage({ params }: PageProps) {
       <div className="bg-white">
         <div className="container mx-auto px-4 py-8">
           <Link
-            href="/transfers"
+            href="/transfer"
             className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-6"
           >
-            ← Voltar para transfers
+            ← Voltar para transfer
           </Link>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

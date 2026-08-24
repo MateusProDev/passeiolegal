@@ -14,6 +14,7 @@ interface Transfer {
   price: number;
   vehicleType: string;
   capacity: number;
+  slug?: string;
 }
 
 interface TransfersProps {
@@ -111,7 +112,7 @@ export default function Transfers({ transfers }: TransfersProps) {
             {visibleTransfers.map((transfer) => (
               <Link
                 key={transfer.id}
-                href={`/transfers/${transfer.id}`}
+                href={`/transfer/${transfer.slug || transfer.id}`}
                 className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow flex flex-col group"
                 aria-label={`Ver detalhes de ${transfer.name}`}
               >
@@ -147,7 +148,7 @@ export default function Transfers({ transfers }: TransfersProps) {
 
                 <div className="flex items-center justify-end">
                   <Link
-                    href={`/transfers/${transfer.id}`}
+                    href={`/transfer/${transfer.slug || transfer.id}`}
                     className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"
                     aria-label={`Ver detalhes de ${transfer.name}`}
                   >
@@ -177,7 +178,7 @@ export default function Transfers({ transfers }: TransfersProps) {
 
         <div className="text-center mt-12">
           <Link
-            href="/transfers"
+            href="/transfer"
             className="inline-block bg-secondary-600 hover:bg-secondary-700 text-white px-8 py-3 rounded-lg transition-colors font-semibold"
           >
             Ver Todos os Transfers

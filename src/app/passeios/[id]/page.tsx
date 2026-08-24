@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!tour) {
     return {
-      title: "Tour não encontrado | Passeio Legal",
+      title: "Passeio não encontrado | Passeio Legal",
       robots: "noindex, nofollow",
     };
   }
@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     "passeios fortaleza",
     "turismo ceará",
     "passeio legal",
-    "tour fortaleza",
+    "passeio fortaleza",
     "excursão fortaleza",
   ].join(", ");
 
@@ -78,7 +78,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       type: "website",
       locale: "pt_BR",
-      url: `${baseUrl}/tours/${params.id}`,
+      url: `${baseUrl}/passeios/${params.id}`,
       title: tour.name,
       description,
       siteName: "Passeio Legal",
@@ -98,12 +98,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: tour.mainImageUrl ? [tour.mainImageUrl] : [],
     },
     alternates: {
-      canonical: `${baseUrl}/tours/${params.id}`,
+      canonical: `${baseUrl}/passeios/${params.id}`,
     },
   };
 }
 
-export default async function TourDetailPage({ params }: PageProps) {
+export default async function PasseioDetailPage({ params }: PageProps) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
   const tour = await getTour(params.id);
 
@@ -111,13 +111,13 @@ export default async function TourDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // Busca tours relacionados para recomendação
+  // Busca passeios relacionados para recomendação
   const relatedTours = await tourService.getRelated(tour.id, 3);
 
   const breadcrumbItems = [
     { name: "Início", url: baseUrl },
-    { name: "Passeios", url: `${baseUrl}/tours` },
-    { name: tour.name, url: `${baseUrl}/tours/${params.id}` },
+    { name: "Passeios", url: `${baseUrl}/passeios` },
+    { name: tour.name, url: `${baseUrl}/passeios/${params.id}` },
   ];
 
   return (
@@ -132,7 +132,7 @@ export default async function TourDetailPage({ params }: PageProps) {
           name={tour.name}
           description={tour.description}
           image={tour.mainImageUrl}
-          url={`${baseUrl}/tours/${params.id}`}
+          url={`${baseUrl}/passeios/${params.id}`}
         />
       )}
 
@@ -144,7 +144,7 @@ export default async function TourDetailPage({ params }: PageProps) {
       <div className="bg-white">
         <div className="container mx-auto px-4 py-6">
           <Link
-            href="/tours"
+            href="/passeios"
             className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6 font-medium transition-colors"
             aria-label="Voltar para lista de passeios"
           >
@@ -292,7 +292,7 @@ export default async function TourDetailPage({ params }: PageProps) {
       {/* FAQ */}
       <TourFAQ />
 
-      {/* Tours Recomendados */}
+      {/* Passeios Recomendados */}
       <RecommendedTours tours={relatedTours} />
 
       <Footer />

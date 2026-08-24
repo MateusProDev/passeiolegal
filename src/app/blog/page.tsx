@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { Calendar, Clock, ArrowRight } from 'lucide-react';
 import { blogService } from '@/lib/firestore';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
+import Header from '@/components/public/Header';
+import Footer from '@/components/public/Footer';
 
 interface BlogPost {
   id: string;
@@ -71,7 +73,9 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24">
+    <main className="min-h-screen bg-gray-50 pt-24">
+      <Header />
+      
       <BreadcrumbJsonLd items={breadcrumbItems} />
       
       {/* Header */}
@@ -147,6 +151,8 @@ export default function BlogPage() {
           </div>
         )}
       </div>
-    </div>
+      
+      <Footer />
+    </main>
   );
 }

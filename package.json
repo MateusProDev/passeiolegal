@@ -7,7 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "init-site-content": "tsx scripts/initialize-site-content.ts"
+    "init-site-content": "tsx scripts/initialize-site-content.ts",
+    "update-tour-slugs": "tsx scripts/update-tour-slugs.ts",
+    "update-transfer-slugs": "tsx scripts/update-transfer-slugs.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",

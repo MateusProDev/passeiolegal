@@ -14,6 +14,7 @@ interface Tour {
   price: number;
   duration: string;
   featured: boolean;
+  slug?: string;
 }
 
 interface ToursProps {
@@ -110,7 +111,7 @@ export default function Tours({ tours }: ToursProps) {
             {visibleTours.map((tour) => (
               <Link
                 key={tour.id}
-                href={`/tours/${tour.id}`}
+                href={`/passeios/${tour.slug || tour.id}`}
                 className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col group"
                 aria-label={`Ver detalhes de ${tour.name}`}
               >
@@ -152,7 +153,7 @@ export default function Tours({ tours }: ToursProps) {
 
                   <div className="flex items-center justify-end">
                     <Link
-                      href={`/tours/${tour.id}`}
+                      href={`/passeios/${tour.slug || tour.id}`}
                       className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"
                       aria-label={`Ver detalhes de ${tour.name}`}
                     >
@@ -183,7 +184,7 @@ export default function Tours({ tours }: ToursProps) {
 
         <div className="text-center mt-12">
           <Link
-            href="/tours"
+            href="/passeios"
             className="inline-block bg-secondary-600 hover:bg-secondary-700 text-white px-8 py-3 rounded-lg transition-colors font-semibold"
           >
             Ver Todos os Passeios

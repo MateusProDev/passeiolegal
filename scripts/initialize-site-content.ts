@@ -1,5 +1,17 @@
 import { adminDb } from '../src/lib/firebase-admin';
 
+// Função para gerar slugs amigáveis a partir de nomes
+function generateSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+    .replace(/[^a-z0-9\s-]/g, '') // Remove caracteres especiais
+    .trim()
+    .replace(/\s+/g, '-') // Substitui espaços por hífens
+    .replace(/-+/g, '-'); // Remove hífens duplicados
+}
+
 // Banners para a página inicial
 const banners = [
   {
@@ -167,15 +179,16 @@ const testimonials = [
   },
 ];
 
-// Tours - Estrutura correta do Firebase
+// Tours - Estrutura correta do Firebase com slugs gerados automaticamente
 const tours = [
   {
     name: "Passeio Beach Parck - Ingressos e Transporte com Desconto",
+    slug: "passeio-beach-park-ingressos-e-transporte-com-desconto",
     description: "Compre ingressos para o Beach Parck com transporte incluso e saída de hotéis em [Nome da Cidade]. Diversão garantida com segurança e conforto.",
     longDescription: "Prepare-se para um dia inesquecível no Beach Parck, o maior e mais emocionante parque aquático da região! Este passeio completo foi pensado para você aproveitar ao máximo, com conforto, segurança e o melhor custo-benefício. 🚐 Transporte Confortável Saímos diretamente do seu hotel em vans modernas com ar-condicionado, garantindo uma viagem tranquila e segura até o parque. Nosso motorista experiente conhece as melhores rotas para evitar trânsito e chegar rapidamente. 🎟️ Ingresso com Desconto",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Passeio Beach Parck - Ingressos e Transporte com Desconto",
-    duration: "2 hours",
+    duration: "2 horas",
     price: 0,
     includesItems: [
       "Transporte com ar-condicionado",
@@ -195,11 +208,12 @@ const tours = [
   },
   {
     name: "3 Praias em 1 Dia",
+    slug: "3-praias-em-1-dia",
     description: "O melhor passeio de buggy do Ceará! Venha conhecer e se encantar com essas 3 lindas praias do litoral leste do Ceará.",
     longDescription: "O melhor passeio de buggy do Ceará! Venha conhecer e se encantar com essas 3 lindas praias do litoral leste do Ceará. Seja no modo privativo ou excursão, você vai adorar esse roteiro, que tem tudo o que um bom aventureiro procura.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "3 Praias em 1 Dia",
-    duration: "8 hours",
+    duration: "8 horas",
     price: 0,
     includesItems: [
       "Transporte em buggy",
@@ -216,11 +230,12 @@ const tours = [
   },
   {
     name: "3 Praias VIP em 1 Dia",
+    slug: "3-praias-vip-em-1-dia",
     description: "Este passeio junta o melhor do passeio de 3 Praias em 1 Dia com o exuberante Caribe do Ceará.",
     longDescription: "Este passeio junta o melhor do passeio de 3 Praias em 1 Dia com o exuberante Caribe do Ceará. Você vai conhecer uma paisagem incrível de encontro do rio com o mar, formando piscinas naturais de águas quentes e tranquilas.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "3 Praias VIP em 1 Dia",
-    duration: "8 hours",
+    duration: "8 horas",
     price: 0,
     includesItems: [
       "Transporte em buggy",
@@ -238,11 +253,12 @@ const tours = [
   },
   {
     name: "Águas Belas",
+    slug: "aguas-belas",
     description: "Águas Belas é uma praia muito apreciada do litoral leste, com águas claras e quentinhas.",
     longDescription: "Águas Belas é uma praia muito apreciada do litoral leste, com águas claras e quentinhas. Você vai aproveitar as piscinas naturais na praia, ou ainda desfrutar do Rio Malcozinhado se optar pelo passeio opcional de buggy no nosso ponto de apoio, que possui uma excelente estrutura e gastronomia muito elogiada.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Águas Belas",
-    duration: "6 hours",
+    duration: "6 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -259,11 +275,12 @@ const tours = [
   },
   {
     name: "Beach Park",
+    slug: "beach-park",
     description: "O Beach Park é o maior parque aquático da América Latina, localizado em Aquiraz no Ceará.",
     longDescription: "Este passeio tem na modalidade privativo e excursão com saída de Fortaleza as 09:00 e regresso as 17:00 horas. O Beach Park é o maior parque aquático da América Latina e está localizado na cidade de Aquiraz no Ceará, na praia do Porto das Dunas, muito apreciada por sua beleza, segurança, limpeza e tranquilidade.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Beach Park",
-    duration: "8 hours",
+    duration: "8 horas",
     price: 0,
     includesItems: [
       "Ingresso Beach Park",
@@ -280,11 +297,12 @@ const tours = [
   },
   {
     name: "Caribe do Ceará",
+    slug: "caribe-do-ceara",
     description: "O passeio oferece paradas no Centro de Artesanato de Aquiraz e na Estação Nordestina.",
     longDescription: "O passeio oferece paradas no Centro de Artesanato de Aquiraz, onde você poderá ver a maior Renda de Bilro sendo elaborada, e também na Estação Nordestina, onde você encontra a Maior Rapadura do mundo, inclusive com degustação de rapaduras com até 50 sabores variados e cachaças artesanais.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Caribe do Ceará",
-    duration: "6 hours",
+    duration: "6 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -301,11 +319,12 @@ const tours = [
   },
   {
     name: "Canoa Quebrada",
+    slug: "canoa-quebrada",
     description: "Um lugar mágico e de mar verde, Canoa Quebrada é um dos pontos mais visitados do Ceará.",
     longDescription: "Um lugar mágico e de mar verde, Canoa Quebrada é um dos pontos mais visitados do Ceará. A sua beleza que conquistou os europeus é um dos destaques desse passeio. Possui um excelente ponto de apoio, com ótima estrutura e o melhor da culinária regional.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Canoa Quebrada",
-    duration: "10 hours",
+    duration: "10 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -322,11 +341,12 @@ const tours = [
   },
   {
     name: "City Tour",
+    slug: "city-tour",
     description: "Nosso City Tour privativo tem uma duração média de 5h, com horário flexível.",
     longDescription: "Nosso City Tour privativo tem uma duração média de 5h, com horário flexível e ajustado de acordo com os seus pontos de interesse. Entre os principais destaques temos a Praia do Futuro e a sua impressionante estrutura que recebe e acolhe o turista, a imponente Catedral Metropolitana, o Centro Cultural Dragão do Mar, o Museu da Cultura Cearense, o lindíssimo Teatro José de Alencar, a Estátua de Iracema, o Mercado dos Peixes, a belíssima orla de Fortaleza, formada pelas praias de Iracema, Meireles e Mucuripe.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "City Tour Fortaleza",
-    duration: "5 hours",
+    duration: "5 horas",
     price: 0,
     includesItems: [
       "Transporte privativo",
@@ -343,11 +363,12 @@ const tours = [
   },
   {
     name: "Cumbuco",
+    slug: "cumbuco",
     description: "Point do kitesurf e do surf, Cumbuco também ostenta o título de passeio de buggy mais radical do Ceará.",
     longDescription: "Point do kitesurf e do surf, Cumbuco também ostenta o título de passeio de buggy mais radical do Ceará, com suas dunas e lagoas fascinantes, onde você poderá curtir atrações como tirolesa, skibunda, jet-ski, banana boat, jangada, quadriciclo e passeio à cavalo pela praia (opcionais).",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Cumbuco",
-    duration: "6 hours",
+    duration: "6 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -364,11 +385,12 @@ const tours = [
   },
   {
     name: "Flechaú",
+    slug: "flechau",
     description: "Esse passeio combina o que há de melhor entre Flecheiras (Piscinas Naturais) e Mundaú (Passeio de Catamarã).",
     longDescription: "Esse passeio está disponível no modo privativo, com saída sugerida entre 7h e 8h da manhã e combina o que há de melhor entre Flecheiras (Piscinas Naturais) e Mundaú (Passeio de Catamarã pelo Rio Mundaú).",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Flechaú",
-    duration: "10 hours",
+    duration: "10 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -385,11 +407,12 @@ const tours = [
   },
   {
     name: "Flecheiras",
+    slug: "flecheiras",
     description: "Flecheiras é uma praia do litoral oeste do Ceará de beleza sem igual, com águas claras e piscinas naturais.",
     longDescription: "Flecheiras é uma praia do litoral oeste do Ceará de beleza sem igual, tem águas claras e piscinas naturais que formam uma paisagem incrível. Você vem a Flecheiras e fica encantado com a beleza do lugar, sem dúvida é um cartão postal, onde você pode se desligar de tudo.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Flecheiras",
-    duration: "8 hours",
+    duration: "8 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -406,11 +429,12 @@ const tours = [
   },
   {
     name: "Guaramiranga",
+    slug: "guaramiranga",
     description: "Conheça Guaramiranga, a Cidade das Flores! Um roteiro explorando a região do Maciço de Baturité.",
     longDescription: "Conheça Guaramiranga, a Cidade das Flores! Um roteiro explorando a região do Maciço de Baturité, e essa charmosa cidade, que apresenta um clima agradável, com temperaturas amenas e diversos cenários encantadores, sendo também conhecida como a Suíça Cearense.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Guaramiranga",
-    duration: "8 hours",
+    duration: "8 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -427,11 +451,12 @@ const tours = [
   },
   {
     name: "Icaraí de Amontada",
+    slug: "icarai-de-amontada",
     description: "Icaraizinho é uma praia linda e tranquila no litoral oeste do Ceará, conhecida mundialmente por ser um point dos esportes de vento.",
     longDescription: "Icaraizinho, ou Icaraí de Amontada é uma praia linda e tranquila no litoral oeste do Ceará, com localização privilegiada e é conhecida mundialmente por ser um point dos esportes de vento, especialmente do kitesurf e do windsurf.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Icaraí de Amontada",
-    duration: "8 hours",
+    duration: "8 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -448,11 +473,12 @@ const tours = [
   },
   {
     name: "Icapuí",
+    slug: "icapui",
     description: "Um dos destinos mais charmosos e exclusivos do litoral Cearense, conhecida como a Terra da Lagosta.",
     longDescription: "Um dos destinos mais charmosos e exclusivos do litoral Cearense. Que tal aquele mergulho rodeado pelos mais belos e coloridos peixinhos? Encante-se com Icapuí e seus verdes coqueiros, praias, dunas e, LAGOSTAS, sim, Icapuí é conhecida como a Terra da Lagosta, devido à sua abundante presença, essa iguaria tem aqui o melhor preço do Ceará.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Icapuí",
-    duration: "10 hours",
+    duration: "10 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -469,11 +495,12 @@ const tours = [
   },
   {
     name: "Jericoacoara",
+    slug: "jericoacoara",
     description: "Jericoacoara é simplesmente a praia mais visitada e mais bela do Ceará.",
     longDescription: "Este passeio está disponível na modalidade privativo, com saída à combinar, e excursão com saída às 03:00 da manhã e retorno às 18:00h. Jericoacoara é simplesmente a praia mais visitada e mais bela do Ceará.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Jericoacoara",
-    duration: "15 hours",
+    duration: "15 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -491,11 +518,12 @@ const tours = [
   },
   {
     name: "Lagoinha",
+    slug: "lagoinha",
     description: "Você que vem para Lagoinha pode curtir esse passeio que é muito apreciado, o 3 em 1.",
     longDescription: "Você que vem para Lagoinha pode curtir esse passeio que é muito apreciado, o 3 em 1, sendo um trajeto percorrido de buggy pelas dunas, nascentes de água doce, mirante central da praia, além das lagoas do Jegue e das Almécegas, onde começa a etapa no catamarã que tem parada para banho.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Lagoinha",
-    duration: "8 hours",
+    duration: "8 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -513,11 +541,12 @@ const tours = [
   },
   {
     name: "Morro Branco",
+    slug: "morro-branco",
     description: "Morro Branco tem a sua beleza natural nas falésias que a cerca, sendo lar das areias coloridas e artesanatos locais.",
     longDescription: "Morro Branco tem a sua beleza natural nas falésias que a cerca, sendo lar das areias coloridas e artesanatos locais. Morro Branco é ideal para você que procura descanso e um pouco de natureza. Temos como opcional no local o mais elogiado passeio de buggy, no qual você poderá conhecer mais 2 praias e uma linda lagoa, sempre com parada para aquele banho refrescante e divertir-se também no famoso Skibunda.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Morro Branco",
-    duration: "6 hours",
+    duration: "6 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -534,11 +563,12 @@ const tours = [
   },
   {
     name: "Mundaú",
+    slug: "mundau",
     description: "Mundaú fica no litoral oeste do Ceará e é um lugar incrível para se conhecer, é diversão garantida.",
     longDescription: "Mundaú fica no litoral oeste do Ceará e é um lugar incrível para se conhecer, é diversão garantida para você, com belas paisagens e um passeio de catamarã pelo Rio Mundaú, com duração de 1:30h, paradas para banho e comtemplação desse paraíso natural.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Mundaú",
-    duration: "8 hours",
+    duration: "8 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -555,11 +585,12 @@ const tours = [
   },
   {
     name: "Paracuru",
+    slug: "paracuru",
     description: "A praia central de Paracuru é um dos principais pontos turísticos da região e é um verdadeiro cartão postal.",
     longDescription: "A praia central de Paracuru é um dos principais pontos turísticos da região e é um verdadeiro cartão postal, descrita como linda, deserta e paradisíaca. Com o famoso farol em frente ao mar verde-esmeralda, ao seu lado fica um deck de onde você pode apreciar esta vista exuberante.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Paracuru",
-    duration: "6 hours",
+    duration: "6 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -576,11 +607,12 @@ const tours = [
   },
   {
     name: "Praia das Fontes",
+    slug: "praia-das-fontes",
     description: "Este passeio está disponível para quem vai conhecer Morro Branco. Essa é uma das mais belas praias do Ceará.",
     longDescription: "Este passeio está disponível para quem vai conhecer Morro Branco. Essa é uma das mais belas praias do Ceará, possuindo grutas, fontes naturais de água doce e uma praia de águas quentes e areia fofa.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Praia das Fontes",
-    duration: "6 hours",
+    duration: "6 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -597,11 +629,12 @@ const tours = [
   },
   {
     name: "Prainha",
+    slug: "prainha",
     description: "Prainha está localizada na primeira capital do Ceará, em Aquiraz. Tem seu artesanato forte e dunas perfeitas.",
     longDescription: "Prainha está localizada na primeira capital do Ceará, em Aquiraz. Tem seu artesanato forte e dunas perfeitas para o passeio de buggy, onde você pode explorar as dunas e uma descida radical no chamado insano natural.",
     mainImageUrl: "https://res.cloudinary.com/jhcsri5f/image/upload/v1787052503/passeiolegal/tours/g915icb1magxipgeqtdi.jpg",
     mainImageAlt: "Prainha",
-    duration: "6 hours",
+    duration: "6 horas",
     price: 0,
     includesItems: [
       "Transporte",
@@ -765,6 +798,7 @@ async function initializeSiteContent() {
     const toursRef = adminDb.collection('tours');
     let tourAdded = 0;
     let tourUpdated = 0;
+    let tourSkipped = 0;
 
     for (const tour of tours) {
       const existingTour = await toursRef.where('name', '==', tour.name).get();
@@ -772,6 +806,7 @@ async function initializeSiteContent() {
       if (existingTour.empty) {
         await toursRef.add({
           ...tour,
+          slug: tour.slug || generateSlug(tour.name),
           createdAt: new Date(),
           updatedAt: new Date(),
         });
@@ -779,12 +814,23 @@ async function initializeSiteContent() {
         console.log(`✓ Added tour: ${tour.name}`);
       } else {
         const docId = existingTour.docs[0].id;
-        await toursRef.doc(docId).update({
-          ...tour,
-          updatedAt: new Date(),
-        });
-        tourUpdated++;
-        console.log(`✓ Updated tour: ${tour.name}`);
+        const existingData = existingTour.docs[0].data();
+        
+        // Verifica se precisa atualizar apenas o slug
+        const currentSlug = existingData.slug;
+        const newSlug = tour.slug || generateSlug(tour.name);
+        
+        if (!currentSlug || currentSlug !== newSlug) {
+          await toursRef.doc(docId).update({
+            slug: newSlug,
+            updatedAt: new Date(),
+          });
+          tourUpdated++;
+          console.log(`✓ Updated slug for tour: ${tour.name} -> ${newSlug}`);
+        } else {
+          tourSkipped++;
+          console.log(`✓ Tour already exists with correct slug: ${tour.name}`);
+        }
       }
     }
 

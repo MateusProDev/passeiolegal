@@ -10,6 +10,7 @@ import TourConversionBar from "@/components/public/TourConversionBar";
 import TourTrustBadges from "@/components/public/TourTrustBadges";
 import TourFAQ from "@/components/public/TourFAQ";
 import RecommendedTours from "@/components/public/RecommendedTours";
+import * as Types from "@/types";
 
 interface PageProps {
   params: { id: string };
@@ -18,15 +19,12 @@ interface PageProps {
 // Force dynamic rendering for real-time updates
 export const dynamic = 'force-dynamic';
 
-async function getTour(id: string) {
+async function getTour(id: string): Promise<Types.Tour | null> {
   try {
     // Tenta buscar pelo slug primeiro, se não encontrar tenta pelo ID
-    let tour = await tourService.getBySlug(id);
-    if (!tour) {
-      const tourById = await tourService.getById(id);
-      tour = tourById;
-    }
-    return tour;
+    const tour = await tourService.getBySlug(id);
+    if (tour) return tour;
+    return await tourService.getById(id);
   } catch (error) {
     console.error("Error fetching tour:", error);
     return null;

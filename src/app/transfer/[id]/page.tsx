@@ -6,6 +6,7 @@ import { transferService } from "@/lib/firestore";
 import { Car, Users } from "lucide-react";
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import * as Types from "@/types";
 
 interface PageProps {
   params: { id: string };
@@ -14,15 +15,12 @@ interface PageProps {
 // Force dynamic rendering for real-time updates
 export const dynamic = 'force-dynamic';
 
-async function getTransfer(id: string) {
+async function getTransfer(id: string): Promise<Types.Transfer | null> {
   try {
     // Tenta buscar pelo slug primeiro, se não encontrar tenta pelo ID
-    let transfer = await transferService.getBySlug(id);
-    if (!transfer) {
-      const transferById = await transferService.getById(id);
-      transfer = transferById;
-    }
-    return transfer;
+    const transfer = await transferService.getBySlug(id);
+    if (transfer) return transfer;
+    return await transferService.getById(id);
   } catch (error) {
     console.error("Error fetching transfer:", error);
     return null;

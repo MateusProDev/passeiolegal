@@ -19,7 +19,8 @@ async function getTransfer(id: string) {
     // Tenta buscar pelo slug primeiro, se não encontrar tenta pelo ID
     let transfer = await transferService.getBySlug(id);
     if (!transfer) {
-      transfer = await transferService.getById(id);
+      const transferById = await transferService.getById(id);
+      transfer = transferById;
     }
     return transfer;
   } catch (error) {

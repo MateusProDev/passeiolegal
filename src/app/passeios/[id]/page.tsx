@@ -23,7 +23,8 @@ async function getTour(id: string) {
     // Tenta buscar pelo slug primeiro, se não encontrar tenta pelo ID
     let tour = await tourService.getBySlug(id);
     if (!tour) {
-      tour = await tourService.getById(id);
+      const tourById = await tourService.getById(id);
+      tour = tourById;
     }
     return tour;
   } catch (error) {

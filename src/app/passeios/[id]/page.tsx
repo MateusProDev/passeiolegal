@@ -12,7 +12,6 @@ import TourFAQ from "@/components/public/TourFAQ";
 import RecommendedTours from "@/components/public/RecommendedTours";
 import TourTracking from "@/components/public/TourTracking";
 import * as Types from "@/types";
-import { metaPixelEvents } from "@/utils/metaPixel";
 
 interface PageProps {
   params: { id: string };

@@ -46,12 +46,6 @@ export default function Footer() {
     { icon: MessageCircle, href: '#', label: 'WhatsApp', onClick: handleWhatsAppClick },
   ];
 
-  const socialLinks = [
-    { icon: Facebook, href: '#', label: 'Facebook', onClick: undefined },
-    { icon: Instagram, href: '#', label: 'Instagram', onClick: undefined },
-    { icon: MessageCircle, href: '#', label: 'WhatsApp', onClick: handleWhatsAppClick },
-  ];
-
   const quickLinks = [
     { label: 'Início', href: '/' },
     { label: 'Passeios', href: '/passeios' },

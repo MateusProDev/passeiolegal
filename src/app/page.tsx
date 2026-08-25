@@ -7,7 +7,6 @@ import Transfers from "@/components/public/Transfers";
 import Testimonials from "@/components/public/Testimonials";
 import Blog from "@/components/public/Blog";
 import FAQ from "@/components/public/FAQ";
-import Contact from "@/components/public/Contact";
 import AnimatedCounter from "@/components/public/AnimatedCounter";
 import { bannerService, tourService, transferService, testimonialService, blogService, faqService, settingsService } from "@/lib/firestore";
 
@@ -133,8 +132,6 @@ export default async function Home() {
       <Blog posts={blogPosts} />
       
       <FAQ faqs={faqs} />
-      
-      <Contact />
       
       <Footer />
     </main>

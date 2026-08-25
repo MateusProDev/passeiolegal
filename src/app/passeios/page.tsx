@@ -30,7 +30,6 @@ export default function PasseiosPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [durationFilter, setDurationFilter] = useState<'all' | 'short' | 'medium' | 'long'>('all');
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
-  const [settings, setSettings] = useState<any>(null);
   const [sectionDisabled, setSectionDisabled] = useState(false);
   
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
@@ -49,7 +48,6 @@ export default function PasseiosPage() {
         
         setTours(allTours);
         setFilteredTours(allTours);
-        setSettings(settingsData);
         
         if (settingsData?.sections?.toursEnabled === false) {
           setSectionDisabled(true);

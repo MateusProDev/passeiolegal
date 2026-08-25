@@ -144,7 +144,7 @@ export default function Footer() {
                   aria-label={social.label}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={(e) => {
+                  onClick={() => {
                     if (social.onClick) {
                       social.onClick();
                     }

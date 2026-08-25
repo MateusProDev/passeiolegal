@@ -9,7 +9,7 @@ import Blog from "@/components/public/Blog";
 import FAQ from "@/components/public/FAQ";
 import Contact from "@/components/public/Contact";
 import AnimatedCounter from "@/components/public/AnimatedCounter";
-import { bannerService, tourService, transferService, testimonialService, blogService, faqService } from "@/lib/firestore";
+import { bannerService, tourService, transferService, testimonialService, blogService, faqService, settingsService } from "@/lib/firestore";
 
 // Force dynamic rendering for real-time updates
 export const dynamic = 'force-dynamic';
@@ -51,13 +51,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 async function getPageData() {
   try {
-    const [banners, tours, transfers, testimonials, blogPosts, faqs] = await Promise.all([
+    const [banners, tours, transfers, testimonials, blogPosts, faqs, settings] = await Promise.all([
       bannerService.getAll(),
       tourService.getAll(false),
       transferService.getAll(false),
       testimonialService.getAll(),
       blogService.getAll(false),
       faqService.getAll(),
+      settingsService.get(),
     ]);
 
     return {
@@ -67,6 +68,7 @@ async function getPageData() {
       testimonials,
       blogPosts,
       faqs,
+      settings,
     };
   } catch (error) {
     console.error("Error fetching page data:", error);
@@ -77,12 +79,16 @@ async function getPageData() {
       testimonials: [],
       blogPosts: [],
       faqs: [],
+      settings: null,
     };
   }
 }
 
 export default async function Home() {
-  const { banners, tours, transfers, testimonials, blogPosts, faqs } = await getPageData();
+  const { banners, tours, transfers, testimonials, blogPosts, faqs, settings } = await getPageData();
+  
+  const toursEnabled = settings?.sections?.toursEnabled ?? true;
+  const transfersEnabled = settings?.sections?.transfersEnabled ?? true;
 
   return (
     <main className="min-h-screen pt-24">
@@ -118,9 +124,9 @@ export default async function Home() {
         </div>
       </section>
 
-      <Tours tours={tours} />
+      {toursEnabled && <Tours tours={tours} />}
       
-      <Transfers transfers={transfers} />
+      {transfersEnabled && <Transfers transfers={transfers} />}
       
       <Testimonials testimonials={testimonials} />
       

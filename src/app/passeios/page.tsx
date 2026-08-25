@@ -30,6 +30,8 @@ export default function PasseiosPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [durationFilter, setDurationFilter] = useState<'all' | 'short' | 'medium' | 'long'>('all');
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
+  const [settings, setSettings] = useState<any>(null);
+  const [sectionDisabled, setSectionDisabled] = useState(false);
   
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
   const breadcrumbItems = [
@@ -38,20 +40,47 @@ export default function PasseiosPage() {
   ];
 
   useEffect(() => {
-    const fetchTours = async () => {
+    const fetchData = async () => {
       try {
-        const allTours = await tourService.getAll(false);
+        const [allTours, settingsData] = await Promise.all([
+          tourService.getAll(false),
+          fetch('/api/settings').then(res => res.ok ? res.json() : null)
+        ]);
+        
         setTours(allTours);
         setFilteredTours(allTours);
+        setSettings(settingsData);
+        
+        if (settingsData?.sections?.toursEnabled === false) {
+          setSectionDisabled(true);
+        }
       } catch (error) {
-        console.error('Error fetching tours:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTours();
+    fetchData();
   }, []);
+
+  if (sectionDisabled) {
+    return (
+      <main className="min-h-screen bg-gray-50 pt-24">
+        <Header />
+        <div className="container mx-auto px-4 py-16">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">Seção Indisponível</h1>
+            <p className="text-gray-600 mb-8">A seção de passeios está temporariamente desativada.</p>
+            <Link href="/" className="inline-block bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg transition-colors">
+              Voltar para a Página Inicial
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
 
   useEffect(() => {
     let filtered = tours;

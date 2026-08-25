@@ -141,7 +141,13 @@ export interface SiteSettings {
   whatsappConfig: WhatsappConfig;
   primaryColor: string;
   secondaryColor: string;
+  sections: SectionSettings;
   updatedAt: Date;
+}
+
+export interface SectionSettings {
+  toursEnabled: boolean;
+  transfersEnabled: boolean;
 }
 
 export interface MenuLink {

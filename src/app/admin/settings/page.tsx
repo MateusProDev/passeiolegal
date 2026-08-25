@@ -202,6 +202,55 @@ export default function SettingsAdmin() {
         </CardContent>
       </Card>
 
+      <Card>
+        <CardHeader>
+          <CardTitle>Seções do Site</CardTitle>
+          <CardDescription>Ative ou desative seções do site</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <label className="text-sm font-medium">Passeios</label>
+              <p className="text-xs text-muted-foreground">Mostrar seção de passeios no site</p>
+            </div>
+            <input
+              type="checkbox"
+              checked={settings?.sections?.toursEnabled ?? true}
+              onChange={(e) =>
+                setSettings({
+                  ...settings,
+                  sections: {
+                    ...settings?.sections,
+                    toursEnabled: e.target.checked,
+                  },
+                })
+              }
+              className="w-4 h-4 text-primary-600 rounded focus:ring-primary-600"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <label className="text-sm font-medium">Transfer</label>
+              <p className="text-xs text-muted-foreground">Mostrar seção de transfer no site</p>
+            </div>
+            <input
+              type="checkbox"
+              checked={settings?.sections?.transfersEnabled ?? true}
+              onChange={(e) =>
+                setSettings({
+                  ...settings,
+                  sections: {
+                    ...settings?.sections,
+                    transfersEnabled: e.target.checked,
+                  },
+                })
+              }
+              className="w-4 h-4 text-primary-600 rounded focus:ring-primary-600"
+            />
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="flex gap-2">
         <Button onClick={handleSave} disabled={saving}>
           {saving ? "Salvando..." : "Salvar Configurações"}

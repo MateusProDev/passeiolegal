@@ -99,14 +99,14 @@ export default function Tours({ tours }: ToursProps) {
             <>
               <button
                 onClick={goToPrevious}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 bg-white hover:bg-gray-100 shadow-lg p-3 rounded-full transition-colors z-10"
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 bg-white/80 hover:bg-white/95 shadow-lg p-3 rounded-full transition-colors z-10"
                 aria-label="Passeio anterior"
               >
                 <ChevronLeft size={24} className="text-gray-700" />
               </button>
               <button
                 onClick={goToNext}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 bg-white hover:bg-gray-100 shadow-lg p-3 rounded-full transition-colors z-10"
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 bg-white/80 hover:bg-white/95 shadow-lg p-3 rounded-full transition-colors z-10"
                 aria-label="Próximo passeio"
               >
                 <ChevronRight size={24} className="text-gray-700" />

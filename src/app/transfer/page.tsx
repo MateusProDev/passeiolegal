@@ -27,7 +27,6 @@ export default function TransfersPage() {
   const [filteredTransfers, setFilteredTransfers] = useState<Transfer[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [settings, setSettings] = useState<any>(null);
   const [sectionDisabled, setSectionDisabled] = useState(false);
   
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
@@ -46,7 +45,6 @@ export default function TransfersPage() {
         
         setTransfers(allTransfers);
         setFilteredTransfers(allTransfers);
-        setSettings(settingsData);
         
         if (settingsData?.sections?.transfersEnabled === false) {
           setSectionDisabled(true);

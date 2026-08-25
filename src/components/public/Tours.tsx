@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Clock, Users, ChevronLeft, ChevronRight } from 'lucide-react';
+import { metaPixelEvents } from '@/utils/metaPixel';
 
 interface Tour {
   id: string;
@@ -43,6 +44,13 @@ export default function Tours({ tours }: ToursProps) {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const handleTourClick = (tourName: string) => {
+    metaPixelEvents.customEvent('ViewTourList', {
+      content_name: tourName,
+      content_category: 'Tour'
+    });
+  };
 
   useEffect(() => {
     if (displayTours.length <= itemsPerPage) return;
@@ -114,6 +122,7 @@ export default function Tours({ tours }: ToursProps) {
                 href={`/passeios/${tour.slug || tour.id}`}
                 className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col group"
                 aria-label={`Ver detalhes de ${tour.name}`}
+                onClick={() => handleTourClick(tour.name)}
               >
                 <div className="relative h-48 w-full">
                   {tour.mainImageUrl ? (

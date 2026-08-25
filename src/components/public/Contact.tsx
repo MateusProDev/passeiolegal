@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
+import { metaPixelEvents } from '@/utils/metaPixel';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -32,6 +33,12 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    // Track lead event
+    metaPixelEvents.lead({
+      content_name: 'Contact Form',
+      content_category: 'Contact'
+    });
 
     // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 1000));

@@ -126,7 +126,32 @@ Após configurar e fazer deploy:
    - Acesse seu site
    - Verifique se o Pixel está ativo e registrando PageView
 
-## 🚨 IMPORTANTE
+## � Eventos do Meta Pixel Implementados
+
+Seu projeto já tem um utilitário para rastreamento de eventos em `src/utils/metaPixel.ts`:
+
+- **Contact** - Cliques no WhatsApp/formulário
+- **Lead** - Envio de formulários de interesse
+- **InitiateCheckout** - Início do processo de reserva
+- **Purchase** - Conclusão de reserva
+- **Search** - Pesquisas de passeios/transfers
+- **Schedule** - Agendamento de passeios
+
+**Uso:**
+```typescript
+import { metaPixelEvents } from '@/utils/metaPixel';
+
+// Para contato via WhatsApp
+metaPixelEvents.contact();
+
+// Para envio de formulário
+metaPixelEvents.lead();
+
+// Para conclusão de compra
+metaPixelEvents.purchase(valor, 'BRL');
+```
+
+## �🚨 IMPORTANTE
 
 **Sem analytics configurados, você vai queimar R$70/dia sem saber:**
 - Qual anúncio está funcionando

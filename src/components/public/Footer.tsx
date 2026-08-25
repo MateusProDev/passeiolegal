@@ -4,6 +4,14 @@ import Link from 'next/link';
 import { Facebook, Instagram, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { metaPixelEvents } from '@/utils/metaPixel';
+
+interface SocialLink {
+  icon: any;
+  href: string;
+  label: string;
+  onClick?: () => void;
+}
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -25,10 +33,23 @@ export default function Footer() {
     fetchSettings();
   }, []);
 
-  const socialLinks = [
+  const handleWhatsAppClick = () => {
+    metaPixelEvents.contact({
+      content_name: 'Footer WhatsApp',
+      content_category: 'Contact'
+    });
+  };
+
+  const socialLinks: SocialLink[] = [
     { icon: Facebook, href: '#', label: 'Facebook' },
     { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: MessageCircle, href: '#', label: 'WhatsApp' },
+    { icon: MessageCircle, href: '#', label: 'WhatsApp', onClick: handleWhatsAppClick },
+  ];
+
+  const socialLinks = [
+    { icon: Facebook, href: '#', label: 'Facebook', onClick: undefined },
+    { icon: Instagram, href: '#', label: 'Instagram', onClick: undefined },
+    { icon: MessageCircle, href: '#', label: 'WhatsApp', onClick: handleWhatsAppClick },
   ];
 
   const quickLinks = [
@@ -129,6 +150,11 @@ export default function Footer() {
                   aria-label={social.label}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    if (social.onClick) {
+                      social.onClick();
+                    }
+                  }}
                 >
                   <social.icon size={20} />
                 </a>

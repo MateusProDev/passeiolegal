@@ -10,7 +10,9 @@ import TourConversionBar from "@/components/public/TourConversionBar";
 import TourTrustBadges from "@/components/public/TourTrustBadges";
 import TourFAQ from "@/components/public/TourFAQ";
 import RecommendedTours from "@/components/public/RecommendedTours";
+import TourTracking from "@/components/public/TourTracking";
 import * as Types from "@/types";
+import { metaPixelEvents } from "@/utils/metaPixel";
 
 interface PageProps {
   params: { id: string };
@@ -126,6 +128,9 @@ export default async function PasseioDetailPage({ params }: PageProps) {
   return (
     <main className="min-h-screen pt-24 pb-20">
       <Header />
+      
+      {/* Track tour view */}
+      <TourTracking tourName={tour.name} tourId={tour.id} />
       
       <BreadcrumbJsonLd items={breadcrumbItems} />
       

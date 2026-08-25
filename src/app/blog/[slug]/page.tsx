@@ -169,7 +169,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               )}
 
               {/* Article Content */}
-              <article className="bg-white rounded-xl shadow-lg p-8 md:p-12">
+              <article className="bg-gray-50 rounded-xl shadow-lg p-8 md:p-12">
                 <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
                   {content.split('\n\n').map((paragraph, idx) => (
                     paragraph.trim() && (

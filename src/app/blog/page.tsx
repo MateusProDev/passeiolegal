@@ -98,7 +98,7 @@ export default function BlogPage() {
             {posts.map((post) => (
               <article
                 key={post.id}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col"
+                className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col"
               >
                 <Link href={`/blog/${post.slug}`}>
                   <div className="relative h-48 w-full cursor-pointer">

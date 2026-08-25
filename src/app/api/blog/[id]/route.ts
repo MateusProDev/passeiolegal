@@ -1,6 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { blogService } from "@/lib/firestore";
 
+// GET /api/blog/[id] - Get single blog post
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const blog = await blogService.getById(params.id);
+    if (!blog) {
+      return NextResponse.json(
+        { error: "Blog post not found" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(blog);
+  } catch (error) {
+    console.error("Error fetching blog post:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch blog post" },
+      { status: 500 }
+    );
+  }
+}
+
 // PUT /api/blog/[id] - Update blog post
 export async function PUT(
   request: NextRequest,

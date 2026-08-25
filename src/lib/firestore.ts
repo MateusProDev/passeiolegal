@@ -237,6 +237,10 @@ export const testimonialService = {
     return firebaseService.getMany<Types.Testimonial>("testimonials", []);
   },
 
+  async getById(id: string) {
+    return firebaseService.get<Types.Testimonial>("testimonials", id);
+  },
+
   async create(
     data: Omit<Types.Testimonial, "id" | "createdAt" | "updatedAt">
   ) {
@@ -257,6 +261,10 @@ export const blogService = {
     const constraints: QueryConstraint[] = [orderBy("createdAt", "desc")];
     if (onlyPublished) constraints.push(where("published", "==", true));
     return firebaseService.getMany<Types.BlogPost>("blog", constraints);
+  },
+
+  async getById(id: string) {
+    return firebaseService.get<Types.BlogPost>("blog", id);
   },
 
   async getBySlug(slug: string) {
@@ -282,6 +290,10 @@ export const blogService = {
 export const faqService = {
   async getAll() {
     return firebaseService.getMany<Types.FAQ>("faq", []);
+  },
+
+  async getById(id: string) {
+    return firebaseService.get<Types.FAQ>("faq", id);
   },
 
   async create(data: Omit<Types.FAQ, "id" | "createdAt" | "updatedAt">) {

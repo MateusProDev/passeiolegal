@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     siteName: "Passeio Legal",
     images: [
       {
-        url: `${baseUrl}/og-image.jpg`,
+        url: `${baseUrl}/OG.png`,
         width: 1200,
         height: 630,
         alt: "Passeio Legal - Tours e Transfers",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Passeio Legal",
     description: "Descubra os melhores passeios e transfers",
-    images: [`${baseUrl}/og-image.jpg`],
+    images: [`${baseUrl}/OG.png`],
     creator: "@passeiolegal",
   },
   verification: {

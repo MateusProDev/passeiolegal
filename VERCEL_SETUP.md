@@ -12,7 +12,7 @@ Configure estas variáveis de ambiente na Vercel **antes** de iniciar sua campan
 3. Copie o "Measurement ID" (formato: `G-XXXXXXXXXX`)
 4. Configure na Vercel:
    - **Nome**: `NEXT_PUBLIC_GA_ID`
-   - **Valor**: `G-XXXXXXXXXX` (seu ID real)
+   - **Valor**: `G-YCGK9Q04SP` (seu ID configurado)
 
 ### Meta Pixel (Facebook/Instagram)
 1. Acesse [Meta Business Suite](https://business.facebook.com/)
@@ -20,7 +20,11 @@ Configure estas variáveis de ambiente na Vercel **antes** de iniciar sua campan
 3. Copie o Pixel ID (formato: números apenas)
 4. Configure na Vercel:
    - **Nome**: `NEXT_PUBLIC_META_PIXEL_ID`
-   - **Valor**: `XXXXXXXXXXXXXXX` (seu ID real)
+   - **Valor**: `1373592994356766` (seu ID configurado)
+
+### Conta de Anúncios Facebook
+- **ID da Conta**: `1014705683732131`
+- Use este ID ao configurar sua campanha de anúncios no Meta Ads Manager
 
 ## 🌐 Variáveis de URL
 
@@ -86,15 +90,27 @@ Essas variáveis já devem estar configuradas se o projeto está funcionando:
 
 ## ✅ Checklist Antes da Campanha
 
-- [ ] Google Analytics 4 configurado e testado
-- [ ] Meta Pixel configurado e testado
+### 📊 Analytics e IDs
+- [✅] Google Analytics 4 ID configurado: `G-YCGK9Q04SP`
+- [✅] Meta Pixel ID configurado: `1373592994356766`
+- [✅] Conta de Anúncios Facebook ID: `1014705683732131`
+
+### 🔧 Configuração na Vercel
+- [✅] `NEXT_PUBLIC_GA_ID=G-YCGK9Q04SP` configurado na Vercel
+- [✅] `NEXT_PUBLIC_META_PIXEL_ID=1373592994356766` configurado na Vercel
+- [✅] Deploy realizado após configuração
+
+### 🧪 Testes de Funcionamento
+- [✅] GA4 está recebendo dados
+- [✅] Meta Pixel está registrando eventos (PageView, ViewContent)
+
+### 🏢 Dados da Empresa
+- [✅] Dados reais da empresa no Schema.org
+
+### 🌐 Configurações Adicionais (Opcionais)
 - [ ] Domínio real configurado em `NEXT_PUBLIC_APP_URL`
 - [ ] Google Search Console verificado
-- [ ] Dados reais da empresa no Schema.org
-- [ ] Deploy realizado após configuração
-- [ ] GA4 está recebendo dados
-- [ ] Meta Pixel está registrando eventos
-- [ ] Imagem OG criada (1200x630px) em `public/og-image.jpg`
+- [✅] Imagem OG criada (1200x630px) em `public/OG.png`
 
 ## 🎯 Teste de Analytics
 

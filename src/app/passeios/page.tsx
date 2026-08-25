@@ -136,7 +136,7 @@ export default function PasseiosPage() {
 
       <div className="container mx-auto px-4 py-8">
         {/* Search and Filters */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <div className="bg-gray-50 rounded-xl shadow-lg p-6 mb-8">
           <div className="flex flex-col md:flex-row gap-4 items-center">
             {/* Search */}
             <div className="flex-1 relative">
@@ -220,7 +220,7 @@ export default function PasseiosPage() {
             {filteredTours.map((tour) => (
               <article
                 key={tour.id}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col"
+                className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col"
               >
                 <div className="relative h-48 w-full">
                   {tour.mainImageUrl ? (

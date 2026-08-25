@@ -117,7 +117,7 @@ export default function TransfersPage() {
 
       <div className="container mx-auto px-4 py-8">
         {/* Search */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <div className="bg-gray-50 rounded-xl shadow-lg p-6 mb-8">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
             <input

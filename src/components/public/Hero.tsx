@@ -110,14 +110,14 @@ export default function Hero({ banners }: HeroProps) {
         <>
           <button
             onClick={goToPrevious}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 p-3 rounded-full transition-colors"
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-100/30 hover:bg-gray-100/50 p-3 rounded-full transition-colors"
             aria-label="Banner anterior"
           >
             <ChevronLeft size={24} className="text-white" />
           </button>
           <button
             onClick={goToNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 p-3 rounded-full transition-colors"
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-100/30 hover:bg-gray-100/50 p-3 rounded-full transition-colors"
             aria-label="Próximo banner"
           >
             <ChevronRight size={24} className="text-white" />
@@ -127,9 +127,9 @@ export default function Hero({ banners }: HeroProps) {
 
       {/* Progress Bar */}
       {banners.length > 1 && (
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/30">
-          <div 
-            className="h-full bg-white transition-all duration-50 ease-linear"
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-100/30">
+          <div
+            className="h-full bg-gray-100 transition-all duration-50 ease-linear"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -146,7 +146,7 @@ export default function Hero({ banners }: HeroProps) {
                 setProgress(0);
               }}
               className={`w-3 h-3 rounded-full transition-colors ${
-                index === currentIndex ? 'bg-white' : 'bg-white/50'
+                index === currentIndex ? 'bg-gray-100' : 'bg-gray-100/50'
               }`}
               aria-label={`Ir para banner ${index + 1}`}
               aria-current={index === currentIndex ? 'true' : undefined}

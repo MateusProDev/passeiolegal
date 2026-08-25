@@ -82,7 +82,7 @@ export default function Tours({ tours }: ToursProps) {
   const visibleTours = displayTours.slice(currentIndex, currentIndex + itemsPerPage);
 
   return (
-    <section id="tours" className="py-14 bg-gray-50">
+    <section id="tours" className="py-14 bg-gray-100">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -99,14 +99,14 @@ export default function Tours({ tours }: ToursProps) {
             <>
               <button
                 onClick={goToPrevious}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 bg-white/90 hover:bg-white shadow-lg p-3 rounded-full transition-colors z-10"
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 bg-gray-50/90 hover:bg-gray-50 shadow-lg p-3 rounded-full transition-colors z-10"
                 aria-label="Passeio anterior"
               >
                 <ChevronLeft size={24} className="text-gray-700" />
               </button>
               <button
                 onClick={goToNext}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 bg-white/90 hover:bg-white shadow-lg p-3 rounded-full transition-colors z-10"
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 bg-gray-50/90 hover:bg-gray-50 shadow-lg p-3 rounded-full transition-colors z-10"
                 aria-label="Próximo passeio"
               >
                 <ChevronRight size={24} className="text-gray-700" />
@@ -120,7 +120,7 @@ export default function Tours({ tours }: ToursProps) {
               <Link
                 key={tour.id}
                 href={`/passeios/${tour.slug || tour.id}`}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col group"
+                className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col group"
                 aria-label={`Ver detalhes de ${tour.name}`}
                 onClick={() => handleTourClick(tour.name)}
               >

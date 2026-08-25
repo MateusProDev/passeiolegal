@@ -75,7 +75,7 @@ export default function Transfers({ transfers }: TransfersProps) {
   const visibleTransfers = displayTransfers.slice(currentIndex, currentIndex + itemsPerPage);
 
   return (
-    <section id="transfers" className="py-14 bg-white">
+    <section id="transfers" className="py-14 bg-gray-100">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -92,14 +92,14 @@ export default function Transfers({ transfers }: TransfersProps) {
             <>
               <button
                 onClick={goToPrevious}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 bg-white/90 hover:bg-white shadow-lg p-3 rounded-full transition-colors z-10"
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 bg-gray-50/90 hover:bg-gray-50 shadow-lg p-3 rounded-full transition-colors z-10"
                 aria-label="Transfer anterior"
               >
                 <ChevronLeft size={24} className="text-gray-700" />
               </button>
               <button
                 onClick={goToNext}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 bg-white/90 hover:bg-white shadow-lg p-3 rounded-full transition-colors z-10"
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 bg-gray-50/90 hover:bg-gray-50 shadow-lg p-3 rounded-full transition-colors z-10"
                 aria-label="Próximo transfer"
               >
                 <ChevronRight size={24} className="text-gray-700" />

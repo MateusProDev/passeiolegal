@@ -8,9 +8,10 @@ interface ImageUploadProps {
   currentImage?: string;
   label?: string;
   compact?: boolean;
+  banner?: boolean;
 }
 
-export default function ImageUpload({ onImageUpload, currentImage, label = "Imagem", compact = false }: ImageUploadProps) {
+export default function ImageUpload({ onImageUpload, currentImage, label = "Imagem", compact = false, banner = false }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(currentImage || "");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -68,16 +69,32 @@ export default function ImageUpload({ onImageUpload, currentImage, label = "Imag
     }
   };
 
+  const previewContainerClass = banner
+    ? "relative aspect-video w-full max-w-sm"
+    : compact
+      ? "relative h-24 w-24"
+      : "relative";
+  const previewImageClass = banner
+    ? "h-full w-full rounded-lg border border-gray-200 bg-gray-50 object-contain p-2"
+    : compact
+      ? "h-24 w-24 rounded-lg border border-gray-200 bg-gray-50 object-contain p-2"
+      : "h-48 w-full rounded-lg object-cover";
+  const uploadContainerClass = banner
+    ? "flex aspect-video w-full max-w-sm cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-4 text-center transition-colors hover:border-gray-400"
+    : compact
+      ? "flex h-24 w-24 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-2 text-center transition-colors hover:border-gray-400"
+      : "cursor-pointer rounded-lg border-2 border-dashed border-gray-300 p-8 text-center transition-colors hover:border-gray-400";
+
   return (
     <div className="space-y-2">
       {label && <label className="block text-sm font-medium">{label}</label>}
       
       {preview ? (
-        <div className={compact ? "relative w-24 h-24" : "relative"}>
+        <div className={previewContainerClass}>
           <img
             src={preview}
             alt="Preview"
-            className={compact ? "w-24 h-24 object-contain rounded-lg border border-gray-200 bg-gray-50 p-2" : "w-full h-48 object-cover rounded-lg"}
+            className={previewImageClass}
           />
           <button
             type="button"
@@ -92,7 +109,7 @@ export default function ImageUpload({ onImageUpload, currentImage, label = "Imag
           onClick={() => fileInputRef.current?.click()}
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
-          className={compact ? "w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg p-2 text-center cursor-pointer hover:border-gray-400 transition-colors flex items-center justify-center" : "border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-gray-400 transition-colors"}
+          className={uploadContainerClass}
         >
           {uploading ? (
             <div className="flex flex-col items-center">
@@ -111,6 +128,12 @@ export default function ImageUpload({ onImageUpload, currentImage, label = "Imag
             </div>
           )}
         </div>
+      )}
+
+      {banner && (
+        <p className="text-xs text-gray-500">
+          Recomendação: imagem horizontal 16:9, preferencialmente 1200 x 675 px.
+        </p>
       )}
       
       <input

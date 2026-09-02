@@ -3,7 +3,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X } from 'lucide-react';
+import { Home, Info, Map, Menu, Newspaper, Phone, X, type LucideIcon } from 'lucide-react';
+
+interface MenuItem {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+}
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,13 +31,13 @@ export default function Header() {
     fetchSettings();
   }, []);
 
-  const menuItems = [
-    { label: 'Início', href: '/' },
-    ...(settings?.sections?.toursEnabled !== false ? [{ label: 'Passeios', href: '/passeios' }] : []),
-    ...(settings?.sections?.transfersEnabled !== false ? [{ label: 'Transfer', href: '/transfer' }] : []),
-    { label: 'Blog', href: '/blog' },
-    { label: 'Sobre', href: '/about' },
-    { label: 'Contato', href: '/contact' },
+  const menuItems: MenuItem[] = [
+    { label: 'Início', href: '/', icon: Home },
+    ...(settings?.sections?.toursEnabled !== false ? [{ label: 'Passeios', href: '/passeios', icon: Map }] : []),
+    ...(settings?.sections?.transfersEnabled !== false ? [{ label: 'Transfer', href: '/transfer', icon: Map }] : []),
+    { label: 'Blog', href: '/blog', icon: Newspaper },
+    { label: 'Sobre', href: '/about', icon: Info },
+    { label: 'Contato', href: '/contact', icon: Phone },
   ];
 
   return (
@@ -63,9 +69,10 @@ export default function Header() {
               <li key={item.href} role="none">
                 <Link
                   href={item.href}
-                  className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 font-[var(--font-poppins)] text-sm font-semibold text-gray-700 transition-colors hover:bg-white/60 hover:text-primary-700"
                   role="menuitem"
                 >
+                  <item.icon size={17} strokeWidth={2.2} />
                   {item.label}
                 </Link>
               </li>
@@ -90,10 +97,11 @@ export default function Header() {
               <li key={item.href} role="none">
                 <Link
                   href={item.href}
-                  className="block text-gray-700 hover:text-primary-600 transition-colors font-medium py-2"
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 font-[var(--font-poppins)] font-semibold text-gray-700 transition-colors hover:bg-white/60 hover:text-primary-700"
                   onClick={() => setIsMenuOpen(false)}
                   role="menuitem"
                 >
+                  <item.icon size={18} strokeWidth={2.2} />
                   {item.label}
                 </Link>
               </li>

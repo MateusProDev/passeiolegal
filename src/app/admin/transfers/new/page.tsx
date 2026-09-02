@@ -116,6 +116,7 @@ export default function NewTransfer() {
             <ImageUpload
               label="Imagem do Veículo"
               currentImage={formData.imageUrl}
+              banner
               onImageUpload={(url) => setFormData({ ...formData, imageUrl: url })}
             />
             <ImageGalleryUpload

@@ -95,6 +95,7 @@ export default function NewTour() {
             <ImageUpload
               label="Imagem Principal"
               currentImage={formData.mainImageUrl}
+              banner
               onImageUpload={(url) => setFormData({ ...formData, mainImageUrl: url })}
             />
             <ImageGalleryUpload

@@ -40,6 +40,7 @@ export default function ImageGalleryUpload({ images, onImagesChange, label, maxI
             key={image?.id || `gallery-slot-${index}`}
             label={`Imagem ${index + 1}`}
             currentImage={image?.url}
+            banner
             onImageUpload={(url) => updateImage(index, url)}
           />
         ))}

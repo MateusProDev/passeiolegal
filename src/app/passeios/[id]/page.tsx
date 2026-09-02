@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import { tourService } from "@/lib/firestore";
-import { Clock, Check, X, Star, Users, AlertCircle, Sparkles, ChevronDown } from "lucide-react";
+import { Clock, Check, X, Users, AlertCircle, Sparkles, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import TourConversionBar from "@/components/public/TourConversionBar";

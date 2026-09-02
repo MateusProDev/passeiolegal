@@ -45,6 +45,26 @@ function formatActivityDate(timestamp: Activity["timestamp"]) {
   return date.toLocaleString("pt-BR");
 }
 
+function StatCard({ title, value, link }: { title: string; value: number; link: string }) {
+  return (
+    <Link href={link}>
+      <Card className="cursor-pointer border-gray-200 bg-white shadow-md hover:-translate-y-0.5 hover:shadow-xl transition-all">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-medium text-muted-foreground">
+            {title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-3xl font-bold">{value}</div>
+          <p className="text-xs text-muted-foreground mt-2">
+            Clique para gerenciar
+          </p>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+}
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats>({
     banners: 0,
@@ -98,26 +118,6 @@ export default function AdminDashboard() {
       .then((data) => setActivities(Array.isArray(data) ? data : []))
       .catch((error) => console.error("Error fetching activity:", error));
   }, []);
-
-  function StatCard({ title, value, link }: { title: string; value: number; link: string }) {
-    return (
-      <Link href={link}>
-        <Card className="cursor-pointer border-gray-200 bg-white shadow-md hover:-translate-y-0.5 hover:shadow-xl transition-all">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              {title}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{value}</div>
-            <p className="text-xs text-muted-foreground mt-2">
-              Clique para gerenciar
-            </p>
-          </CardContent>
-        </Card>
-      </Link>
-    );
-  }
 
   return (
     <div className="space-y-8">

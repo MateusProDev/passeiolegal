@@ -219,8 +219,7 @@ export default function AdminDashboard() {
                     {formatActivityDate(activity.timestamp)}
                   </span>
                 </div>
-              ))
-                <Card className="border-gray-200 bg-white shadow-md">
+              ))}
           </div>
         </CardContent>
       </Card>

@@ -89,6 +89,8 @@ export default function SettingsAdmin() {
             <label className="text-sm font-medium mb-2 block">Logo do Cabeçalho</label>
             <ImageUpload
               currentImage={settings?.headerLogo}
+              label=""
+              compact
               onImageUpload={(url) =>
                 setSettings({
                   ...settings,

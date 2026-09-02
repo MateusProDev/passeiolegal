@@ -1,18 +1,23 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Upload, X, Loader2 } from "lucide-react";
 
 interface ImageUploadProps {
   onImageUpload: (url: string) => void;
   currentImage?: string;
   label?: string;
+  compact?: boolean;
 }
 
-export default function ImageUpload({ onImageUpload, currentImage, label = "Imagem" }: ImageUploadProps) {
+export default function ImageUpload({ onImageUpload, currentImage, label = "Imagem", compact = false }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(currentImage || "");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setPreview(currentImage || "");
+  }, [currentImage]);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -54,14 +59,14 @@ export default function ImageUpload({ onImageUpload, currentImage, label = "Imag
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium">{label}</label>
+      {label && <label className="block text-sm font-medium">{label}</label>}
       
       {preview ? (
-        <div className="relative">
+        <div className={compact ? "relative w-24 h-24" : "relative"}>
           <img
             src={preview}
             alt="Preview"
-            className="w-full h-48 object-cover rounded-lg"
+            className={compact ? "w-24 h-24 object-contain rounded-lg border border-gray-200 bg-gray-50 p-2" : "w-full h-48 object-cover rounded-lg"}
           />
           <button
             type="button"
@@ -74,7 +79,7 @@ export default function ImageUpload({ onImageUpload, currentImage, label = "Imag
       ) : (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-gray-400 transition-colors"
+          className={compact ? "w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg p-2 text-center cursor-pointer hover:border-gray-400 transition-colors flex items-center justify-center" : "border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-gray-400 transition-colors"}
         >
           {uploading ? (
             <div className="flex flex-col items-center">

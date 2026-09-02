@@ -69,14 +69,21 @@ export default function AdminDashboard() {
           { key: "faqItems", url: "/api/faq" },
         ];
 
-        const results: Partial<DashboardStats> = {};
-        for (const endpoint of endpoints) {
-          const res = await fetch(endpoint.url);
-          const data = await res.json();
-          results[endpoint.key as keyof DashboardStats] = Array.isArray(data)
-            ? data.length
-            : 0;
-        }
+        const responses = await Promise.all(
+          endpoints.map(async (endpoint) => {
+            const res = await fetch(endpoint.url);
+            const data = await res.json();
+            return {
+              key: endpoint.key as keyof DashboardStats,
+              value: Array.isArray(data) ? data.length : 0,
+            };
+          })
+        );
+
+        const results = responses.reduce<Partial<DashboardStats>>(
+          (current, result) => ({ ...current, [result.key]: result.value }),
+          {}
+        );
 
         setStats((prev) => ({ ...prev, ...results }));
       } catch (error) {

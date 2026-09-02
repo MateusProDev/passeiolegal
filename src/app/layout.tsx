@@ -3,6 +3,13 @@ import { Providers } from "./providers";
 import "./globals.css";
 import { LocalBusinessJsonLd, WebSiteJsonLd } from "@/components/seo/JsonLd";
 import Script from "next/script";
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  variable: "--font-poppins",
+  display: "swap",
+});
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
 
@@ -83,7 +90,7 @@ export default function RootLayout({
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
         <meta name="theme-color" content="#ffffff" />
       </head>
-      <body>
+      <body className={poppins.variable}>
         {/* Google Analytics 4 */}
         {process.env.NEXT_PUBLIC_GA_ID && (
           <>

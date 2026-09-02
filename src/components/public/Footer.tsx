@@ -168,6 +168,14 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-8 pt-8 pb-4 text-center text-gray-400 text-sm">
           <p>&copy; {currentYear} Passeio Legal. Todos os direitos reservados.</p>
+          <a
+            href="https://turvia.com.br"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-2 hover:text-white transition-colors"
+          >
+            Desenvolvido por TURVIA
+          </a>
         </div>
       </div>
     </footer>

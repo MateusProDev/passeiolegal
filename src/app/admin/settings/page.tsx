@@ -7,6 +7,16 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
 
+const defaultAboutSection = {
+  title: "Sobre a Passeio Legal",
+  description: "Há mais de 10 anos no mercado de turismo, oferecendo experiências únicas e memoráveis para nossos clientes. Nossa missão é proporcionar momentos inesquecíveis com segurança, conforto e profissionalismo.",
+  stats: [
+    { value: 10, label: "Anos de Experiência" },
+    { value: 5000, label: "Clientes Satisfeitos" },
+    { value: 100, label: "Destinos" },
+  ],
+};
+
 export default function SettingsAdmin() {
   const [settings, setSettings] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -247,6 +257,72 @@ export default function SettingsAdmin() {
               }
               className="w-4 h-4 text-primary-600 rounded focus:ring-primary-600"
             />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Sobre a Passeio Legal</CardTitle>
+          <CardDescription>Edite o texto e os números exibidos na seção sobre a empresa</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <label className="text-sm font-medium">Título</label>
+            <Input
+              placeholder="Sobre a Passeio Legal"
+              value={settings?.aboutSection?.title || defaultAboutSection.title}
+              onChange={(e) =>
+                setSettings({
+                  ...settings,
+                  aboutSection: { ...settings?.aboutSection, title: e.target.value },
+                })
+              }
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium">Descrição</label>
+            <textarea
+              className="w-full min-h-28 rounded-md border border-input bg-background px-3 py-2 text-sm"
+              placeholder="Conte a história da empresa"
+              value={settings?.aboutSection?.description || defaultAboutSection.description}
+              onChange={(e) =>
+                setSettings({
+                  ...settings,
+                  aboutSection: { ...settings?.aboutSection, description: e.target.value },
+                })
+              }
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[0, 1, 2].map((index) => {
+              const stat = settings?.aboutSection?.stats?.[index] || defaultAboutSection.stats[index];
+              return (
+                <div key={index} className="space-y-2">
+                  <label className="text-sm font-medium">Estatística {index + 1}</label>
+                  <Input
+                    type="number"
+                    min="0"
+                    placeholder="10"
+                    value={stat.value}
+                    onChange={(e) => {
+                      const stats = [...(settings?.aboutSection?.stats || defaultAboutSection.stats)];
+                      stats[index] = { ...stats[index], value: Number(e.target.value) };
+                      setSettings({ ...settings, aboutSection: { ...settings?.aboutSection, stats } });
+                    }}
+                  />
+                  <Input
+                    placeholder="Anos de Experiência"
+                    value={stat.label}
+                    onChange={(e) => {
+                      const stats = [...(settings?.aboutSection?.stats || defaultAboutSection.stats)];
+                      stats[index] = { ...stats[index], label: e.target.value };
+                      setSettings({ ...settings, aboutSection: { ...settings?.aboutSection, stats } });
+                    }}
+                  />
+                </div>
+              );
+            })}
           </div>
         </CardContent>
       </Card>

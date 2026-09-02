@@ -142,7 +142,19 @@ export interface SiteSettings {
   primaryColor: string;
   secondaryColor: string;
   sections: SectionSettings;
+  aboutSection?: AboutSectionSettings;
   updatedAt: Date;
+}
+
+export interface AboutSectionSettings {
+  title: string;
+  description: string;
+  stats: AboutStat[];
+}
+
+export interface AboutStat {
+  value: number;
+  label: string;
 }
 
 export interface SectionSettings {

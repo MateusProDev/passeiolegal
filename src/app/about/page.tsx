@@ -3,6 +3,7 @@ import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import AnimatedCounter from "@/components/public/AnimatedCounter";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { settingsService } from "@/lib/firestore";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
 
@@ -16,9 +17,16 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 86400; // Revalidate once per day
+export const dynamic = "force-dynamic";
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const settings = await settingsService.get();
+  const aboutSection = settings?.aboutSection;
+  const aboutStats = aboutSection?.stats || [
+    { value: 10, label: "Anos de Experiência" },
+    { value: 5000, label: "Clientes Satisfeitos" },
+    { value: 100, label: "Destinos" },
+  ];
   const breadcrumbItems = [
     { name: "Início", url: baseUrl },
     { name: "Sobre Nós", url: `${baseUrl}/about` },
@@ -33,7 +41,7 @@ export default function AboutPage() {
       {/* Header */}
       <div className="bg-primary-600 text-white py-16">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Sobre a Passeio Legal</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{aboutSection?.title || "Sobre a Passeio Legal"}</h1>
           <p className="text-xl max-w-2xl">
             Conheça nossa história e compromisso com proporcionar experiências inesquecíveis
           </p>
@@ -49,7 +57,7 @@ export default function AboutPage() {
                 Nossa História
               </h2>
               <p className="text-gray-600 text-lg leading-relaxed">
-                Há mais de 10 anos no mercado de turismo, a Passeio Legal nasceu com a missão de proporcionar momentos inesquecíveis para nossos clientes. O que começou como um pequeno sonho se transformou em uma empresa referência em passeios e transfers, sempre focada na qualidade, segurança e satisfação de quem nos escolhe.
+                {aboutSection?.description || "Há mais de 10 anos no mercado de turismo, a Passeio Legal nasceu com a missão de proporcionar momentos inesquecíveis para nossos clientes. O que começou como um pequeno sonho se transformou em uma empresa referência em passeios e transfers, sempre focada na qualidade, segurança e satisfação de quem nos escolhe."}
               </p>
             </div>
 
@@ -85,18 +93,12 @@ export default function AboutPage() {
                 Nossos Números
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                <div className="text-center">
-                  <AnimatedCounter target={10} suffix="+" />
-                  <div className="text-gray-600 mt-2">Anos de Experiência</div>
-                </div>
-                <div className="text-center">
-                  <AnimatedCounter target={5000} suffix="+" />
-                  <div className="text-gray-600 mt-2">Clientes Satisfeitos</div>
-                </div>
-                <div className="text-center">
-                  <AnimatedCounter target={100} suffix="+" />
-                  <div className="text-gray-600 mt-2">Destinos</div>
-                </div>
+                {aboutStats.map((stat) => (
+                  <div className="text-center" key={stat.label}>
+                    <AnimatedCounter target={stat.value} suffix="+" />
+                    <div className="text-gray-600 mt-2">{stat.label}</div>
+                  </div>
+                ))}
               </div>
             </div>
 

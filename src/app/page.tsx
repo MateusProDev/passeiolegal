@@ -88,6 +88,12 @@ export default async function Home() {
   
   const toursEnabled = settings?.sections?.toursEnabled ?? true;
   const transfersEnabled = settings?.sections?.transfersEnabled ?? true;
+  const aboutSection = settings?.aboutSection;
+  const aboutStats = aboutSection?.stats || [
+    { value: 10, label: "Anos de Experiência" },
+    { value: 5000, label: "Clientes Satisfeitos" },
+    { value: 100, label: "Destinos" },
+  ];
 
   return (
     <main className="min-h-screen pt-24">
@@ -99,26 +105,20 @@ export default async function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Sobre a Passeio Legal
+              {aboutSection?.title || "Sobre a Passeio Legal"}
             </h2>
             <p className="text-gray-600 max-w-3xl mx-auto text-lg">
-              Há mais de 10 anos no mercado de turismo, oferecendo experiências únicas e memoráveis para nossos clientes. Nossa missão é proporcionar momentos inesquecíveis com segurança, conforto e profissionalismo.
+              {aboutSection?.description || "Há mais de 10 anos no mercado de turismo, oferecendo experiências únicas e memoráveis para nossos clientes. Nossa missão é proporcionar momentos inesquecíveis com segurança, conforto e profissionalismo."}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <AnimatedCounter target={10} suffix="+" />
-              <div className="text-gray-600">Anos de Experiência</div>
-            </div>
-            <div className="text-center">
-              <AnimatedCounter target={5000} suffix="+" />
-              <div className="text-gray-600">Clientes Satisfeitos</div>
-            </div>
-            <div className="text-center">
-              <AnimatedCounter target={100} suffix="+" />
-              <div className="text-gray-600">Destinos</div>
-            </div>
+            {aboutStats.map((stat) => (
+              <div className="text-center" key={stat.label}>
+                <AnimatedCounter target={stat.value} suffix="+" />
+                <div className="text-gray-600">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

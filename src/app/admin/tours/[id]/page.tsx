@@ -7,6 +7,7 @@ import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
 import ImageGalleryUpload from "@/components/ui/ImageGalleryUpload";
+import { GalleryImage } from "@/types";
 import { useTours } from "@/hooks/useApi";
 
 export default function EditTour() {
@@ -24,7 +25,7 @@ export default function EditTour() {
     featured: false,
     mainImageUrl: "",
     mainImageAlt: "",
-    galleryImages: [],
+    galleryImages: [] as GalleryImage[],
     includesItems: "",
     excludesItems: "",
   });

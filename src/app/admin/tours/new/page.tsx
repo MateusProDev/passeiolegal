@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
 import ImageGalleryUpload from "@/components/ui/ImageGalleryUpload";
+import { GalleryImage } from "@/types";
 import { useTours } from "@/hooks/useApi";
 
 export default function NewTour() {
@@ -20,7 +21,7 @@ export default function NewTour() {
     active: true,
     mainImageUrl: "",
     mainImageAlt: "",
-    galleryImages: [],
+    galleryImages: [] as GalleryImage[],
   });
 
   const handleSubmit = async (e: React.FormEvent) => {

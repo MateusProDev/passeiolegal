@@ -7,6 +7,7 @@ import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
 import ImageGalleryUpload from "@/components/ui/ImageGalleryUpload";
+import { GalleryImage } from "@/types";
 import { useTransfers } from "@/hooks/useApi";
 
 export default function EditTransfer() {
@@ -23,7 +24,7 @@ export default function EditTransfer() {
     active: true,
     imageUrl: "",
     imageAlt: "",
-    galleryImages: [],
+    galleryImages: [] as GalleryImage[],
   });
 
   useEffect(() => {

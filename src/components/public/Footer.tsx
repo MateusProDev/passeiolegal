@@ -154,6 +154,14 @@ export default function Footer() {
                 </a>
               ))}
             </div>
+            <div className="relative mt-5 h-14 w-36">
+              <Image
+                src="/cadastur.png"
+                alt="Cadastur"
+                fill
+                className="object-contain object-left"
+              />
+            </div>
           </div>
         </div>
 

@@ -19,8 +19,7 @@ export default function ImageUpload({ onImageUpload, currentImage, label = "Imag
     setPreview(currentImage || "");
   }, [currentImage]);
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const uploadFile = async (file: File) => {
     if (!file) return;
 
     setUploading(true);
@@ -47,6 +46,18 @@ export default function ImageUpload({ onImageUpload, currentImage, label = "Imag
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) await uploadFile(file);
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const file = e.dataTransfer.files?.[0];
+    if (file) await uploadFile(file);
   };
 
   const handleRemove = () => {
@@ -79,6 +90,8 @@ export default function ImageUpload({ onImageUpload, currentImage, label = "Imag
       ) : (
         <div
           onClick={() => fileInputRef.current?.click()}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={handleDrop}
           className={compact ? "w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg p-2 text-center cursor-pointer hover:border-gray-400 transition-colors flex items-center justify-center" : "border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-gray-400 transition-colors"}
         >
           {uploading ? (

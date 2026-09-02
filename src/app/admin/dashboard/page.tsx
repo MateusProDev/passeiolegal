@@ -101,7 +101,7 @@ export default function AdminDashboard() {
 
   const StatCard = ({ title, value, link }: { title: string; value: number; link: string }) => (
     <Link href={link}>
-      <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+      <Card className="cursor-pointer border-gray-200 bg-white shadow-md hover:-translate-y-0.5 hover:shadow-xl transition-all">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-medium text-muted-foreground">
             {title}
@@ -161,9 +161,9 @@ export default function AdminDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <Card>
+        <Card className="border-gray-200 bg-white shadow-md">
         <CardHeader>
-          <CardTitle>Ações rápidas</CardTitle>
+          <CardTitle className="text-gray-900">Ações rápidas</CardTitle>
           <CardDescription>Atalhos para as ações mais comuns</CardDescription>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -189,9 +189,9 @@ export default function AdminDashboard() {
       </Card>
 
       {/* Recent Activity */}
-      <Card>
+      <Card className="border-gray-200 bg-white shadow-md">
         <CardHeader>
-          <CardTitle>Atividades recentes</CardTitle>
+          <CardTitle className="text-gray-900">Atividades recentes</CardTitle>
           <CardDescription>Atividades recentes do seu site</CardDescription>
         </CardHeader>
         <CardContent>
@@ -220,7 +220,7 @@ export default function AdminDashboard() {
                   </span>
                 </div>
               ))
-            )}
+                <Card className="border-gray-200 bg-white shadow-md">
           </div>
         </CardContent>
       </Card>

@@ -35,7 +35,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-primary-100/70 bg-primary-50/90 backdrop-blur-sm shadow-md">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-primary-300/70 bg-primary-100/90 backdrop-blur-sm shadow-md">
       <nav className="container mx-auto px-4 py-2" role="navigation" aria-label="Navegação principal">
         <div className="flex items-center justify-between">
           {/* Logo */}

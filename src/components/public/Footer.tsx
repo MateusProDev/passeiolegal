@@ -57,7 +57,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-gray-900 text-white" role="contentinfo">
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 pt-12 pb-[calc(3rem+env(safe-area-inset-bottom))]">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* About Section */}
           <div>
@@ -166,7 +166,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+        <div className="border-t border-gray-800 mt-8 pt-8 pb-4 text-center text-gray-400 text-sm">
           <p>&copy; {currentYear} Passeio Legal. Todos os direitos reservados.</p>
         </div>
       </div>

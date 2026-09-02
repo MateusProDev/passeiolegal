@@ -7,6 +7,7 @@ import { Car, Users } from "lucide-react";
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import * as Types from "@/types";
+import DetailGallery from "@/components/public/DetailGallery";
 
 interface PageProps {
   params: { id: string };
@@ -80,6 +81,15 @@ export default async function TransferDetailPage({ params }: PageProps) {
     { name: "Transfer", url: `${baseUrl}/transfer` },
     { name: transfer.name, url: `${baseUrl}/transfer/${params.id}` },
   ];
+  const galleryImages = [
+    {
+      id: "main",
+      url: transfer.imageUrl,
+      alt: transfer.imageAlt,
+      order: 0,
+    },
+    ...(transfer.galleryImages || []),
+  ].filter((image) => image.url);
 
   return (
     <main className="min-h-screen pt-24">
@@ -98,13 +108,10 @@ export default async function TransferDetailPage({ params }: PageProps) {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div>
-              <div className="relative h-96 rounded-xl overflow-hidden mb-6">
-                <img
-                  src={transfer.imageUrl}
-                  alt={transfer.imageAlt || transfer.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <DetailGallery
+                images={galleryImages}
+                alt={transfer.imageAlt || transfer.name}
+              />
             </div>
 
             <div>

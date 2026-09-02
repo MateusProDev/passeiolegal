@@ -46,6 +46,7 @@ export interface Transfer {
   description: string;
   imageUrl: string;
   imageAlt: string;
+  galleryImages?: GalleryImage[];
   price: number;
   vehicleType: string;
   capacity: number;

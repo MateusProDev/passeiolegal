@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
+import ImageGalleryUpload from "@/components/ui/ImageGalleryUpload";
 import { useTours } from "@/hooks/useApi";
 
 export default function EditTour() {
@@ -23,6 +24,7 @@ export default function EditTour() {
     featured: false,
     mainImageUrl: "",
     mainImageAlt: "",
+    galleryImages: [],
     includesItems: "",
     excludesItems: "",
   });
@@ -49,6 +51,7 @@ export default function EditTour() {
           featured: tour.featured ?? false,
           mainImageUrl: tour.mainImageUrl || "",
           mainImageAlt: tour.mainImageAlt || "",
+          galleryImages: Array.isArray(tour.galleryImages) ? tour.galleryImages.slice(0, 2) : [],
           includesItems: Array.isArray(tour.includesItems) ? tour.includesItems.join(", ") : "",
           excludesItems: Array.isArray(tour.excludesItems) ? tour.excludesItems.join(", ") : "",
         });
@@ -164,6 +167,11 @@ export default function EditTour() {
               label="Imagem Principal"
               currentImage={formData.mainImageUrl}
               onImageUpload={(url) => setFormData({ ...formData, mainImageUrl: url })}
+            />
+            <ImageGalleryUpload
+              label="Imagens adicionais"
+              images={formData.galleryImages}
+              onImagesChange={(galleryImages) => setFormData({ ...formData, galleryImages })}
             />
             <div>
               <label className="block text-sm font-medium mb-2">Alt da Imagem</label>

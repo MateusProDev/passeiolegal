@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
+import ImageGalleryUpload from "@/components/ui/ImageGalleryUpload";
 import { useTransfers } from "@/hooks/useApi";
 
 export default function EditTransfer() {
@@ -22,6 +23,7 @@ export default function EditTransfer() {
     active: true,
     imageUrl: "",
     imageAlt: "",
+    galleryImages: [],
   });
 
   useEffect(() => {
@@ -45,6 +47,7 @@ export default function EditTransfer() {
           active: transfer.active ?? true,
           imageUrl: transfer.imageUrl || "",
           imageAlt: transfer.imageAlt || "",
+          galleryImages: Array.isArray(transfer.galleryImages) ? transfer.galleryImages.slice(0, 2) : [],
         });
       } catch (error) {
         toast.error("Erro ao carregar transfer");
@@ -153,6 +156,11 @@ export default function EditTransfer() {
               label="Imagem do Veículo"
               currentImage={formData.imageUrl}
               onImageUpload={(url) => setFormData({ ...formData, imageUrl: url })}
+            />
+            <ImageGalleryUpload
+              label="Imagens adicionais"
+              images={formData.galleryImages}
+              onImagesChange={(galleryImages) => setFormData({ ...formData, galleryImages })}
             />
             <div>
               <label className="block text-sm font-medium mb-2">Alt da Imagem</label>

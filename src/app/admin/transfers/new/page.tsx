@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
+import ImageGalleryUpload from "@/components/ui/ImageGalleryUpload";
 import { useTransfers } from "@/hooks/useApi";
 
 export default function NewTransfer() {
@@ -20,6 +21,7 @@ export default function NewTransfer() {
     active: true,
     imageUrl: "",
     imageAlt: "",
+    galleryImages: [],
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -37,6 +39,7 @@ export default function NewTransfer() {
           vehicleType: formData.vehicleType,
           imageUrl: formData.imageUrl,
           imageAlt: formData.imageAlt,
+          galleryImages: formData.galleryImages,
           active: formData.active,
         }),
       });
@@ -113,6 +116,11 @@ export default function NewTransfer() {
               label="Imagem do Veículo"
               currentImage={formData.imageUrl}
               onImageUpload={(url) => setFormData({ ...formData, imageUrl: url })}
+            />
+            <ImageGalleryUpload
+              label="Imagens adicionais"
+              images={formData.galleryImages}
+              onImagesChange={(galleryImages) => setFormData({ ...formData, galleryImages })}
             />
             <div>
               <label className="block text-sm font-medium mb-2">Alt da Imagem</label>

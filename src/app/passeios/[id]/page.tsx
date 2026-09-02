@@ -11,6 +11,7 @@ import TourTrustBadges from "@/components/public/TourTrustBadges";
 import TourFAQ from "@/components/public/TourFAQ";
 import RecommendedTours from "@/components/public/RecommendedTours";
 import TourTracking from "@/components/public/TourTracking";
+import DetailGallery from "@/components/public/DetailGallery";
 import * as Types from "@/types";
 
 interface PageProps {
@@ -117,6 +118,15 @@ export default async function PasseioDetailPage({ params }: PageProps) {
 
   // Busca passeios relacionados para recomendação
   const relatedTours = await tourService.getRelated(tour.id, 3);
+  const galleryImages = [
+    {
+      id: "main",
+      url: tour.mainImageUrl,
+      alt: tour.mainImageAlt,
+      order: 0,
+    },
+    ...(tour.galleryImages || []),
+  ].filter((image) => image.url);
 
   const breadcrumbItems = [
     { name: "Início", url: baseUrl },
@@ -161,35 +171,11 @@ export default async function PasseioDetailPage({ params }: PageProps) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Coluna Esquerda - Imagens */}
             <div>
-              <div className="relative h-96 lg:h-[500px] rounded-xl overflow-hidden mb-4 shadow-lg">
-                <img
-                  src={tour.mainImageUrl}
-                  alt={`${tour.name} - Passeio turístico em Fortaleza e região`}
-                  className="w-full h-full object-cover"
-                  loading="eager"
-                />
-                {tour.featured && (
-                  <div className="absolute top-4 right-4 bg-yellow-500 text-white px-4 py-2 rounded-full font-semibold flex items-center gap-2 shadow-md">
-                    <Star size={16} />
-                    <span>Destaque</span>
-                  </div>
-                )}
-              </div>
-
-              {tour.galleryImages && tour.galleryImages.length > 0 && (
-                <div className="grid grid-cols-3 gap-3">
-                  {tour.galleryImages.slice(0, 6).map((image) => (
-                    <div key={image.id} className="relative h-24 rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity">
-                      <img
-                        src={image.url}
-                        alt={image.alt || `${tour.name} - Foto adicional`}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
+              <DetailGallery
+                images={galleryImages}
+                alt={`${tour.name} - Passeio turístico em Fortaleza e região`}
+                featured={tour.featured}
+              />
             </div>
 
             {/* Coluna Direita - Conteúdo */}

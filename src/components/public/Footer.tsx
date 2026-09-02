@@ -154,7 +154,7 @@ export default function Footer() {
                 </a>
               ))}
             </div>
-            <div className="relative mt-5 h-14 w-36">
+            <div className="relative mt-5 h-24 w-24 sm:h-20 sm:w-40">
               <Image
                 src="/cadastur.png"
                 alt="Cadastur"

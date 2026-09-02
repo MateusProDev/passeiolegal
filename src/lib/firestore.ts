@@ -13,6 +13,7 @@ import {
   QueryConstraint,
   setDoc,
   Timestamp,
+  limit as firestoreLimit,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import * as Types from "@/types";
@@ -27,6 +28,13 @@ export const firebaseService = {
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
       });
+      if (collectionName !== "activityLogs") {
+        try {
+          await activityLogService.log("admin", "created", collectionName, docRef.id, data as Record<string, unknown>);
+        } catch (logError) {
+          console.error("Error recording activity:", logError);
+        }
+      }
       return docRef.id;
     } catch (error) {
       console.error("Error creating document:", error);
@@ -82,6 +90,13 @@ export const firebaseService = {
         ...data,
         updatedAt: Timestamp.now(),
       });
+      if (collectionName !== "activityLogs") {
+        try {
+          await activityLogService.log("admin", "updated", collectionName, id, data as Record<string, unknown>);
+        } catch (logError) {
+          console.error("Error recording activity:", logError);
+        }
+      }
     } catch (error) {
       console.error("Error updating document:", error);
       throw error;
@@ -93,6 +108,13 @@ export const firebaseService = {
     try {
       const docRef = doc(db, collectionName, id);
       await deleteDoc(docRef);
+      if (collectionName !== "activityLogs") {
+        try {
+          await activityLogService.log("admin", "deleted", collectionName, id);
+        } catch (logError) {
+          console.error("Error recording activity:", logError);
+        }
+      }
     } catch (error) {
       console.error("Error deleting document:", error);
       throw error;
@@ -352,7 +374,7 @@ export const activityLogService = {
 
   async getRecent(limit?: number) {
     const constraints: QueryConstraint[] = [orderBy("timestamp", "desc")];
-    if (limit) constraints.push(limit as unknown as QueryConstraint);
+    if (limit) constraints.push(firestoreLimit(limit));
     return firebaseService.getMany<Types.ActivityLog>(
       "activityLogs",
       constraints

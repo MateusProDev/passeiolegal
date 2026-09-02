@@ -115,7 +115,7 @@ export default function Tours({ tours }: ToursProps) {
           )}
 
           {/* Carousel */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-8 lg:px-0">
             {visibleTours.map((tour) => (
               <Link
                 key={tour.id}

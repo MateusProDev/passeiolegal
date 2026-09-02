@@ -41,7 +41,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       <aside className="w-64 bg-card border-r border-border shadow-lg relative">
         <div className="p-6 border-b border-border">
           <h1 className="text-2xl font-bold text-primary">Passeio Legal</h1>
-          <p className="text-sm text-muted-foreground">Admin Dashboard</p>
+          <p className="text-sm text-muted-foreground">Painel administrativo</p>
         </div>
 
         <nav className="p-6 space-y-2">
@@ -49,7 +49,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             href="/admin/dashboard"
             className="block px-4 py-2 rounded-md hover:bg-accent transition-colors"
           >
-            Dashboard
+            Painel
           </Link>
           <Link
             href="/admin/banners"
@@ -100,7 +100,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             onClick={handleLogout}
             className="w-full px-4 py-2 bg-destructive text-destructive-foreground rounded-md hover:bg-destructive/90 transition-colors text-sm font-medium"
           >
-            Logout
+            Sair
           </button>
         </div>
       </aside>

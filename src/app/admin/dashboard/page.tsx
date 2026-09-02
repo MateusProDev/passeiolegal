@@ -14,6 +14,37 @@ interface DashboardStats {
   faqItems: number;
 }
 
+interface Activity {
+  id: string;
+  action: string;
+  entityType: string;
+  entityId: string;
+  timestamp: string | { seconds: number; nanoseconds: number };
+}
+
+const entityLabels: Record<string, string> = {
+  banners: "banner",
+  tours: "passeio",
+  transfers: "transfer",
+  testimonials: "depoimento",
+  blog: "post do blog",
+  faq: "item do FAQ",
+  settings: "configurações",
+};
+
+const actionLabels: Record<string, string> = {
+  created: "criado",
+  updated: "atualizado",
+  deleted: "excluído",
+};
+
+function formatActivityDate(timestamp: Activity["timestamp"]) {
+  const date = typeof timestamp === "string"
+    ? new Date(timestamp)
+    : new Date(timestamp.seconds * 1000);
+  return date.toLocaleString("pt-BR");
+}
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats>({
     banners: 0,
@@ -23,6 +54,7 @@ export default function AdminDashboard() {
     blogPosts: 0,
     faqItems: 0,
   });
+  const [activities, setActivities] = useState<Activity[]>([]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -32,6 +64,9 @@ export default function AdminDashboard() {
           { key: "banners", url: "/api/banners" },
           { key: "tours", url: "/api/tours" },
           { key: "transfers", url: "/api/transfers" },
+          { key: "testimonials", url: "/api/testimonials" },
+          { key: "blogPosts", url: "/api/blog?published=false" },
+          { key: "faqItems", url: "/api/faq" },
         ];
 
         const results: Partial<DashboardStats> = {};
@@ -50,6 +85,11 @@ export default function AdminDashboard() {
     };
 
     fetchStats();
+
+    fetch("/api/activity")
+      .then((response) => response.json())
+      .then((data) => setActivities(Array.isArray(data) ? data : []))
+      .catch((error) => console.error("Error fetching activity:", error));
   }, []);
 
   const StatCard = ({ title, value, link }: { title: string; value: number; link: string }) => (
@@ -63,7 +103,7 @@ export default function AdminDashboard() {
         <CardContent>
           <div className="text-3xl font-bold">{value}</div>
           <p className="text-xs text-muted-foreground mt-2">
-            Click to manage
+            Clique para gerenciar
           </p>
         </CardContent>
       </Card>
@@ -73,7 +113,7 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
+        <h1 className="text-3xl font-bold mb-2">Painel</h1>
         <p className="text-muted-foreground">
           Bem-vindo ao painel administrativo da Passeio Legal
         </p>
@@ -102,12 +142,12 @@ export default function AdminDashboard() {
           link="/admin/testimonials"
         />
         <StatCard
-          title="Blog Posts"
+          title="Posts do Blog"
           value={stats.blogPosts}
           link="/admin/blog"
         />
         <StatCard
-          title="FAQ Items"
+          title="Itens do FAQ"
           value={stats.faqItems}
           link="/admin/faq"
         />
@@ -116,7 +156,7 @@ export default function AdminDashboard() {
       {/* Quick Actions */}
       <Card>
         <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
+          <CardTitle>Ações rápidas</CardTitle>
           <CardDescription>Atalhos para as ações mais comuns</CardDescription>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -130,7 +170,7 @@ export default function AdminDashboard() {
             <Link href="/admin/transfers/new">Novo Transfer</Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/admin/blog/new">Novo Blog Post</Link>
+            <Link href="/admin/blog/new">Novo post do blog</Link>
           </Button>
           <Button variant="outline" asChild>
             <Link href="/admin/testimonials/new">Novo Depoimento</Link>
@@ -144,21 +184,36 @@ export default function AdminDashboard() {
       {/* Recent Activity */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
+          <CardTitle>Atividades recentes</CardTitle>
           <CardDescription>Atividades recentes do seu site</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="flex items-start space-x-4 pb-4 border-b">
-              <div className="w-2 h-2 rounded-full bg-primary mt-2"></div>
-              <div className="flex-1">
-                <p className="text-sm font-medium">Nenhuma atividade ainda</p>
-                <p className="text-xs text-muted-foreground">
-                  Comece adicionando conteúdo
-                </p>
+            {activities.length === 0 ? (
+              <div className="flex items-start space-x-4 pb-4 border-b">
+                <div className="w-2 h-2 rounded-full bg-primary mt-2"></div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium">Nenhuma atividade ainda</p>
+                  <p className="text-xs text-muted-foreground">Comece adicionando conteúdo</p>
+                </div>
+                <span className="text-xs text-muted-foreground">Agora</span>
               </div>
-              <span className="text-xs text-muted-foreground">Agora</span>
-            </div>
+            ) : (
+              activities.map((activity) => (
+                <div key={activity.id} className="flex items-start space-x-4 pb-4 border-b last:border-b-0">
+                  <div className="w-2 h-2 rounded-full bg-primary mt-2"></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">
+                      {entityLabels[activity.entityType] || activity.entityType} {actionLabels[activity.action] || activity.action}
+                    </p>
+                    <p className="text-xs text-muted-foreground">ID: {activity.entityId}</p>
+                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    {formatActivityDate(activity.timestamp)}
+                  </span>
+                </div>
+              ))
+            )}
           </div>
         </CardContent>
       </Card>

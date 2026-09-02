@@ -154,13 +154,31 @@ export default function Footer() {
                 </a>
               ))}
             </div>
-            <div className="relative mx-auto mt-5 aspect-square h-auto w-1/2 sm:mx-0 sm:h-24 sm:w-44 sm:aspect-auto">
-              <Image
-                src="/cadastur.png"
-                alt="Cadastur"
-                fill
-                className="object-contain object-left"
-              />
+            <div className="mt-5 flex flex-col items-center gap-0 sm:flex-row sm:items-center sm:gap-2">
+              <div className="relative h-16 w-44 sm:h-20">
+                <Image
+                  src="/cadastur.png"
+                  alt="Cadastur"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <div className="relative h-16 w-44 sm:h-20">
+                <Image
+                  src="/seguranca.png"
+                  alt="Site certificado e seguro"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <div className="relative h-16 w-44 sm:h-20">
+                <Image
+                  src="/pagamentos.png"
+                  alt="Formas de pagamento"
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </div>
           </div>
         </div>

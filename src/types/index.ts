@@ -16,6 +16,7 @@ export interface Banner {
 // Tours/Passeios Types
 export interface Tour {
   id: string;
+  slug?: string;
   name: string;
   description: string;
   longDescription?: string;

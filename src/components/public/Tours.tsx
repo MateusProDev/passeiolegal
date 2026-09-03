@@ -8,6 +8,7 @@ import { metaPixelEvents } from '@/utils/metaPixel';
 
 interface Tour {
   id: string;
+  order?: number;
   name: string;
   description: string;
   mainImageUrl: string;

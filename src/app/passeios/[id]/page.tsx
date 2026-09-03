@@ -2,13 +2,13 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
-import { tourService } from "@/lib/firestore";
+import { faqService, tourService } from "@/lib/firestore";
 import { Clock, Check, X, Users, AlertCircle, Sparkles, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import TourConversionBar from "@/components/public/TourConversionBar";
 import TourTrustBadges from "@/components/public/TourTrustBadges";
-import TourFAQ from "@/components/public/TourFAQ";
+import FAQ from "@/components/public/FAQ";
 import RecommendedTours from "@/components/public/RecommendedTours";
 import TourTracking from "@/components/public/TourTracking";
 import DetailGallery from "@/components/public/DetailGallery";
@@ -118,6 +118,7 @@ export default async function PasseioDetailPage({ params }: PageProps) {
 
   // Busca passeios relacionados para recomendação
   const relatedTours = await tourService.getRelated(tour.id, 3);
+  const faqs = await faqService.getAll();
   const galleryImages = [
     {
       id: "main",
@@ -283,7 +284,7 @@ export default async function PasseioDetailPage({ params }: PageProps) {
       <TourTrustBadges />
 
       {/* FAQ */}
-      <TourFAQ faqs={tour.faqs} />
+      <FAQ faqs={faqs} />
 
       {/* Passeios Recomendados */}
       <RecommendedTours tours={relatedTours} />

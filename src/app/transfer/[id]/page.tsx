@@ -2,13 +2,14 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
-import { transferService } from "@/lib/firestore";
+import { faqService, transferService } from "@/lib/firestore";
 import { Car, Users } from "lucide-react";
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import * as Types from "@/types";
 import DetailGallery from "@/components/public/DetailGallery";
 import WhatsAppConversionLink from "@/components/public/WhatsAppConversionLink";
+import FAQ from "@/components/public/FAQ";
 
 interface PageProps {
   params: { id: string };
@@ -91,6 +92,7 @@ export default async function TransferDetailPage({ params }: PageProps) {
     },
     ...(transfer.galleryImages || []),
   ].filter((image) => image.url);
+  const faqs = await faqService.getAll();
   const whatsappUrl = `https://wa.me/5585997314093?text=${encodeURIComponent(`Olá, gostaria de saber mais sobre o transfer: ${transfer.name}`)}`;
 
   return (
@@ -152,6 +154,8 @@ export default async function TransferDetailPage({ params }: PageProps) {
           </div>
         </div>
       </div>
+
+      <FAQ faqs={faqs} />
 
       <Footer />
     </main>

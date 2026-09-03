@@ -172,14 +172,14 @@ export default function Footer() {
                 )
               ))}
             </div>
-            <div className="mt-5 flex flex-col items-center gap-0 sm:flex-row sm:items-center sm:gap-2">
+            <div className="mt-5 flex flex-col items-center gap-5 sm:flex-row sm:items-center sm:gap-2">
               <div className="order-1 w-full sm:relative sm:h-20 sm:w-44">
                 <Image
                   src="/cadastur.png"
                   alt="Cadastur"
                   width={352}
                   height={240}
-                  className="block h-auto w-full object-contain sm:absolute sm:inset-0 sm:h-full"
+                  className="mx-auto block h-auto w-[92%] object-contain sm:absolute sm:inset-0 sm:h-full sm:w-full"
                 />
               </div>
               <div className="order-2 w-full sm:relative sm:h-20 sm:w-44">

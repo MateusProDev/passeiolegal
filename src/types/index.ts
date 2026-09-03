@@ -18,6 +18,7 @@ export interface Tour {
   id: string;
   slug?: string;
   order?: number;
+  faqs?: TourFAQ[];
   name: string;
   description: string;
   longDescription?: string;
@@ -32,6 +33,11 @@ export interface Tour {
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface TourFAQ {
+  question: string;
+  answer: string;
 }
 
 export interface GalleryImage {

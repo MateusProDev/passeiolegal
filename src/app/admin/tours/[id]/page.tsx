@@ -9,6 +9,8 @@ import ImageUpload from "@/components/ui/ImageUpload";
 import ImageGalleryUpload from "@/components/ui/ImageGalleryUpload";
 import { GalleryImage } from "@/types";
 import { useTours } from "@/hooks/useApi";
+import { DEFAULT_TOUR_FAQS } from "@/components/public/TourFAQ";
+import type { TourFAQ } from "@/types";
 
 export default function EditTour() {
   const router = useRouter();
@@ -28,6 +30,7 @@ export default function EditTour() {
     galleryImages: [] as GalleryImage[],
     includesItems: "",
     excludesItems: "",
+    faqs: DEFAULT_TOUR_FAQS,
   });
 
   useEffect(() => {
@@ -55,6 +58,7 @@ export default function EditTour() {
           galleryImages: Array.isArray(tour.galleryImages) ? tour.galleryImages.slice(0, 2) : [],
           includesItems: Array.isArray(tour.includesItems) ? tour.includesItems.join(", ") : "",
           excludesItems: Array.isArray(tour.excludesItems) ? tour.excludesItems.join(", ") : "",
+          faqs: Array.isArray(tour.faqs) && tour.faqs.length ? tour.faqs : DEFAULT_TOUR_FAQS,
         });
       } catch (error) {
         toast.error("Erro ao carregar tour");
@@ -203,6 +207,38 @@ export default function EditTour() {
                 rows={3}
                 placeholder="Ex: Bebidas alcoólicas, Gorjetas"
               />
+            </div>
+            <div className="space-y-4 border-t pt-4">
+              <div>
+                <h2 className="text-lg font-semibold">Perguntas Frequentes</h2>
+                <p className="text-sm text-muted-foreground">Edite as perguntas e respostas exibidas na página deste passeio.</p>
+              </div>
+              {formData.faqs.map((faq: TourFAQ, index: number) => (
+                <div key={index} className="space-y-2 rounded border p-4">
+                  <label className="block text-sm font-medium">Pergunta {index + 1}</label>
+                  <input
+                    type="text"
+                    value={faq.question}
+                    onChange={(e) => {
+                      const faqs = [...formData.faqs];
+                      faqs[index] = { ...faqs[index], question: e.target.value };
+                      setFormData({ ...formData, faqs });
+                    }}
+                    className="w-full px-3 py-2 border rounded"
+                  />
+                  <label className="block text-sm font-medium">Resposta</label>
+                  <textarea
+                    value={faq.answer}
+                    onChange={(e) => {
+                      const faqs = [...formData.faqs];
+                      faqs[index] = { ...faqs[index], answer: e.target.value };
+                      setFormData({ ...formData, faqs });
+                    }}
+                    className="w-full px-3 py-2 border rounded"
+                    rows={3}
+                  />
+                </div>
+              ))}
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">

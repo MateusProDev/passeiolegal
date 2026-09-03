@@ -2,44 +2,39 @@
 
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import type { TourFAQ as TourFAQItem } from '@/types';
 
-interface FAQItem {
-  question: string;
-  answer: string;
-}
+export const DEFAULT_TOUR_FAQS: TourFAQItem[] = [
+  {
+    question: "Como funciona o parcelamento?",
+    answer: "Oferecemos parcelamento em até 12x no cartão de crédito. Para pagamentos à vista, oferecemos desconto de 5%. Entre em contato para conhecer as condições especiais.",
+  },
+  {
+    question: "Posso remarcar o passeio?",
+    answer: "Sim! Você pode remarcar seu passeio até 48 horas antes da data prevista, sem custo adicional, sujeito à disponibilidade. Remarcações com menos de 48h podem ter taxa de alteração.",
+  },
+  {
+    question: "O seguro viagem está incluído?",
+    answer: "Todos os nossos passeios incluem seguro básico de acidentes pessoais. Para viagens internacionais ou passeios específicos, oferecemos seguro viagem completo com cobertura médica e cancelamento.",
+  },
+  {
+    question: "Qual é a política de cancelamento?",
+    answer: "Cancelamento até 7 dias antes: reembolso integral. De 3 a 7 dias: 50% de reembolso. Menos de 3 dias: sem reembolso. Em casos de força maior, avaliamos cada situação individualmente.",
+  },
+  {
+    question: "O passeio inclui alimentação?",
+    answer: "Depende do passeio. Alguns incluem almoço ou lanches, conforme descrito na seção 'O que está incluído'. Recomendamos verificar os detalhes específicos de cada roteiro.",
+  },
+];
 
 interface TourFAQProps {
-  faqs?: FAQItem[];
+  faqs?: TourFAQItem[];
 }
 
 export default function TourFAQ({ faqs }: TourFAQProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  // FAQs padrão para tours se não forem fornecidos
-  const defaultFaqs: FAQItem[] = [
-    {
-      question: "Como funciona o parcelamento?",
-      answer: "Oferecemos parcelamento em até 12x no cartão de crédito. Para pagamentos à vista, oferecemos desconto de 5%. Entre em contato para conhecer as condições especiais.",
-    },
-    {
-      question: "Posso remarcar o passeio?",
-      answer: "Sim! Você pode remarcar seu passeio até 48 horas antes da data prevista, sem custo adicional, sujeito à disponibilidade. Remarcações com menos de 48h podem ter taxa de alteração.",
-    },
-    {
-      question: "O seguro viagem está incluído?",
-      answer: "Todos os nossos passeios incluem seguro básico de acidentes pessoais. Para viagens internacionais ou passeios específicos, oferecemos seguro viagem completo com cobertura médica e cancelamento.",
-    },
-    {
-      question: "Qual é a política de cancelamento?",
-      answer: "Cancelamento até 7 dias antes: reembolso integral. De 3 a 7 dias: 50% de reembolso. Menos de 3 dias: sem reembolso. Em casos de força maior, avaliamos cada situação individualmente.",
-    },
-    {
-      question: "O passeio inclui alimentação?",
-      answer: "Depende do passeio. Alguns incluem almoço ou lanches, conforme descrito na seção 'O que está incluído'. Recomendamos verificar os detalhes específicos de cada roteiro.",
-    },
-  ];
-
-  const faqList = faqs || defaultFaqs;
+  const faqList = faqs?.length ? faqs : DEFAULT_TOUR_FAQS;
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);

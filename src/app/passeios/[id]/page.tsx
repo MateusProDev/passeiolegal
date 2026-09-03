@@ -283,7 +283,7 @@ export default async function PasseioDetailPage({ params }: PageProps) {
       <TourTrustBadges />
 
       {/* FAQ */}
-      <TourFAQ />
+      <TourFAQ faqs={tour.faqs} />
 
       {/* Passeios Recomendados */}
       <RecommendedTours tours={relatedTours} />

@@ -179,7 +179,7 @@ export default function Footer() {
                   alt="Cadastur"
                   width={352}
                   height={240}
-                  className="mx-auto block h-auto w-[92%] object-contain sm:absolute sm:inset-0 sm:h-full sm:w-full"
+                  className="mx-auto block h-auto w-[85%] object-contain sm:absolute sm:inset-0 sm:h-full sm:w-full"
                 />
               </div>
               <div className="order-2 w-full sm:relative sm:h-20 sm:w-44">
@@ -188,7 +188,7 @@ export default function Footer() {
                   alt="Site certificado e seguro"
                   width={352}
                   height={270}
-                  className="block h-auto w-full object-contain sm:absolute sm:inset-0 sm:h-full"
+                  className="mx-auto block h-auto w-[85%] object-contain sm:absolute sm:inset-0 sm:h-full sm:w-full"
                 />
               </div>
               <div className="order-3 w-full sm:relative sm:h-20 sm:w-44">

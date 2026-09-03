@@ -173,7 +173,7 @@ export default function Footer() {
               ))}
             </div>
             <div className="mt-5 flex flex-col items-center gap-0 sm:flex-row sm:items-center sm:gap-2">
-              <div className="relative h-[120px] w-44 sm:h-20">
+              <div className="relative h-[240px] w-full max-w-[352px] sm:h-20 sm:w-44">
                 <Image
                   src="/cadastur.png"
                   alt="Cadastur"
@@ -181,7 +181,7 @@ export default function Footer() {
                   className="object-contain"
                 />
               </div>
-              <div className="relative h-[120px] w-44 sm:h-20">
+              <div className="relative h-[240px] w-full max-w-[352px] sm:h-20 sm:w-44">
                 <Image
                   src="/seguranca.png"
                   alt="Site certificado e seguro"
@@ -189,7 +189,7 @@ export default function Footer() {
                   className="object-contain"
                 />
               </div>
-              <div className="relative h-[120px] w-44 sm:h-20">
+              <div className="relative h-[240px] w-full max-w-[352px] sm:h-20 sm:w-44">
                 <Image
                   src="/pagamentos.png"
                   alt="Formas de pagamento"

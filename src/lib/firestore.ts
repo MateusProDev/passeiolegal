@@ -168,9 +168,16 @@ export const bannerService = {
 
 export const tourService = {
   async getAll(onlyActive = false) {
-    const constraints: QueryConstraint[] = [orderBy("name", "asc")];
+    const constraints: QueryConstraint[] = [];
     if (onlyActive) constraints.push(where("active", "==", true));
-    return firebaseService.getMany<Types.Tour>("tours", constraints);
+    const tours = await firebaseService.getMany<Types.Tour>("tours", constraints);
+    return tours.sort((first, second) => {
+      if (first.featured !== second.featured) return first.featured ? -1 : 1;
+      if (first.featured && second.featured) {
+        return (first.order ?? Number.MAX_SAFE_INTEGER) - (second.order ?? Number.MAX_SAFE_INTEGER);
+      }
+      return first.name.localeCompare(second.name);
+    });
   },
 
   async getById(id: string) {
@@ -185,11 +192,14 @@ export const tourService = {
   },
 
   async getFeatured() {
-    return firebaseService.getMany<Types.Tour>("tours", [
+    const tours = await firebaseService.getMany<Types.Tour>("tours", [
       where("active", "==", true),
       where("featured", "==", true),
-      orderBy("name", "asc"),
     ]);
+    return tours.sort((first, second) => {
+      const orderDifference = (first.order ?? Number.MAX_SAFE_INTEGER) - (second.order ?? Number.MAX_SAFE_INTEGER);
+      return orderDifference || first.name.localeCompare(second.name);
+    });
   },
 
   // Busca tours relacionados para recomendação (mesma categoria ou featured, excluindo o atual)

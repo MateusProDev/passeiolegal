@@ -17,6 +17,7 @@ export interface Banner {
 export interface Tour {
   id: string;
   slug?: string;
+  order?: number;
   name: string;
   description: string;
   longDescription?: string;

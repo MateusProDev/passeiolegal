@@ -24,6 +24,7 @@ interface TransfersProps {
 export default function Transfers({ transfers }: TransfersProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(1);
+  const [isPaused, setIsPaused] = useState(false);
 
   const displayTransfers = transfers.slice(0, 8);
 
@@ -46,7 +47,7 @@ export default function Transfers({ transfers }: TransfersProps) {
   }, []);
 
   useEffect(() => {
-    if (displayTransfers.length <= itemsPerPage) return;
+    if (displayTransfers.length <= itemsPerPage || isPaused) return;
 
     const timer = setInterval(() => {
       setCurrentIndex((prev) => {
@@ -56,7 +57,7 @@ export default function Transfers({ transfers }: TransfersProps) {
     }, 5000);
 
     return () => clearInterval(timer);
-  }, [displayTransfers.length, itemsPerPage]);
+  }, [displayTransfers.length, itemsPerPage, isPaused]);
 
   const goToSlide = (index: number) => {
     const maxIndex = Math.max(0, displayTransfers.length - itemsPerPage);
@@ -108,7 +109,14 @@ export default function Transfers({ transfers }: TransfersProps) {
           )}
 
           {/* Carousel */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onTouchStart={() => setIsPaused(true)}
+            onTouchEnd={() => setIsPaused(false)}
+            onTouchCancel={() => setIsPaused(false)}
+          >
             {visibleTransfers.map((transfer) => (
               <Link
                 key={transfer.id}

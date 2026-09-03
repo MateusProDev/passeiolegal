@@ -25,8 +25,11 @@ interface ToursProps {
 export default function Tours({ tours }: ToursProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(1);
+  const [isPaused, setIsPaused] = useState(false);
 
-  const featuredTours = tours.filter((tour) => tour.featured);
+  const featuredTours = tours
+    .filter((tour) => tour.featured)
+    .sort((first, second) => (first.order ?? Number.MAX_SAFE_INTEGER) - (second.order ?? Number.MAX_SAFE_INTEGER));
   const displayTours = featuredTours.length > 0 ? featuredTours : tours.slice(0, 6);
 
   useEffect(() => {
@@ -53,7 +56,7 @@ export default function Tours({ tours }: ToursProps) {
   };
 
   useEffect(() => {
-    if (displayTours.length <= itemsPerPage) return;
+    if (displayTours.length <= itemsPerPage || isPaused) return;
 
     const timer = setInterval(() => {
       setCurrentIndex((prev) => {
@@ -63,7 +66,7 @@ export default function Tours({ tours }: ToursProps) {
     }, 5000);
 
     return () => clearInterval(timer);
-  }, [displayTours.length, itemsPerPage]);
+  }, [displayTours.length, itemsPerPage, isPaused]);
 
   const goToSlide = (index: number) => {
     const maxIndex = Math.max(0, displayTours.length - itemsPerPage);
@@ -115,7 +118,14 @@ export default function Tours({ tours }: ToursProps) {
           )}
 
           {/* Carousel */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-8 lg:px-0">
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-8 lg:px-0"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onTouchStart={() => setIsPaused(true)}
+            onTouchEnd={() => setIsPaused(false)}
+            onTouchCancel={() => setIsPaused(false)}
+          >
             {visibleTours.map((tour) => (
               <Link
                 key={tour.id}

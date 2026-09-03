@@ -182,15 +182,6 @@ export default function Footer() {
                   className="mx-auto block h-auto w-[85%] object-contain sm:absolute sm:inset-0 sm:h-full sm:w-full"
                 />
               </div>
-              <div className="order-2 w-full sm:relative sm:h-20 sm:w-44">
-                <Image
-                  src="/seguranca.png"
-                  alt="Site certificado e seguro"
-                  width={352}
-                  height={270}
-                  className="mx-auto block h-auto w-[85%] object-contain sm:absolute sm:inset-0 sm:h-full sm:w-full"
-                />
-              </div>
               <div className="order-3 w-full sm:relative sm:h-20 sm:w-44">
                 <Image
                   src="/pagamentos.png"
@@ -215,6 +206,15 @@ export default function Footer() {
           >
             Desenvolvido por TURVIA
           </a>
+          <div className="mt-2 mx-auto w-[60%] max-w-[240px] sm:relative sm:h-20 sm:w-44">
+            <Image
+              src="/seguranca.png"
+              alt="Site certificado e seguro"
+              width={240}
+              height={180}
+              className="mx-auto block h-auto w-full object-contain"
+            />
+          </div>
         </div>
       </div>
     </footer>

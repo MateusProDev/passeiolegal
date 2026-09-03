@@ -108,7 +108,7 @@ export default function Hero({ banners }: HeroProps) {
           <WhatsAppConversionLink
             href={currentBanner.buttonLink}
             target={isWhatsAppUrl(currentBanner.buttonLink) ? '_blank' : undefined}
-            className="inline-block bg-primary-600 hover:bg-primary-700 text-white font-[var(--font-poppins)] font-bold px-8 py-3 rounded-lg transition-colors"
+            className="inline-block bg-primary-600 hover:bg-primary-700 text-white font-poppins font-bold px-8 py-3 rounded-lg transition-colors"
             aria-label={currentBanner.buttonText}
           >
             {currentBanner.buttonText}

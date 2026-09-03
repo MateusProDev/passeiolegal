@@ -36,6 +36,7 @@ const config = {
         },
       },
       fontFamily: {
+        poppins: ["var(--font-poppins)", "sans-serif"],
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
       },
       spacing: {

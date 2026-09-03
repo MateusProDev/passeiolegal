@@ -22,9 +22,10 @@ interface HeroProps {
 export default function Hero({ banners }: HeroProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
-    if (banners.length === 0) return;
+    if (banners.length === 0 || isPaused) return;
     
     const interval = 50; // Update progress every 50ms
     const duration = 5000; // 5 seconds per slide
@@ -41,7 +42,7 @@ export default function Hero({ banners }: HeroProps) {
     }, interval);
 
     return () => clearInterval(timer);
-  }, [banners.length]);
+  }, [banners.length, isPaused]);
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
@@ -69,7 +70,15 @@ export default function Hero({ banners }: HeroProps) {
   const currentBanner = banners[currentIndex];
 
   return (
-    <section className="relative h-[600px] overflow-hidden" aria-label="Banner principal">
+    <section
+      className="relative h-[600px] overflow-hidden"
+      aria-label="Banner principal"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={() => setIsPaused(true)}
+      onTouchEnd={() => setIsPaused(false)}
+      onTouchCancel={() => setIsPaused(false)}
+    >
       {/* Banner Image */}
       <div className="absolute inset-0">
         {currentBanner.imageUrl ? (
@@ -99,7 +108,7 @@ export default function Hero({ banners }: HeroProps) {
           <WhatsAppConversionLink
             href={currentBanner.buttonLink}
             target={isWhatsAppUrl(currentBanner.buttonLink) ? '_blank' : undefined}
-            className="inline-block bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+            className="inline-block bg-primary-600 hover:bg-primary-700 text-white font-[var(--font-poppins)] font-bold px-8 py-3 rounded-lg transition-colors"
             aria-label={currentBanner.buttonText}
           >
             {currentBanner.buttonText}

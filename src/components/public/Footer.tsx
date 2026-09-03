@@ -173,28 +173,31 @@ export default function Footer() {
               ))}
             </div>
             <div className="mt-5 flex flex-col items-center gap-0 sm:flex-row sm:items-center sm:gap-2">
-              <div className="relative order-1 h-[240px] w-44 sm:order-1 sm:h-20 sm:w-44">
+              <div className="order-1 w-full sm:relative sm:h-20 sm:w-44">
                 <Image
                   src="/cadastur.png"
                   alt="Cadastur"
-                  fill
-                  className="object-contain"
+                  width={352}
+                  height={240}
+                  className="block h-auto w-full object-contain sm:absolute sm:inset-0 sm:h-full"
                 />
               </div>
-              <div className="relative order-2 h-[270px] w-44 sm:order-2 sm:h-20 sm:w-44">
+              <div className="order-2 w-full sm:relative sm:h-20 sm:w-44">
                 <Image
                   src="/seguranca.png"
                   alt="Site certificado e seguro"
-                  fill
-                  className="object-contain"
+                  width={352}
+                  height={270}
+                  className="block h-auto w-full object-contain sm:absolute sm:inset-0 sm:h-full"
                 />
               </div>
-              <div className="relative order-3 h-[240px] w-44 sm:order-3 sm:h-20 sm:w-44">
+              <div className="order-3 w-full sm:relative sm:h-20 sm:w-44">
                 <Image
                   src="/pagamentos.png"
                   alt="Formas de pagamento"
-                  fill
-                  className="object-contain"
+                  width={352}
+                  height={240}
+                  className="block h-auto w-full object-contain sm:absolute sm:inset-0 sm:h-full"
                 />
               </div>
             </div>

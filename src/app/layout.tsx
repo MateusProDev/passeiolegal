@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Passeio Legal" }],
   creator: "Passeio Legal",
   publisher: "Passeio Legal",
+  alternates: {
+    canonical: baseUrl,
+  },
   robots: {
     index: true,
     follow: true,
@@ -72,7 +75,6 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
-        <link rel="canonical" href={baseUrl} />
         <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png" />
         <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png" />
         <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png" />
@@ -92,6 +94,20 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body className={poppins.variable}>
+        {/* Google Ads conversion tracking */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-11405399413"
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads-tag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-11405399413');
+          `}
+        </Script>
+
         {/* Google Analytics 4 */}
         {process.env.NEXT_PUBLIC_GA_ID && (
           <>

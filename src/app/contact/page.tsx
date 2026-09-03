@@ -5,6 +5,7 @@ import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import { Mail, Phone, MapPin, MessageCircle, Send } from "lucide-react";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import WhatsAppConversionLink from "@/components/public/WhatsAppConversionLink";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
 
@@ -102,14 +103,14 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">WhatsApp</h3>
                     <p className="text-gray-600">{contactInfo.whatsapp}</p>
-                    <a
+                    <WhatsAppConversionLink
                       href={`https://wa.me/${contactInfo.whatsapp.replace(/\D/g, '')}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-green-600 hover:text-green-700 font-medium inline-flex items-center gap-1 mt-2"
                     >
                       Chamar no WhatsApp
-                    </a>
+                    </WhatsAppConversionLink>
                   </div>
                 </div>
               )}

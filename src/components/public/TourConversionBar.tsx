@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { MessageCircle } from 'lucide-react';
 import { metaPixelEvents } from '@/utils/metaPixel';
+import WhatsAppConversionLink from './WhatsAppConversionLink';
 
 interface TourConversionBarProps {
   tourName: string;
@@ -45,7 +46,7 @@ export default function TourConversionBar({ tourName, whatsappNumber = "55859973
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-gray-900 truncate">{tourName}</p>
           </div>
-          <a
+          <WhatsAppConversionLink
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -54,7 +55,7 @@ export default function TourConversionBar({ tourName, whatsappNumber = "55859973
           >
             <MessageCircle size={18} />
             <span>Solicitar Orçamento</span>
-          </a>
+          </WhatsAppConversionLink>
         </div>
       </div>
     </div>

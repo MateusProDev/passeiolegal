@@ -13,7 +13,12 @@ interface MenuItem {
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [settings, setSettings] = useState<any>(null);
+  const [settings, setSettings] = useState<any>(() => {
+    if (typeof window === 'undefined') return null;
+
+    const cachedLogo = window.localStorage.getItem('passeiolegal:header-logo');
+    return cachedLogo ? { headerLogo: cachedLogo } : null;
+  });
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -22,6 +27,9 @@ export default function Header() {
         if (response.ok) {
           const data = await response.json();
           setSettings(data);
+          if (data.headerLogo) {
+            window.localStorage.setItem('passeiolegal:header-logo', data.headerLogo);
+          }
         }
       } catch (error) {
         console.error('Error fetching settings:', error);
@@ -53,12 +61,15 @@ export default function Header() {
                   alt={settings.headerLogoAlt || 'Passeio Legal'}
                   fill
                   className="object-contain"
-                  unoptimized
+                  priority
+                  sizes="80px"
                 />
               </div>
             ) : (
-              <div className="w-20 h-20 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-2xl">PL</span>
+              <div className="w-20 h-20 flex items-center justify-center text-center">
+                <span className="text-primary-700 font-bold text-sm leading-tight">
+                  Passeio Legal
+                </span>
               </div>
             )}
           </Link>

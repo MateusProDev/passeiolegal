@@ -8,6 +8,7 @@ import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import * as Types from "@/types";
 import DetailGallery from "@/components/public/DetailGallery";
+import WhatsAppConversionLink from "@/components/public/WhatsAppConversionLink";
 
 interface PageProps {
   params: { id: string };
@@ -90,6 +91,7 @@ export default async function TransferDetailPage({ params }: PageProps) {
     },
     ...(transfer.galleryImages || []),
   ].filter((image) => image.url);
+  const whatsappUrl = `https://wa.me/5585997314093?text=${encodeURIComponent(`Olá, gostaria de saber mais sobre o transfer: ${transfer.name}`)}`;
 
   return (
     <main className="min-h-screen pt-24">
@@ -131,14 +133,14 @@ export default async function TransferDetailPage({ params }: PageProps) {
               <p className="text-gray-600 mb-8">{transfer.description}</p>
 
               <div className="flex gap-4">
-                <Link
-                  href="https://wa.me/5511999999999?text=Olá, gostaria de saber mais sobre o transfer: ${encodeURIComponent(transfer.name)}"
+                <WhatsAppConversionLink
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-colors font-semibold text-center"
                 >
                   Reservar pelo WhatsApp
-                </Link>
+                </WhatsAppConversionLink>
                 <Link
                   href="#contact"
                   className="flex-1 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg transition-colors font-semibold text-center"

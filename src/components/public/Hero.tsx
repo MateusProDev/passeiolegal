@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
+import WhatsAppConversionLink, { isWhatsAppUrl } from './WhatsAppConversionLink';
 
 interface Banner {
   id: string;
@@ -95,13 +96,14 @@ export default function Hero({ banners }: HeroProps) {
           <p className="text-xl md:text-2xl mb-8 animate-fade-in">
             {currentBanner.subtitle}
           </p>
-          <a
+          <WhatsAppConversionLink
             href={currentBanner.buttonLink}
+            target={isWhatsAppUrl(currentBanner.buttonLink) ? '_blank' : undefined}
             className="inline-block bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
             aria-label={currentBanner.buttonText}
           >
             {currentBanner.buttonText}
-          </a>
+          </WhatsAppConversionLink>
         </div>
       </div>
 

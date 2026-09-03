@@ -24,7 +24,7 @@ export default function RecommendedTours({ tours }: RecommendedToursProps) {
             </p>
           </div>
           <Link
-            href="/tours"
+            href="/passeios"
             className="hidden md:flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors"
           >
             Ver todos
@@ -36,7 +36,7 @@ export default function RecommendedTours({ tours }: RecommendedToursProps) {
           {tours.map((tour) => (
             <Link
               key={tour.id}
-              href={`/tours/${tour.id}`}
+              href={`/passeios/${tour.slug || tour.id}`}
               className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100"
             >
               {/* Imagem */}
@@ -79,7 +79,7 @@ export default function RecommendedTours({ tours }: RecommendedToursProps) {
 
         <div className="mt-8 text-center md:hidden">
           <Link
-            href="/tours"
+            href="/passeios"
             className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors"
           >
             Ver todos os passeios

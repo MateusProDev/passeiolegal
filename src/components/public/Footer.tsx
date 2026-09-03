@@ -5,6 +5,7 @@ import { Facebook, Instagram, MessageCircle, Mail, Phone, MapPin } from 'lucide-
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { metaPixelEvents } from '@/utils/metaPixel';
+import WhatsAppConversionLink, { isWhatsAppUrl } from './WhatsAppConversionLink';
 
 interface SocialLink {
   icon: any;
@@ -43,7 +44,14 @@ export default function Footer() {
   const socialLinks: SocialLink[] = [
     { icon: Facebook, href: '#', label: 'Facebook' },
     { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: MessageCircle, href: '#', label: 'WhatsApp', onClick: handleWhatsAppClick },
+    ...(settings?.contactInfo?.whatsapp
+      ? [{
+          icon: MessageCircle,
+          href: `https://wa.me/${settings.contactInfo.whatsapp.replace(/\D/g, '')}`,
+          label: 'WhatsApp',
+          onClick: handleWhatsAppClick,
+        }]
+      : []),
   ];
 
   const quickLinks = [
@@ -137,21 +145,31 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Redes Sociais</h3>
             <div className="flex space-x-4">
               {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition-colors"
-                  aria-label={social.label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => {
-                    if (social.onClick) {
-                      social.onClick();
-                    }
-                  }}
-                >
-                  <social.icon size={20} />
-                </a>
+                isWhatsAppUrl(social.href) ? (
+                  <WhatsAppConversionLink
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition-colors"
+                    aria-label={social.label}
+                    onClick={social.onClick}
+                  >
+                    <social.icon size={20} />
+                  </WhatsAppConversionLink>
+                ) : (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition-colors"
+                    aria-label={social.label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={social.onClick}
+                  >
+                    <social.icon size={20} />
+                  </a>
+                )
               ))}
             </div>
             <div className="mt-5 flex flex-col items-center gap-0 sm:flex-row sm:items-center sm:gap-2">

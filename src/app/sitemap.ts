@@ -12,13 +12,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${baseUrl}/tours`,
+      url: `${baseUrl}/passeios`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/transfers`,
+      url: `${baseUrl}/transfer`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.8,
@@ -71,7 +71,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       toursSnapshot.docs.forEach((doc) => {
         const data = doc.data();
         dynamicPages.push({
-          url: `${baseUrl}/tours/${doc.id}`,
+          url: `${baseUrl}/passeios/${data.slug || doc.id}`,
           lastModified: data.updatedAt?.toDate() || new Date(),
           changeFrequency: 'weekly' as const,
           priority: 0.8,
@@ -86,7 +86,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       transfersSnapshot.docs.forEach((doc) => {
         const data = doc.data();
         dynamicPages.push({
-          url: `${baseUrl}/transfers/${doc.id}`,
+          url: `${baseUrl}/transfer/${data.slug || doc.id}`,
           lastModified: data.updatedAt?.toDate() || new Date(),
           changeFrequency: 'weekly' as const,
           priority: 0.8,

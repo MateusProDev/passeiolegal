@@ -49,7 +49,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-primary-300/70 bg-primary-100/90 backdrop-blur-sm shadow-md">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-primary-800/70 bg-gradient-to-r from-primary-700 via-primary-600 to-primary-500 shadow-md">
       <nav className="container mx-auto px-4 py-2" role="navigation" aria-label="Navegação principal">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -67,7 +67,7 @@ export default function Header() {
               </div>
             ) : (
               <div className="w-20 h-20 flex items-center justify-center text-center">
-                <span className="text-primary-700 font-bold text-sm leading-tight">
+                <span className="text-white font-bold text-sm leading-tight">
                   Passeio Legal
                 </span>
               </div>
@@ -80,7 +80,7 @@ export default function Header() {
               <li key={item.href} role="none">
                 <Link
                   href={item.href}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 font-[var(--font-poppins)] text-sm font-semibold text-gray-700 transition-colors hover:bg-white/60 hover:text-primary-700"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 font-[var(--font-poppins)] text-sm font-semibold text-white transition-colors hover:bg-white/20"
                   role="menuitem"
                 >
                   <item.icon size={17} strokeWidth={2.2} />
@@ -92,7 +92,7 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className="md:hidden p-2 rounded-lg text-white hover:bg-white/20 transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label={isMenuOpen ? 'Fechar menu' : 'Abrir menu'}
             aria-expanded={isMenuOpen}
@@ -108,7 +108,7 @@ export default function Header() {
               <li key={item.href} role="none">
                 <Link
                   href={item.href}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 font-[var(--font-poppins)] font-semibold text-gray-700 transition-colors hover:bg-white/60 hover:text-primary-700"
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 font-[var(--font-poppins)] font-semibold text-white transition-colors hover:bg-white/20"
                   onClick={() => setIsMenuOpen(false)}
                   role="menuitem"
                 >

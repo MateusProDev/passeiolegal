@@ -9,7 +9,6 @@ import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
 import { getSiteUrl } from '@/lib/site-url';
-import { getSiteUrl } from '@/lib/site-url';
 
 const baseUrl = getSiteUrl();
 

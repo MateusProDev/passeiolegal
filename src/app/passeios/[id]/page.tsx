@@ -13,6 +13,7 @@ import RecommendedTours from "@/components/public/RecommendedTours";
 import TourTracking from "@/components/public/TourTracking";
 import DetailGallery from "@/components/public/DetailGallery";
 import * as Types from "@/types";
+import { getSiteUrl } from "@/lib/site-url";
 
 interface PageProps {
   params: { id: string };
@@ -34,7 +35,7 @@ async function getTour(id: string): Promise<Types.Tour | null> {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+  const baseUrl = getSiteUrl();
   const tour = await getTour(params.id);
 
   if (!tour) {
@@ -109,7 +110,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function PasseioDetailPage({ params }: PageProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+  const baseUrl = getSiteUrl();
   const tour = await getTour(params.id);
 
   if (!tour) {
@@ -147,11 +148,12 @@ export default async function PasseioDetailPage({ params }: PageProps) {
       <BreadcrumbJsonLd items={breadcrumbItems} />
       
       {/* SEO: JSON-LD Product Schema enriquecido */}
-      {tour.mainImageUrl && (
+      {tour.mainImageUrl && tour.price > 0 && (
         <ProductJsonLd
           name={tour.name}
           description={tour.description}
           image={tour.mainImageUrl}
+          price={tour.price}
           url={`${baseUrl}/passeios/${params.id}`}
         />
       )}

@@ -10,6 +10,7 @@ import * as Types from "@/types";
 import DetailGallery from "@/components/public/DetailGallery";
 import WhatsAppConversionLink from "@/components/public/WhatsAppConversionLink";
 import FAQ from "@/components/public/FAQ";
+import { getSiteUrl } from "@/lib/site-url";
 import RecommendedTransfers from "@/components/public/RecommendedTransfers";
 
 interface PageProps {
@@ -32,7 +33,7 @@ async function getTransfer(id: string): Promise<Types.Transfer | null> {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+  const baseUrl = getSiteUrl();
   const transfer = await getTransfer(params.id);
 
   if (!transfer) {
@@ -79,7 +80,7 @@ export default async function TransferDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+  const baseUrl = getSiteUrl();
   const breadcrumbItems = [
     { name: "Início", url: baseUrl },
     { name: "Transfer", url: `${baseUrl}/transfer` },

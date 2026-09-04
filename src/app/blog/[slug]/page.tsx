@@ -8,6 +8,7 @@ import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
 import ShareButtons from '@/components/public/ShareButtons';
 import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd';
+import { getSiteUrl } from '@/lib/site-url';
 
 interface PageProps {
   params: {
@@ -16,7 +17,7 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+  const baseUrl = getSiteUrl();
   try {
     const posts = await blogService.getAll(false);
     const post = posts.find(p => p.slug === params.slug && p.published);
@@ -93,7 +94,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     };
 
     const content = post.content || '';
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+    const baseUrl = getSiteUrl();
 
     const breadcrumbItems = [
       { name: "Início", url: baseUrl },

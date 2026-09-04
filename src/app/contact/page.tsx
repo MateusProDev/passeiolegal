@@ -6,8 +6,9 @@ import Footer from "@/components/public/Footer";
 import { Mail, Phone, MapPin, MessageCircle, Send } from "lucide-react";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import WhatsAppConversionLink from "@/components/public/WhatsAppConversionLink";
+import { getSiteUrl } from "@/lib/site-url";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+const baseUrl = getSiteUrl();
 
 export default function ContactPage() {
   const [settings, setSettings] = useState<any>(null);

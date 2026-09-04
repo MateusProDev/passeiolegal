@@ -4,8 +4,9 @@ import Footer from "@/components/public/Footer";
 import AnimatedCounter from "@/components/public/AnimatedCounter";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { settingsService } from "@/lib/firestore";
+import { getSiteUrl } from "@/lib/site-url";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+const baseUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   title: "Sobre Nós - Passeio Legal",

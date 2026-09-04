@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import { getSiteUrl } from "@/lib/site-url";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+const baseUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   title: "Blog de Turismo em Fortaleza e Ceará",

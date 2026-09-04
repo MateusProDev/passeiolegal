@@ -9,12 +9,13 @@ import Blog from "@/components/public/Blog";
 import FAQ from "@/components/public/FAQ";
 import AnimatedCounter from "@/components/public/AnimatedCounter";
 import { bannerService, tourService, transferService, testimonialService, blogService, faqService, settingsService } from "@/lib/firestore";
+import { getSiteUrl } from "@/lib/site-url";
 
 // Force dynamic rendering for real-time updates
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+  const baseUrl = getSiteUrl();
 
   return {
     title: "Passeio Legal - Tours e Transfers em Fortaleza e Região",

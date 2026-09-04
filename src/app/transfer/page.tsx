@@ -8,6 +8,10 @@ import { transferService } from '@/lib/firestore';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
+import { getSiteUrl } from '@/lib/site-url';
+import { getSiteUrl } from '@/lib/site-url';
+
+const baseUrl = getSiteUrl();
 
 interface Transfer {
   id: string;
@@ -29,7 +33,7 @@ export default function TransfersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [sectionDisabled, setSectionDisabled] = useState(false);
   
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+  const baseUrl = getSiteUrl();
   const breadcrumbItems = [
     { name: "Início", url: baseUrl },
     { name: "Transfer", url: `${baseUrl}/transfer` },

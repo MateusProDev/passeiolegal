@@ -1,11 +1,9 @@
 import { MetadataRoute } from 'next';
 import { adminDb } from '@/lib/firebase-admin';
+import { getSiteUrl } from '@/lib/site-url';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const configuredUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '');
-  const baseUrl = configuredUrl && !configuredUrl.includes('seu-dominio.vercel.app')
-    ? configuredUrl
-    : 'https://passeiolegal.com';
+  const baseUrl = getSiteUrl();
   
   const staticPages: MetadataRoute.Sitemap = [
     {

@@ -1,10 +1,8 @@
 import { MetadataRoute } from 'next';
+import { getSiteUrl } from '@/lib/site-url';
 
 export default function robots(): MetadataRoute.Robots {
-  const configuredUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '');
-  const baseUrl = configuredUrl && !configuredUrl.includes('seu-dominio.vercel.app')
-    ? configuredUrl
-    : 'https://passeiolegal.com';
+  const baseUrl = getSiteUrl();
 
   return {
     rules: [

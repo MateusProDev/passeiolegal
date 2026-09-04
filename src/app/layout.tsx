@@ -4,6 +4,7 @@ import "./globals.css";
 import { LocalBusinessJsonLd, WebSiteJsonLd } from "@/components/seo/JsonLd";
 import Script from "next/script";
 import { Poppins } from "next/font/google";
+import { getSiteUrl } from "@/lib/site-url";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -12,7 +13,7 @@ const poppins = Poppins({
   display: "swap",
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://passeiolegal.com";
+const baseUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),

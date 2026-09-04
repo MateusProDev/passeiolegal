@@ -37,6 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!transfer) {
     return {
       title: "Transfer não encontrado | Passeio Legal",
+      robots: "noindex, nofollow",
     };
   }
 

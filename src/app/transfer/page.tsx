@@ -10,8 +10,6 @@ import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
 import { getSiteUrl } from '@/lib/site-url';
 
-const baseUrl = getSiteUrl();
-
 interface Transfer {
   id: string;
   name: string;

@@ -15,7 +15,7 @@ import type { TourFAQ } from "@/types";
 export default function EditTour() {
   const router = useRouter();
   const params = useParams();
-  const { refetch } = useTours(false);
+  const { data: tours, refetch } = useTours(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
@@ -31,6 +31,7 @@ export default function EditTour() {
     includesItems: "",
     excludesItems: "",
     faqs: DEFAULT_TOUR_FAQS,
+    recommendedTourIds: [] as string[],
   });
 
   useEffect(() => {
@@ -59,6 +60,7 @@ export default function EditTour() {
           includesItems: Array.isArray(tour.includesItems) ? tour.includesItems.join(", ") : "",
           excludesItems: Array.isArray(tour.excludesItems) ? tour.excludesItems.join(", ") : "",
           faqs: Array.isArray(tour.faqs) && tour.faqs.length ? tour.faqs : DEFAULT_TOUR_FAQS,
+          recommendedTourIds: Array.isArray(tour.recommendedTourIds) ? tour.recommendedTourIds : [],
         });
       } catch (error) {
         toast.error("Erro ao carregar tour");
@@ -239,6 +241,31 @@ export default function EditTour() {
                   />
                 </div>
               ))}
+            </div>
+            <div className="space-y-3 border-t pt-4">
+              <div>
+                <h2 className="text-lg font-semibold">Passeios recomendados</h2>
+                <p className="text-sm text-muted-foreground">Escolha até 3 passeios para aparecerem nesta página.</p>
+              </div>
+              <div className="grid gap-2 md:grid-cols-2">
+                {(tours || []).filter((tour) => tour.id !== params.id).map((tour) => (
+                  <label key={tour.id} className="flex items-center gap-2 rounded border p-3 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={formData.recommendedTourIds.includes(tour.id)}
+                      disabled={!formData.recommendedTourIds.includes(tour.id) && formData.recommendedTourIds.length >= 3}
+                      onChange={(e) => {
+                        const recommendedTourIds = e.target.checked
+                          ? [...formData.recommendedTourIds, tour.id].slice(0, 3)
+                          : formData.recommendedTourIds.filter((id) => id !== tour.id);
+                        setFormData({ ...formData, recommendedTourIds });
+                      }}
+                      className="w-4 h-4"
+                    />
+                    <span>{tour.name}</span>
+                  </label>
+                ))}
+              </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">

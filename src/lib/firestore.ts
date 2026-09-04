@@ -218,6 +218,13 @@ export const tourService = {
     }
   },
 
+  async getRecommended(ids: string[], excludeId: string, limit: number = 3) {
+    const recommendations = await Promise.all(ids.map((id) => firebaseService.get<Types.Tour>("tours", id)));
+    return recommendations
+      .filter((tour): tour is Types.Tour => Boolean(tour && tour.id !== excludeId && tour.active))
+      .slice(0, limit);
+  },
+
   async create(data: Omit<Types.Tour, "id" | "createdAt" | "updatedAt">) {
     return firebaseService.create<Types.Tour>("tours", data);
   },
@@ -247,6 +254,23 @@ export const transferService = {
       where("slug", "==", slug),
     ]);
     return result[0] || null;
+  },
+
+  async getRelated(excludeId: string, limit: number = 3) {
+    try {
+      const transfers = await transferService.getAll(true);
+      return transfers.filter((transfer) => transfer.id !== excludeId).slice(0, limit);
+    } catch (error) {
+      console.error("Error fetching related transfers:", error);
+      return [];
+    }
+  },
+
+  async getRecommended(ids: string[], excludeId: string, limit: number = 3) {
+    const recommendations = await Promise.all(ids.map((id) => firebaseService.get<Types.Transfer>("transfers", id)));
+    return recommendations
+      .filter((transfer): transfer is Types.Transfer => Boolean(transfer && transfer.id !== excludeId && transfer.active))
+      .slice(0, limit);
   },
 
   async create(

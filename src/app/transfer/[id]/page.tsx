@@ -10,6 +10,7 @@ import * as Types from "@/types";
 import DetailGallery from "@/components/public/DetailGallery";
 import WhatsAppConversionLink from "@/components/public/WhatsAppConversionLink";
 import FAQ from "@/components/public/FAQ";
+import RecommendedTransfers from "@/components/public/RecommendedTransfers";
 
 interface PageProps {
   params: { id: string };
@@ -94,6 +95,9 @@ export default async function TransferDetailPage({ params }: PageProps) {
     ...(transfer.galleryImages || []),
   ].filter((image) => image.url);
   const faqs = await faqService.getAll();
+  const relatedTransfers = transfer.recommendedTransferIds?.length
+    ? await transferService.getRecommended(transfer.recommendedTransferIds, transfer.id, 3)
+    : await transferService.getRelated(transfer.id, 3);
   const whatsappUrl = `https://wa.me/5585997314093?text=${encodeURIComponent(`Olá, gostaria de saber mais sobre o transfer: ${transfer.name}`)}`;
 
   return (
@@ -157,6 +161,8 @@ export default async function TransferDetailPage({ params }: PageProps) {
       </div>
 
       <FAQ faqs={faqs} />
+
+      <RecommendedTransfers transfers={relatedTransfers} />
 
       <Footer />
     </main>

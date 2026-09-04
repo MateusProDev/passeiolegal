@@ -17,6 +17,7 @@ export interface Banner {
 export interface Tour {
   id: string;
   slug?: string;
+  recommendedTourIds?: string[];
   order?: number;
   faqs?: TourFAQ[];
   name: string;
@@ -50,6 +51,8 @@ export interface GalleryImage {
 // Transfers Types
 export interface Transfer {
   id: string;
+  slug?: string;
+  recommendedTransferIds?: string[];
   name: string;
   description: string;
   imageUrl: string;

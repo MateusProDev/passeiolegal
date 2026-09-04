@@ -117,7 +117,9 @@ export default async function PasseioDetailPage({ params }: PageProps) {
   }
 
   // Busca passeios relacionados para recomendação
-  const relatedTours = await tourService.getRelated(tour.id, 3);
+  const relatedTours = tour.recommendedTourIds?.length
+    ? await tourService.getRecommended(tour.recommendedTourIds, tour.id, 3)
+    : await tourService.getRelated(tour.id, 3);
   const faqs = await faqService.getAll();
   const galleryImages = [
     {

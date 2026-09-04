@@ -13,7 +13,7 @@ import { useTransfers } from "@/hooks/useApi";
 export default function EditTransfer() {
   const router = useRouter();
   const params = useParams();
-  const { refetch } = useTransfers(false);
+  const { data: transfers, refetch } = useTransfers(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
@@ -25,6 +25,7 @@ export default function EditTransfer() {
     imageUrl: "",
     imageAlt: "",
     galleryImages: [] as GalleryImage[],
+    recommendedTransferIds: [] as string[],
   });
 
   useEffect(() => {
@@ -49,6 +50,7 @@ export default function EditTransfer() {
           imageUrl: transfer.imageUrl || "",
           imageAlt: transfer.imageAlt || "",
           galleryImages: Array.isArray(transfer.galleryImages) ? transfer.galleryImages.slice(0, 2) : [],
+          recommendedTransferIds: Array.isArray(transfer.recommendedTransferIds) ? transfer.recommendedTransferIds : [],
         });
       } catch (error) {
         toast.error("Erro ao carregar transfer");
@@ -172,6 +174,31 @@ export default function EditTransfer() {
                 onChange={(e) => setFormData({ ...formData, imageAlt: e.target.value })}
                 className="w-full px-3 py-2 border rounded"
               />
+            </div>
+            <div className="space-y-3 border-t pt-4">
+              <div>
+                <h2 className="text-lg font-semibold">Transfers recomendados</h2>
+                <p className="text-sm text-muted-foreground">Escolha até 3 transfers para aparecerem nesta página.</p>
+              </div>
+              <div className="grid gap-2 md:grid-cols-2">
+                {(transfers || []).filter((item) => item.id !== params.id).map((item) => (
+                  <label key={item.id} className="flex items-center gap-2 rounded border p-3 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={formData.recommendedTransferIds.includes(item.id)}
+                      disabled={!formData.recommendedTransferIds.includes(item.id) && formData.recommendedTransferIds.length >= 3}
+                      onChange={(e) => {
+                        const recommendedTransferIds = e.target.checked
+                          ? [...formData.recommendedTransferIds, item.id].slice(0, 3)
+                          : formData.recommendedTransferIds.filter((id) => id !== item.id);
+                        setFormData({ ...formData, recommendedTransferIds });
+                      }}
+                      className="w-4 h-4"
+                    />
+                    <span>{item.name}</span>
+                  </label>
+                ))}
+              </div>
             </div>
             <div className="flex items-center gap-2">
               <input

@@ -57,7 +57,7 @@ export default function Blog({ posts }: BlogProps) {
                     alt={post.imageAlt || post.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    unoptimized
+                    sizes="(min-width: 768px) 33vw, 100vw"
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-200 flex items-center justify-center">

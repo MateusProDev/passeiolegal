@@ -27,7 +27,7 @@ export default function Hero({ banners }: HeroProps) {
   useEffect(() => {
     if (banners.length === 0 || isPaused) return;
     
-    const interval = 50; // Update progress every 50ms
+    const interval = 1000;
     const duration = 5000; // 5 seconds per slide
     const increment = 100 / (duration / interval);
 
@@ -87,8 +87,8 @@ export default function Hero({ banners }: HeroProps) {
             alt={currentBanner.imageAlt || currentBanner.title}
             fill
             className="object-cover"
+            sizes="100vw"
             priority
-            unoptimized
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-r from-primary-600 to-secondary-600" />
@@ -140,8 +140,8 @@ export default function Hero({ banners }: HeroProps) {
       {banners.length > 1 && (
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-100/30">
           <div
-            className="h-full bg-gray-100 transition-all duration-50 ease-linear"
-            style={{ width: `${progress}%` }}
+            className="h-full origin-left bg-gray-100 transition-transform duration-1000 ease-linear"
+            style={{ transform: `scaleX(${progress / 100})` }}
           />
         </div>
       )}

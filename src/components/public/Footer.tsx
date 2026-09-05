@@ -77,7 +77,6 @@ export default function Footer() {
                     alt={settings.headerLogoAlt || 'Passeio Legal'}
                     fill
                     className="object-contain"
-                    unoptimized
                   />
                 </div>
               ) : (

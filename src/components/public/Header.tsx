@@ -13,14 +13,14 @@ interface MenuItem {
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [settings, setSettings] = useState<any>(() => {
-    if (typeof window === 'undefined') return null;
-
-    const cachedLogo = window.localStorage.getItem('passeiolegal:header-logo');
-    return cachedLogo ? { headerLogo: cachedLogo } : null;
-  });
+  const [settings, setSettings] = useState<any>(null);
 
   useEffect(() => {
+    const cachedLogo = window.localStorage.getItem('passeiolegal:header-logo');
+    if (cachedLogo) {
+      setSettings({ headerLogo: cachedLogo });
+    }
+
     const fetchSettings = async () => {
       try {
         const response = await fetch('/api/settings');

@@ -131,7 +131,7 @@ export default function Transfers({ transfers }: TransfersProps) {
                       alt={transfer.imageAlt || transfer.name}
                       fill
                       className="object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
-                      unoptimized
+                      sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                     />
                   ) : (
                     <div className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center">

@@ -142,7 +142,7 @@ export default function Tours({ tours }: ToursProps) {
                       alt={tour.mainImageAlt || tour.name}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) calc(50vw - 2rem), calc(100vw - 4rem)"
                     />
                   ) : (
                     <div className="w-full h-full bg-gray-200 flex items-center justify-center">
@@ -172,13 +172,9 @@ export default function Tours({ tours }: ToursProps) {
                   </div>
 
                   <div className="flex items-center justify-end">
-                    <Link
-                      href={`/passeios/${tour.slug || tour.id}`}
-                      className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"
-                      aria-label={`Ver detalhes de ${tour.name}`}
-                    >
+                    <span className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium">
                       Ver Detalhes
-                    </Link>
+                    </span>
                   </div>
                 </div>
               </Link>

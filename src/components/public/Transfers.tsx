@@ -131,7 +131,7 @@ export default function Transfers({ transfers }: TransfersProps) {
                       alt={transfer.imageAlt || transfer.name}
                       fill
                       className="object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
-                      sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 768px) calc(50vw - 2rem), calc(100vw - 2rem)"
                     />
                   ) : (
                     <div className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center">
@@ -155,13 +155,9 @@ export default function Transfers({ transfers }: TransfersProps) {
                 </div>
 
                 <div className="flex items-center justify-end">
-                  <Link
-                    href={`/transfer/${transfer.slug || transfer.id}`}
-                    className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"
-                    aria-label={`Ver detalhes de ${transfer.name}`}
-                  >
+                  <span className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium">
                     Ver Detalhes
-                  </Link>
+                  </span>
                 </div>
               </Link>
             ))}

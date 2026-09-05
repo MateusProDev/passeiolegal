@@ -76,6 +76,8 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png" />
         <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png" />
         <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png" />
@@ -95,33 +97,49 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body className={poppins.variable}>
-        {/* Google Ads and Analytics load after the page is interactive. */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-11405399413"
-          strategy="lazyOnload"
-        />
-        <Script id="google-tags" strategy="lazyOnload">
+        {/* Marketing scripts wait for an interaction or an idle fallback. */}
+        <Script id="marketing-scripts" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'AW-11405399413');
             ${process.env.NEXT_PUBLIC_GA_ID ? `gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');` : ''}
+
+            (function() {
+              var loaded = false;
+              function loadMarketingScripts() {
+                if (loaded) return;
+                loaded = true;
+                var googleScript = document.createElement('script');
+                googleScript.async = true;
+                googleScript.src = 'https://www.googletagmanager.com/gtag/js?id=AW-11405399413';
+                document.head.appendChild(googleScript);
+                ${process.env.NEXT_PUBLIC_META_PIXEL_ID ? `
+                var facebookScript = document.createElement('script');
+                facebookScript.async = true;
+                facebookScript.src = 'https://connect.facebook.net/en_US/fbevents.js';
+                document.head.appendChild(facebookScript);
+                ` : ''}
+              }
+              ['pointerdown', 'keydown', 'touchstart'].forEach(function(eventName) {
+                window.addEventListener(eventName, loadMarketingScripts, { once: true, passive: true });
+              });
+              window.setTimeout(loadMarketingScripts, 15000);
+            })();
           `}
         </Script>
 
         {/* Meta Pixel (Facebook) */}
         {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
-          <Script id="meta-pixel" strategy="lazyOnload">
+          <Script id="meta-pixel-queue" strategy="lazyOnload">
             {`
               !function(f,b,e,v,n,t,s)
               {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
               n.callMethod.apply(n,arguments):n.queue.push(arguments)};
               if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-              n.queue=[];t=b.createElement(e);t.async=!0;
-              t.src=v;s=b.getElementsByTagName(e)[0];
-              s.parentNode.insertBefore(t,s)}(window, document,'script',
-              'https://connect.facebook.net/en_US/fbevents.js');
+              n.queue=[];
+              }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
               fbq('init', '${process.env.NEXT_PUBLIC_META_PIXEL_ID}');
               fbq('track', 'PageView');
             `}

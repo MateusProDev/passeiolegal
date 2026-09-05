@@ -66,7 +66,7 @@ export default function AnimatedCounter({
   }, [isVisible, target, duration]);
 
   return (
-    <div ref={ref} className="text-4xl font-bold text-primary-600 mb-2">
+    <div ref={ref} className="text-4xl font-bold text-primary-900 mb-2">
       {prefix}{count.toLocaleString()}{suffix}
     </div>
   );

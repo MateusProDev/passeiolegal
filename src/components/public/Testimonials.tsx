@@ -142,11 +142,13 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
                     <button
                       key={index}
                       onClick={() => setCurrentIndex(index)}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        index === currentIndex ? 'bg-primary-600' : 'bg-gray-300'
-                      }`}
+                      className="relative flex h-11 w-11 items-center justify-center rounded-full"
                       aria-label={`Ir para depoimento ${index + 1}`}
-                    />
+                    >
+                      <span className={`h-2 w-2 rounded-full transition-colors ${
+                        index === currentIndex ? 'bg-primary-600' : 'bg-gray-300'
+                      }`} />
+                    </button>
                   ))}
                 </div>
                 <button

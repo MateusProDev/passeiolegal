@@ -150,7 +150,7 @@ export default function Tours({ tours }: ToursProps) {
                     </div>
                   )}
                   {tour.featured && (
-                    <span className="absolute top-4 right-4 bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    <span className="absolute top-4 right-4 bg-primary-800 text-white px-3 py-1 rounded-full text-sm font-semibold">
                       Destaque
                     </span>
                   )}
@@ -172,7 +172,7 @@ export default function Tours({ tours }: ToursProps) {
                   </div>
 
                   <div className="flex items-center justify-end">
-                    <span className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium">
+                    <span className="bg-primary-800 text-white px-4 py-2 rounded-lg transition-colors font-medium">
                       Ver Detalhes
                     </span>
                   </div>
@@ -188,11 +188,13 @@ export default function Tours({ tours }: ToursProps) {
                 <button
                   key={index}
                   onClick={() => goToSlide(index * itemsPerPage)}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    Math.floor(currentIndex / itemsPerPage) === index ? 'bg-primary-600' : 'bg-gray-300'
-                  }`}
+                  className="relative flex h-11 w-11 items-center justify-center rounded-full"
                   aria-label={`Ir para grupo ${index + 1}`}
-                />
+                >
+                  <span className={`h-3 w-3 rounded-full transition-colors ${
+                    Math.floor(currentIndex / itemsPerPage) === index ? 'bg-primary-600' : 'bg-gray-300'
+                  }`} />
+                </button>
               ))}
             </div>
           )}
@@ -201,7 +203,7 @@ export default function Tours({ tours }: ToursProps) {
         <div className="text-center mt-12">
           <Link
             href="/passeios"
-            className="inline-block bg-secondary-600 hover:bg-secondary-700 text-white px-8 py-3 rounded-lg transition-colors font-semibold"
+            className="inline-block bg-secondary-800 hover:bg-secondary-900 text-white px-8 py-3 rounded-lg transition-colors font-semibold"
           >
             Ver Todos os Passeios
           </Link>

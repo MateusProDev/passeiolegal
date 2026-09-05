@@ -77,7 +77,7 @@ export default function Blog({ posts }: BlogProps) {
                 </h3>
                 <p className="text-gray-600 mb-4 line-clamp-3 flex-1">{post.summary}</p>
 
-                <span className="text-primary-600 hover:text-primary-700 font-medium inline-flex items-center">
+                <span className="text-primary-900 hover:text-primary-950 font-medium inline-flex items-center">
                   Ler mais
                 </span>
               </div>
@@ -88,7 +88,7 @@ export default function Blog({ posts }: BlogProps) {
         <div className="text-center mt-12">
           <Link
             href="/blog"
-            className="inline-block bg-secondary-600 hover:bg-secondary-700 text-white px-8 py-3 rounded-lg transition-colors font-semibold"
+            className="inline-block bg-secondary-800 hover:bg-secondary-900 text-white px-8 py-3 rounded-lg transition-colors font-semibold"
           >
             Ver Todos os Artigos
           </Link>

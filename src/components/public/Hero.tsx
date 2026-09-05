@@ -108,7 +108,7 @@ export default function Hero({ banners }: HeroProps) {
           <WhatsAppConversionLink
             href={currentBanner.buttonLink}
             target={isWhatsAppUrl(currentBanner.buttonLink) ? '_blank' : undefined}
-            className="inline-block bg-primary-600 hover:bg-primary-700 text-white font-poppins font-bold px-8 py-3 rounded-lg transition-colors"
+            className="inline-block bg-primary-800 hover:bg-primary-900 text-white font-poppins font-bold px-8 py-3 rounded-lg transition-colors"
             aria-label={currentBanner.buttonText}
           >
             {currentBanner.buttonText}
@@ -156,12 +156,14 @@ export default function Hero({ banners }: HeroProps) {
                 goToSlide(index);
                 setProgress(0);
               }}
-              className={`w-3 h-3 rounded-full transition-colors ${
-                index === currentIndex ? 'bg-gray-100' : 'bg-gray-100/50'
-              }`}
+              className="relative flex h-11 w-11 items-center justify-center rounded-full"
               aria-label={`Ir para banner ${index + 1}`}
               aria-current={index === currentIndex ? 'true' : undefined}
-            />
+            >
+              <span className={`h-3 w-3 rounded-full transition-colors ${
+                index === currentIndex ? 'bg-gray-100' : 'bg-gray-100/50'
+              }`} />
+            </button>
           ))}
         </div>
       )}

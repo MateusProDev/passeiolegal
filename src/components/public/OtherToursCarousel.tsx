@@ -132,6 +132,16 @@ export default function OtherToursCarousel({ tours }: OtherToursCarouselProps) {
               </div>
 
               <div className="flex items-center gap-2">
+                <WhatsAppConversionLink
+                  href={`https://wa.me/5585997314093?text=${encodeURIComponent(`Olá! Gostaria de reservar o passeio: ${tour.name}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg transition-colors font-medium"
+                  aria-label={`Reservar ${tour.name} pelo WhatsApp`}
+                >
+                  <MessageCircle size={18} />
+                  <span>Reservar agora</span>
+                </WhatsAppConversionLink>
                 <Link
                   href={`/passeios/${tour.slug || tour.id}`}
                   className="flex-1 text-center bg-primary-800 hover:bg-primary-900 text-white px-3 py-2 rounded-lg transition-colors font-medium"
@@ -139,16 +149,6 @@ export default function OtherToursCarousel({ tours }: OtherToursCarouselProps) {
                 >
                   Ver Detalhes
                 </Link>
-                <WhatsAppConversionLink
-                  href={`https://wa.me/5585997314093?text=${encodeURIComponent(`Olá! Gostaria de reservar o passeio: ${tour.name}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg transition-colors font-medium"
-                  aria-label={`Reservar ${tour.name} pelo WhatsApp`}
-                >
-                  <MessageCircle size={18} />
-                  <span>Reservar</span>
-                </WhatsAppConversionLink>
               </div>
             </div>
           </article>

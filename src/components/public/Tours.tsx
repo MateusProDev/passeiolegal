@@ -192,7 +192,7 @@ export default function Tours({ tours }: ToursProps) {
                     </WhatsAppConversionLink>
                     <Link
                       href={`/passeios/${tour.slug || tour.id}`}
-                      className="flex-1 text-center bg-primary-800 hover:bg-primary-900 text-white px-3 py-2 rounded-lg transition-colors font-medium"
+                      className="text-center bg-primary-800 hover:bg-primary-900 text-white px-3 py-2 rounded-lg transition-colors font-medium"
                       onClick={() => handleTourClick(tour.name)}
                     >
                       Ver Detalhes

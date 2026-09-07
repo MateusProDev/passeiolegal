@@ -147,7 +147,7 @@ export default function OtherToursCarousel({ tours }: OtherToursCarouselProps) {
                   aria-label={`Reservar ${tour.name} pelo WhatsApp`}
                 >
                   <MessageCircle size={18} />
-                  <span className="hidden sm:inline">Reservar</span>
+                  <span>Reservar</span>
                 </WhatsAppConversionLink>
               </div>
             </div>

@@ -197,6 +197,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-8 pt-8 pb-4 text-center text-gray-400 text-sm">
           <p>&copy; {currentYear} Passeio Legal. Todos os direitos reservados.</p>
+          <p className="mt-1">CNPJ: 33.175.859/0001-90</p>
           <a
             href="https://turvia.com.br"
             target="_blank"

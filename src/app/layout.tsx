@@ -93,6 +93,12 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
         <meta name="theme-color" content="#ffffff" />
+        <Script
+          id="ahrefs-analytics"
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="jlyllrk8/5uFaW9szI/bug"
+          strategy="beforeInteractive"
+        />
       </head>
       <body className={poppins.variable}>
         <Script id="marketing-scripts" strategy="afterInteractive">

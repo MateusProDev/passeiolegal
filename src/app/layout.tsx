@@ -95,8 +95,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body className={poppins.variable}>
-        {/* Marketing scripts wait for an interaction or an idle fallback. */}
-        <Script id="marketing-scripts" strategy="lazyOnload">
+        <Script id="marketing-scripts" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -104,27 +103,10 @@ export default function RootLayout({
             gtag('config', 'AW-11405399413');
             ${process.env.NEXT_PUBLIC_GA_ID ? `gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');` : ''}
 
-            (function() {
-              var loaded = false;
-              function loadMarketingScripts() {
-                if (loaded) return;
-                loaded = true;
-                var googleScript = document.createElement('script');
-                googleScript.async = true;
-                googleScript.src = 'https://www.googletagmanager.com/gtag/js?id=AW-11405399413';
-                document.head.appendChild(googleScript);
-                ${process.env.NEXT_PUBLIC_META_PIXEL_ID ? `
-                var facebookScript = document.createElement('script');
-                facebookScript.async = true;
-                facebookScript.src = 'https://connect.facebook.net/en_US/fbevents.js';
-                document.head.appendChild(facebookScript);
-                ` : ''}
-              }
-              ['pointerdown', 'keydown', 'touchstart'].forEach(function(eventName) {
-                window.addEventListener(eventName, loadMarketingScripts, { once: true, passive: true });
-              });
-              window.setTimeout(loadMarketingScripts, 15000);
-            })();
+            var googleScript = document.createElement('script');
+            googleScript.async = true;
+            googleScript.src = 'https://www.googletagmanager.com/gtag/js?id=AW-11405399413';
+            document.head.appendChild(googleScript);
           `}
         </Script>
 

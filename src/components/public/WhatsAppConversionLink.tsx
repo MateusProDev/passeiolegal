@@ -63,6 +63,8 @@ export default function WhatsAppConversionLink({
   ...props
 }: WhatsAppConversionLinkProps) {
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (!isWhatsAppUrl(href)) return;
+
     event.preventDefault();
     onClick?.();
     reportWhatsAppConversion(href, target);

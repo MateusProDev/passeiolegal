@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Clock, Users, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Clock, Users, ChevronLeft, ChevronRight, MessageCircle } from 'lucide-react';
 import { metaPixelEvents } from '@/utils/metaPixel';
+import WhatsAppConversionLink from './WhatsAppConversionLink';
+import OtherToursCarousel from './OtherToursCarousel';
 
 interface Tour {
   id: string;
@@ -32,6 +34,9 @@ export default function Tours({ tours }: ToursProps) {
     .filter((tour) => tour.featured)
     .sort((first, second) => (first.order ?? Number.MAX_SAFE_INTEGER) - (second.order ?? Number.MAX_SAFE_INTEGER));
   const displayTours = featuredTours.length > 0 ? featuredTours : tours.slice(0, 6);
+  const otherTours = featuredTours.length > 0
+    ? tours.filter((tour) => !featuredTours.some((featuredTour) => featuredTour.id === tour.id))
+    : tours.slice(6);
 
   useEffect(() => {
     const handleResize = () => {
@@ -128,12 +133,9 @@ export default function Tours({ tours }: ToursProps) {
             onTouchCancel={() => setIsPaused(false)}
           >
             {visibleTours.map((tour) => (
-              <Link
+              <article
                 key={tour.id}
-                href={`/passeios/${tour.slug || tour.id}`}
                 className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col group"
-                aria-label={`Ver detalhes de ${tour.name}`}
-                onClick={() => handleTourClick(tour.name)}
               >
                 <div className="relative h-48 w-full">
                   {tour.mainImageUrl ? (
@@ -157,7 +159,13 @@ export default function Tours({ tours }: ToursProps) {
                 </div>
 
                 <div className="p-6 flex flex-col flex-1">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">{tour.name}</h3>
+                  <Link
+                    href={`/passeios/${tour.slug || tour.id}`}
+                    className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors"
+                    onClick={() => handleTourClick(tour.name)}
+                  >
+                    {tour.name}
+                  </Link>
                   <p className="text-gray-600 mb-4 line-clamp-2 flex-1">{tour.description}</p>
 
                   <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
@@ -171,13 +179,27 @@ export default function Tours({ tours }: ToursProps) {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-end">
-                    <span className="bg-primary-800 text-white px-4 py-2 rounded-lg transition-colors font-medium">
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={`/passeios/${tour.slug || tour.id}`}
+                      className="flex-1 text-center bg-primary-800 hover:bg-primary-900 text-white px-3 py-2 rounded-lg transition-colors font-medium"
+                      onClick={() => handleTourClick(tour.name)}
+                    >
                       Ver Detalhes
-                    </span>
+                    </Link>
+                    <WhatsAppConversionLink
+                      href={`https://wa.me/5585997314093?text=${encodeURIComponent(`Olá! Gostaria de reservar o passeio: ${tour.name}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg transition-colors font-medium"
+                      aria-label={`Reservar ${tour.name} pelo WhatsApp`}
+                    >
+                      <MessageCircle size={18} />
+                      <span className="hidden sm:inline">Reservar</span>
+                    </WhatsAppConversionLink>
                   </div>
                 </div>
-              </Link>
+              </article>
             ))}
           </div>
 
@@ -208,6 +230,20 @@ export default function Tours({ tours }: ToursProps) {
             Ver Todos os Passeios
           </Link>
         </div>
+
+        {otherTours.length > 0 && (
+          <div className="mt-16 border-t border-gray-200 pt-14">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Mais Passeios
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Explore outros roteiros para encontrar a experiência ideal para sua viagem
+              </p>
+            </div>
+            <OtherToursCarousel tours={otherTours} />
+          </div>
+        )}
       </div>
     </section>
   );

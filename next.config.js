@@ -51,14 +51,7 @@ const nextConfig = {
     ];
   },
   redirects: async () => {
-    return [
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.passeiolegal.com' }],
-        destination: 'https://passeiolegal.com/:path*',
-        permanent: true,
-      },
-    ];
+    return [];
   },
 };
 

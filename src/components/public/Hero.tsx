@@ -1,7 +1,5 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import WhatsAppConversionLink, { isWhatsAppUrl } from './WhatsAppConversionLink';
 
@@ -20,43 +18,11 @@ interface HeroProps {
 }
 
 export default function Hero({ banners }: HeroProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const safeBanner = banners.find((banner) => banner?.imageUrl)?.imageUrl
+    ? banners.find((banner) => banner?.imageUrl)
+    : null;
 
-  useEffect(() => {
-    if (banners.length === 0 || isPaused) return;
-    
-    const interval = 1000;
-    const duration = 5000; // 5 seconds per slide
-    const increment = 100 / (duration / interval);
-
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
-          return 0;
-        }
-        return prev + increment;
-      });
-    }, interval);
-
-    return () => clearInterval(timer);
-  }, [banners.length, isPaused]);
-
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-  };
-
-  const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + banners.length) % banners.length);
-  };
-
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % banners.length);
-  };
-
-  if (banners.length === 0) {
+  if (!safeBanner) {
     return (
       <section className="relative h-[600px] bg-gradient-to-r from-primary-600 to-secondary-600 flex items-center justify-center">
         <div className="text-center text-white px-4">
@@ -67,32 +33,24 @@ export default function Hero({ banners }: HeroProps) {
     );
   }
 
-  const currentBanner = banners[currentIndex];
+  const currentBanner = safeBanner;
   const normalizedTitle = currentBanner.title?.trim();
   const heroTitle = normalizedTitle && !normalizedTitle.toLowerCase().includes('top 3')
     ? normalizedTitle
     : 'Passeios e Transfers em Fortaleza e Região';
 
   return (
-    <section
-      className="relative h-[600px] overflow-hidden"
-      aria-label="Banner principal"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={() => setIsPaused(true)}
-      onTouchEnd={() => setIsPaused(false)}
-      onTouchCancel={() => setIsPaused(false)}
-    >
-      {/* Banner Image */}
+    <section className="relative h-[600px] overflow-hidden" aria-label="Banner principal">
       <div className="absolute inset-0">
         {currentBanner.imageUrl ? (
           <Image
             src={currentBanner.imageUrl}
-            alt={currentBanner.imageAlt || currentBanner.title}
+            alt={currentBanner.imageAlt || currentBanner.title || 'Passeios e Transfers em Fortaleza e Região'}
             fill
             className="object-cover"
             sizes="100vw"
             priority
+            quality={70}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-r from-primary-600 to-secondary-600" />
@@ -100,7 +58,6 @@ export default function Hero({ banners }: HeroProps) {
         <div className="absolute inset-0 bg-black/40" />
       </div>
 
-      {/* Banner Content */}
       <div className="relative h-full flex items-center justify-center text-white px-4">
         <div className="text-center max-w-4xl">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 animate-fade-in">
@@ -119,58 +76,6 @@ export default function Hero({ banners }: HeroProps) {
           </WhatsAppConversionLink>
         </div>
       </div>
-
-      {/* Navigation Arrows */}
-      {banners.length > 1 && (
-        <>
-          <button
-            onClick={goToPrevious}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-100/30 hover:bg-gray-100/50 p-3 rounded-full transition-colors"
-            aria-label="Banner anterior"
-          >
-            <ChevronLeft size={24} className="text-white" />
-          </button>
-          <button
-            onClick={goToNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-100/30 hover:bg-gray-100/50 p-3 rounded-full transition-colors"
-            aria-label="Próximo banner"
-          >
-            <ChevronRight size={24} className="text-white" />
-          </button>
-        </>
-      )}
-
-      {/* Progress Bar */}
-      {banners.length > 1 && (
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-100/30">
-          <div
-            className="h-full origin-left bg-gray-100 transition-transform duration-1000 ease-linear"
-            style={{ transform: `scaleX(${progress / 100})` }}
-          />
-        </div>
-      )}
-
-      {/* Dots */}
-      {banners.length > 1 && (
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-2">
-          {banners.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => {
-                goToSlide(index);
-                setProgress(0);
-              }}
-              className="relative flex h-11 w-11 items-center justify-center rounded-full"
-              aria-label={`Ir para banner ${index + 1}`}
-              aria-current={index === currentIndex ? 'true' : undefined}
-            >
-              <span className={`h-3 w-3 rounded-full transition-colors ${
-                index === currentIndex ? 'bg-gray-100' : 'bg-gray-100/50'
-              }`} />
-            </button>
-          ))}
-        </div>
-      )}
     </section>
   );
 }

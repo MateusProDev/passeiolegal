@@ -14,6 +14,7 @@ const poppins = Poppins({
 });
 
 const baseUrl = getSiteUrl();
+const shouldLoadAnalytics = process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === "true";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -93,43 +94,20 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
         <meta name="theme-color" content="#ffffff" />
-        <Script
-          id="ahrefs-analytics"
-          src="https://analytics.ahrefs.com/analytics.js"
-          data-key="jlyllrk8/5uFaW9szI/bug"
-          strategy="lazyOnload"
-        />
       </head>
       <body className={poppins.variable}>
-        <Script id="marketing-scripts" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+        {shouldLoadAnalytics && process.env.NEXT_PUBLIC_GA_ID && (
+          <Script id="marketing-scripts" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){window.dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+            `}
+          </Script>
+        )}
 
-            function loadMarketingScripts() {
-              window.gtag('js', new Date());
-              window.gtag('config', 'AW-11405399413');
-              ${process.env.NEXT_PUBLIC_GA_ID ? `window.gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');` : ''}
-
-              if (!document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) {
-                var googleScript = document.createElement('script');
-                googleScript.async = true;
-                googleScript.defer = true;
-                googleScript.src = 'https://www.googletagmanager.com/gtag/js?id=AW-11405399413';
-                document.head.appendChild(googleScript);
-              }
-            }
-
-            if ('requestIdleCallback' in window) {
-              requestIdleCallback(loadMarketingScripts, { timeout: 2000 });
-            } else {
-              setTimeout(loadMarketingScripts, 1500);
-            }
-          `}
-        </Script>
-
-        {/* Meta Pixel (Facebook) */}
-        {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
+        {shouldLoadAnalytics && process.env.NEXT_PUBLIC_META_PIXEL_ID && (
           <Script id="meta-pixel-queue" strategy="lazyOnload">
             {`
               !function(f,b,e,v,n,t,s)

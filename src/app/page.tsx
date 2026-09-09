@@ -7,31 +7,31 @@ import { bannerService, tourService, transferService, testimonialService, blogSe
 import { getSiteUrl } from "@/lib/site-url";
 
 const Tours = dynamicImport(() => import("@/components/public/Tours"), {
-  loading: () => <div className="h-[420px] w-full animate-pulse rounded-2xl bg-slate-100" />,
+  loading: () => <div className="h-[420px] w-full" />,
 });
 
 const Transfers = dynamicImport(() => import("@/components/public/Transfers"), {
-  loading: () => <div className="h-[420px] w-full animate-pulse rounded-2xl bg-slate-100" />,
+  loading: () => <div className="h-[420px] w-full" />,
 });
 
 const Testimonials = dynamicImport(() => import("@/components/public/Testimonials"), {
-  loading: () => <div className="h-[320px] w-full animate-pulse rounded-2xl bg-slate-100" />,
+  loading: () => <div className="h-[320px] w-full" />,
 });
 
 const Blog = dynamicImport(() => import("@/components/public/Blog"), {
-  loading: () => <div className="h-[360px] w-full animate-pulse rounded-2xl bg-slate-100" />,
+  loading: () => <div className="h-[360px] w-full" />,
 });
 
 const FAQ = dynamicImport(() => import("@/components/public/FAQ"), {
-  loading: () => <div className="h-[280px] w-full animate-pulse rounded-2xl bg-slate-100" />,
+  loading: () => <div className="h-[280px] w-full" />,
 });
 
 const Footer = dynamicImport(() => import("@/components/public/Footer"), {
-  loading: () => <div className="h-[220px] w-full animate-pulse bg-slate-100" />,
+  loading: () => <div className="h-[220px] w-full" />,
 });
 
-// Force dynamic rendering for real-time updates
-export const dynamic = 'force-dynamic';
+// Cache the homepage briefly to keep content fresh without rendering it on every request.
+export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = getSiteUrl();

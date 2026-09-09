@@ -46,7 +46,9 @@ export default function Hero({ banners }: HeroProps) {
             fill
             className="object-cover scale-[1.01]"
             sizes="100vw"
-            priority={false}
+            priority
+            fetchPriority="high"
+            loading="eager"
             quality={55}
           />
         ) : (

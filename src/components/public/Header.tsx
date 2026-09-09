@@ -28,17 +28,17 @@ export default async function Header() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center" aria-label="Passeio Legal - Página inicial">
             {logoUrl ? (
-              <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border border-white/40 bg-white/10 shadow-lg shadow-primary-900/20 ring-2 ring-white/10 transition-transform duration-200 hover:scale-105 sm:h-20 sm:w-20">
+              <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-white/0 transition-transform duration-200 hover:scale-105 sm:h-20 sm:w-20">
                 <Image
                   src={logoUrl}
                   alt={logoAlt}
                   width={88}
                   height={88}
-                  className="h-full w-full object-contain p-1"
+                  className="h-full w-full object-contain"
                 />
               </div>
             ) : (
-              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/40 bg-white/10 text-lg font-black text-white shadow-lg shadow-primary-900/20 ring-2 ring-white/10 transition-transform duration-200 hover:scale-105 sm:h-20 sm:w-20 sm:text-xl">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/40 bg-white/10 text-lg font-black text-white transition-transform duration-200 hover:scale-105 sm:h-20 sm:w-20 sm:text-xl">
                 PL
               </div>
             )}

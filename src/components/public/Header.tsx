@@ -70,13 +70,13 @@ export default async function Header() {
               </span>
             </summary>
 
-            <div className="fixed inset-x-3 top-[92px] z-[60] h-[35vh] min-h-[260px] max-h-[40vh] rounded-2xl border border-white/10 bg-primary-700/95 p-3 shadow-2xl backdrop-blur-sm">
+            <div className="fixed inset-x-0 top-[90px] z-[60] h-[35vh] min-h-[260px] max-h-[40vh] border-t border-b border-white/10 bg-primary-700/97 p-3 shadow-2xl backdrop-blur-sm">
               <ul className="space-y-2 pt-1" role="menu">
                 {menuItems.map((item) => (
                   <li key={item.href} role="none">
                     <Link
                       href={item.href}
-                      className="flex items-center gap-3 rounded-xl px-4 py-3 font-[var(--font-poppins)] text-base font-semibold text-white transition-colors hover:bg-white/20"
+                      className="flex items-center gap-3 px-4 py-3 font-[var(--font-poppins)] text-base font-semibold text-white transition-colors hover:bg-white/20"
                       role="menuitem"
                     >
                       <item.icon size={18} strokeWidth={2.2} />

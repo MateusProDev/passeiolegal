@@ -43,13 +43,14 @@ export default function Hero({ banners }: HeroProps) {
           <Image
             src={currentBanner.imageUrl}
             alt={currentBanner.imageAlt || currentBanner.title || 'Passeios e Transfers em Fortaleza e Região'}
-            fill
-            className="object-cover scale-[1.01]"
+            width={1600}
+            height={900}
+            className="h-full w-full object-cover scale-[1.01]"
             sizes="100vw"
             priority
             fetchPriority="high"
             loading="eager"
-            quality={55}
+            quality={30}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-r from-primary-600 to-secondary-600" />

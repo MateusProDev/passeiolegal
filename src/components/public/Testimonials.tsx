@@ -61,11 +61,16 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
 
         <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-xl shadow-lg p-8 md:p-12">
-            <div className="flex items-center justify-center mb-6" aria-label="Avaliação do cliente">
+            <div
+              className="flex items-center justify-center mb-6"
+              role="img"
+              aria-label={`Avaliação do cliente: ${featuredTestimonial.rating} de 5 estrelas`}
+            >
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
                   size={24}
+                  aria-hidden="true"
                   className={i < featuredTestimonial.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}
                 />
               ))}

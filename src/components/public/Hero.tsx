@@ -1,7 +1,4 @@
-"use client";
-
 import Image from 'next/image';
-import WhatsAppConversionLink, { isWhatsAppUrl } from './WhatsAppConversionLink';
 
 interface Banner {
   id: string;
@@ -47,33 +44,34 @@ export default function Hero({ banners }: HeroProps) {
             src={currentBanner.imageUrl}
             alt={currentBanner.imageAlt || currentBanner.title || 'Passeios e Transfers em Fortaleza e Região'}
             fill
-            className="object-cover"
+            className="object-cover scale-[1.01]"
             sizes="100vw"
-            priority
-            quality={70}
+            priority={false}
+            quality={55}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-r from-primary-600 to-secondary-600" />
         )}
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/35 to-black/45" />
       </div>
 
       <div className="relative h-full flex items-center justify-center text-white px-4">
         <div className="text-center max-w-4xl">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 animate-fade-in">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">
             {heroTitle}
           </h1>
-          <p className="text-xl md:text-2xl mb-8 animate-fade-in">
+          <p className="text-xl md:text-2xl mb-8">
             {currentBanner.subtitle || 'Reserve experiências únicas em Fortaleza e região.'}
           </p>
-          <WhatsAppConversionLink
+          <a
             href={currentBanner.buttonLink}
-            target={isWhatsAppUrl(currentBanner.buttonLink) ? '_blank' : undefined}
+            target={/^https?:\/\//i.test(currentBanner.buttonLink) ? '_blank' : undefined}
+            rel={/^https?:\/\//i.test(currentBanner.buttonLink) ? 'noopener noreferrer' : undefined}
             className="inline-block bg-primary-800 hover:bg-primary-900 text-white font-poppins font-bold px-8 py-3 rounded-lg transition-colors"
             aria-label={currentBanner.buttonText}
           >
             {currentBanner.buttonText}
-          </WhatsAppConversionLink>
+          </a>
         </div>
       </div>
     </section>

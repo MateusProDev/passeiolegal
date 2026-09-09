@@ -91,9 +91,9 @@ export default async function Home() {
   const transfersEnabled = settings?.sections?.transfersEnabled ?? true;
   const aboutSection = settings?.aboutSection;
   const aboutStats = aboutSection?.stats || [
-    { value: 10, label: "Anos de Experiência" },
-    { value: 5000, label: "Clientes Satisfeitos" },
-    { value: 100, label: "Destinos" },
+    { value: 4, label: "Anos de Experiência" },
+    { value: 2000, label: "Clientes Satisfeitos" },
+    { value: 20, label: "Destinos" },
   ];
 
   return (

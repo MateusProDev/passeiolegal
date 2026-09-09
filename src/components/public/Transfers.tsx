@@ -139,12 +139,14 @@ export default function Transfers({ transfers }: TransfersProps) {
                   )}
                 </div>
 
-                <Link
-                  href={`/transfer/${transfer.slug || transfer.id}`}
-                  className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors"
-                >
-                  {transfer.name}
-                </Link>
+                <h3>
+                  <Link
+                    href={`/transfer/${transfer.slug || transfer.id}`}
+                    className="block text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors"
+                  >
+                    {transfer.name}
+                  </Link>
+                </h3>
                 <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-1">{transfer.description}</p>
 
                 <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
@@ -163,7 +165,7 @@ export default function Transfers({ transfers }: TransfersProps) {
                     href={`/transfer/${transfer.slug || transfer.id}`}
                     className="flex-1 text-center bg-primary-800 hover:bg-primary-900 text-white px-3 py-2 rounded-lg transition-colors font-medium"
                   >
-                    Ver Detalhes
+                    Ver transfer
                   </Link>
                   <WhatsAppConversionLink
                     href={`https://wa.me/5585997314093?text=${encodeURIComponent(`Olá! Gostaria de saber mais sobre o transfer: ${transfer.name}`)}`}
@@ -173,7 +175,7 @@ export default function Transfers({ transfers }: TransfersProps) {
                     aria-label={`Consultar ${transfer.name} pelo WhatsApp`}
                   >
                     <MessageCircle size={18} />
-                    <span className="hidden sm:inline">Consultar</span>
+                    <span className="hidden sm:inline">WhatsApp</span>
                   </WhatsAppConversionLink>
                 </div>
               </article>

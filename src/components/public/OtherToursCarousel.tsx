@@ -142,14 +142,14 @@ export default function OtherToursCarousel({ tours }: OtherToursCarouselProps) {
                   aria-label={`Reservar ${tour.name} pelo WhatsApp`}
                 >
                   <MessageCircle size={18} />
-                  <span>Reservar agora</span>
+                  <span>Reservar pelo WhatsApp</span>
                 </WhatsAppConversionLink>
                 <Link
                   href={`/passeios/${tour.slug || tour.id}`}
                   className="text-center bg-primary-800 hover:bg-primary-900 text-white px-3 py-2 rounded-lg transition-colors font-medium"
                   onClick={() => handleTourClick(tour.name)}
                 >
-                  Ver Detalhes
+                  Ver passeio
                 </Link>
               </div>
             </div>

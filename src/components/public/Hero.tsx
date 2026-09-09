@@ -43,14 +43,12 @@ export default function Hero({ banners }: HeroProps) {
           <Image
             src={currentBanner.imageUrl}
             alt={currentBanner.imageAlt || currentBanner.title || 'Passeios e Transfers em Fortaleza e Região'}
-            width={1600}
-            height={900}
-            className="h-full w-full object-cover scale-[1.01]"
+            width={1280}
+            height={720}
+            className="h-full w-full object-cover"
             sizes="100vw"
             priority
-            fetchPriority="high"
-            loading="eager"
-            quality={30}
+            quality={20}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-r from-primary-600 to-secondary-600" />
@@ -70,7 +68,7 @@ export default function Hero({ banners }: HeroProps) {
             href={currentBanner.buttonLink}
             target={/^https?:\/\//i.test(currentBanner.buttonLink) ? '_blank' : undefined}
             rel={/^https?:\/\//i.test(currentBanner.buttonLink) ? 'noopener noreferrer' : undefined}
-            className="inline-block bg-primary-800 hover:bg-primary-900 text-white font-poppins font-bold px-8 py-3 rounded-lg transition-colors"
+            className="inline-block bg-primary-800 hover:bg-primary-900 text-white font-bold px-8 py-3 rounded-lg transition-colors"
             aria-label={currentBanner.buttonText}
           >
             {currentBanner.buttonText}

@@ -89,14 +89,20 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         {shouldLoadAnalytics && process.env.NEXT_PUBLIC_GA_ID && (
-          <Script id="marketing-scripts" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){window.dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
-            `}
-          </Script>
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="marketing-scripts" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){window.dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+              `}
+            </Script>
+          </>
         )}
 
         {shouldLoadAnalytics && process.env.NEXT_PUBLIC_META_PIXEL_ID && (

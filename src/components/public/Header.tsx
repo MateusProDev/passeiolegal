@@ -49,7 +49,7 @@ export default async function Header() {
               <li key={item.href} role="none">
                 <Link
                   href={item.href}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 font-[var(--font-poppins)] text-sm font-semibold text-white transition-colors hover:bg-white/20"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/20"
                   role="menuitem"
                 >
                   <item.icon size={17} strokeWidth={2.2} />
@@ -76,7 +76,7 @@ export default async function Header() {
                   <li key={item.href} role="none">
                     <Link
                       href={item.href}
-                      className="flex items-center gap-3 px-4 py-3 font-[var(--font-poppins)] text-base font-semibold text-white transition-colors hover:bg-white/15"
+                      className="flex items-center gap-3 px-4 py-3 text-base font-semibold text-white transition-colors hover:bg-white/15"
                       role="menuitem"
                     >
                       <item.icon size={18} strokeWidth={2.2} />

@@ -16,6 +16,7 @@ interface WhatsAppConversionLinkProps
   href: string;
   children: ReactNode;
   onClick?: () => void;
+  trackConversion?: boolean;
 }
 
 export function isWhatsAppUrl(url: string): boolean {
@@ -44,10 +45,18 @@ function reportWhatsAppConversion(url: string, target?: string | null): void {
     event_callback: navigate,
   };
 
+  window.dataLayer = window.dataLayer || [];
+
+  if (typeof window.gtag !== "function") {
+    window.gtag = function gtag() {
+      const args = Array.from(arguments);
+      window.dataLayer?.push(args);
+    };
+  }
+
   if (typeof window.gtag === "function") {
     window.gtag("event", "conversion", conversionEvent);
   } else {
-    window.dataLayer = window.dataLayer || [];
     window.dataLayer.push(["event", "conversion", conversionEvent]);
   }
 
@@ -60,14 +69,29 @@ export default function WhatsAppConversionLink({
   target,
   children,
   onClick,
+  trackConversion = true,
   ...props
 }: WhatsAppConversionLinkProps) {
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (!isWhatsAppUrl(href)) return;
 
+    const isPrimaryClick = event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+    if (!isPrimaryClick) return;
+
     event.preventDefault();
     onClick?.();
-    reportWhatsAppConversion(href, target);
+
+    if (trackConversion) {
+      reportWhatsAppConversion(href, target);
+      return;
+    }
+
+    if (target === "_blank") {
+      window.open(href, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    window.location.href = href;
   };
 
   return (

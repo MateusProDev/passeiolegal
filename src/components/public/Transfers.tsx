@@ -164,10 +164,10 @@ export default function Transfers({ transfers }: TransfersProps) {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="mt-auto flex flex-col gap-2 sm:flex-row sm:items-center">
                   <Link
                     href={`/transfer/${transfer.slug || transfer.id}`}
-                    className="flex-1 text-center bg-primary-800 hover:bg-primary-900 text-white px-3 py-2 rounded-lg transition-colors font-medium"
+                    className="flex-1 text-center bg-primary-800 hover:bg-primary-900 text-white px-3 py-2 rounded-lg transition-colors font-medium text-xs sm:text-sm"
                   >
                     Ver transfer
                   </Link>
@@ -175,11 +175,12 @@ export default function Transfers({ transfers }: TransfersProps) {
                     href={`https://wa.me/5585997314093?text=${encodeURIComponent(`Olá! Gostaria de saber mais sobre o transfer: ${transfer.name}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-1 bg-[#0b5d3a] hover:bg-[#0a4b31] text-white px-3 py-2 rounded-lg transition-colors font-medium"
+                    className="flex items-center justify-center gap-1 bg-[#0b5d3a] hover:bg-[#0a4b31] text-white px-3 py-2 rounded-lg transition-colors font-medium text-xs sm:text-sm whitespace-nowrap"
                     aria-label={`Consultar ${transfer.name} pelo WhatsApp`}
                   >
                     <MessageCircle size={18} />
                     <span className="hidden sm:inline">WhatsApp</span>
+                    <span className="sm:hidden">WhatsApp</span>
                   </WhatsAppConversionLink>
                 </div>
               </article>

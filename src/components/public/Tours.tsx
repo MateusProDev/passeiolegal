@@ -195,20 +195,20 @@ export default function Tours({ tours }: ToursProps) {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="mt-auto flex flex-col gap-2 sm:flex-row sm:items-center">
                     <WhatsAppConversionLink
                       href={`https://wa.me/5585997314093?text=${encodeURIComponent(`Olá! Gostaria de reservar o passeio: ${tour.name}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-1 bg-[#0b5d3a] hover:bg-[#0a4b31] text-white px-3 py-2 rounded-lg transition-colors font-medium"
+                      className="flex min-w-0 flex-1 items-center justify-center gap-1 bg-[#0b5d3a] hover:bg-[#0a4b31] text-white px-3 py-2 rounded-lg transition-colors font-medium whitespace-nowrap text-xs sm:text-sm"
                       aria-label={`Reservar ${tour.name} pelo WhatsApp`}
                     >
                       <MessageCircle size={18} />
-                      <span>Reservar pelo WhatsApp</span>
+                      <span className="whitespace-nowrap">Reservar pelo WhatsApp</span>
                     </WhatsAppConversionLink>
                     <Link
                       href={`/passeios/${tour.slug || tour.id}`}
-                      className="text-center bg-primary-800 hover:bg-primary-900 text-white px-3 py-2 rounded-lg transition-colors font-medium"
+                      className="flex-shrink-0 text-center bg-primary-800 hover:bg-primary-900 text-white px-3 py-2 rounded-lg transition-colors font-medium text-xs sm:text-sm"
                       onClick={() => handleTourClick(tour.name)}
                     >
                       Ver passeio

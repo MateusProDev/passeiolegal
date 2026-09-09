@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Info, Map, Menu, Newspaper, Phone, type LucideIcon } from 'lucide-react';
+import { Info, Map, Menu, Newspaper, Phone, X, type LucideIcon } from 'lucide-react';
 import { settingsService } from '@/lib/firestore';
 
 interface MenuItem {
@@ -59,14 +59,19 @@ export default async function Header() {
             ))}
           </ul>
 
-          <details className="relative md:hidden">
-            <summary className="list-none p-2 rounded-lg text-white hover:bg-white/20 transition-colors cursor-pointer">
+          <details className="group relative md:hidden">
+            <summary className="list-none rounded-lg p-2 text-white transition-all duration-200 hover:bg-white/20 cursor-pointer">
               <span className="sr-only">Abrir menu</span>
-              <Menu size={24} />
+              <span className="group-open:hidden block">
+                <Menu size={26} strokeWidth={2.4} />
+              </span>
+              <span className="hidden group-open:block">
+                <X size={26} strokeWidth={2.4} />
+              </span>
             </summary>
 
-            <div className="absolute right-0 top-full mt-2 w-[86vw] max-w-[320px] rounded-2xl border border-white/10 bg-primary-700/95 p-3 shadow-2xl backdrop-blur-sm">
-              <ul className="space-y-2" role="menu">
+            <div className="fixed inset-x-3 top-[92px] z-[60] h-[35vh] min-h-[260px] max-h-[40vh] rounded-2xl border border-white/10 bg-primary-700/95 p-3 shadow-2xl backdrop-blur-sm">
+              <ul className="space-y-2 pt-1" role="menu">
                 {menuItems.map((item) => (
                   <li key={item.href} role="none">
                     <Link

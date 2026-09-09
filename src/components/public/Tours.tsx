@@ -28,8 +28,8 @@ interface ToursProps {
 
 export default function Tours({ tours }: ToursProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(Math.min(tours.length || 1, 3));
   const [isPaused, setIsPaused] = useState(false);
+  const itemsPerPage = 3;
 
   const featuredTours = tours
     .filter((tour) => tour.featured)
@@ -40,23 +40,13 @@ export default function Tours({ tours }: ToursProps) {
     : tours.slice(6);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setItemsPerPage(3);
-      } else if (window.innerWidth >= 768) {
-        setItemsPerPage(2);
-      } else {
-        setItemsPerPage(1);
-      }
-    };
-
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const prefersReducedMotion = mediaQuery.matches || window.innerWidth < 768;
-    setIsPaused(prefersReducedMotion);
+    const updateReducedMotion = () => setIsPaused(mediaQuery.matches);
 
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    updateReducedMotion();
+    mediaQuery.addEventListener?.('change', updateReducedMotion);
+
+    return () => mediaQuery.removeEventListener?.('change', updateReducedMotion);
   }, []);
 
   const handleTourClick = (tourName: string) => {

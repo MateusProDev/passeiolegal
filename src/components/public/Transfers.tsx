@@ -24,31 +24,19 @@ interface TransfersProps {
 
 export default function Transfers({ transfers }: TransfersProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
+  const itemsPerPage = 4;
 
   const displayTransfers = transfers.slice(0, 8);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1280) {
-        setItemsPerPage(4);
-      } else if (window.innerWidth >= 1024) {
-        setItemsPerPage(3);
-      } else if (window.innerWidth >= 768) {
-        setItemsPerPage(2);
-      } else {
-        setItemsPerPage(1);
-      }
-    };
-
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const prefersReducedMotion = mediaQuery.matches || window.innerWidth < 768;
-    setIsPaused(prefersReducedMotion);
+    const updateReducedMotion = () => setIsPaused(mediaQuery.matches);
 
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    updateReducedMotion();
+    mediaQuery.addEventListener?.('change', updateReducedMotion);
+
+    return () => mediaQuery.removeEventListener?.('change', updateReducedMotion);
   }, []);
 
   useEffect(() => {

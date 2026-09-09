@@ -28,7 +28,7 @@ export default async function Header() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center" aria-label="Passeio Legal - Página inicial">
             {logoUrl ? (
-              <div className="flex h-18 w-18 items-center justify-center overflow-hidden rounded-full bg-white/0 transition-transform duration-200 hover:scale-105 sm:h-20 sm:w-20">
+              <div className="flex h-[52px] w-[52px] items-center justify-center overflow-hidden rounded-full bg-white/0 transition-transform duration-200 hover:scale-105 sm:h-[64px] sm:w-[64px] lg:h-[80px] lg:w-[80px]">
                 <Image
                   src={logoUrl}
                   alt={logoAlt}
@@ -38,7 +38,7 @@ export default async function Header() {
                 />
               </div>
             ) : (
-              <div className="flex h-18 w-18 items-center justify-center rounded-full border border-white/40 bg-white/10 text-lg font-black text-white transition-transform duration-200 hover:scale-105 sm:h-20 sm:w-20 sm:text-xl">
+              <div className="flex h-[52px] w-[52px] items-center justify-center rounded-full border border-white/40 bg-white/10 text-lg font-black text-white transition-transform duration-200 hover:scale-105 sm:h-[64px] sm:w-[64px] sm:text-xl lg:h-[80px] lg:w-[80px]">
                 PL
               </div>
             )}

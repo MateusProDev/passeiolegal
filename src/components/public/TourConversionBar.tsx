@@ -51,7 +51,7 @@ export default function TourConversionBar({ tourName, whatsappNumber = "55859973
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleWhatsAppClick}
-            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap"
+            className="flex items-center gap-2 bg-[#0b5d3a] hover:bg-[#0a4b31] text-white px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap"
           >
             <MessageCircle size={18} />
             <span>Solicitar Orçamento</span>

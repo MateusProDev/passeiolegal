@@ -42,6 +42,10 @@ export default function Transfers({ transfers }: TransfersProps) {
       }
     };
 
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const prefersReducedMotion = mediaQuery.matches || window.innerWidth < 768;
+    setIsPaused(prefersReducedMotion);
+
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -55,7 +59,7 @@ export default function Transfers({ transfers }: TransfersProps) {
         const maxIndex = Math.max(0, displayTransfers.length - itemsPerPage);
         return prev >= maxIndex ? 0 : prev + 1;
       });
-    }, 5000);
+    }, 9000);
 
     return () => clearInterval(timer);
   }, [displayTransfers.length, itemsPerPage, isPaused]);
@@ -171,7 +175,7 @@ export default function Transfers({ transfers }: TransfersProps) {
                     href={`https://wa.me/5585997314093?text=${encodeURIComponent(`Olá! Gostaria de saber mais sobre o transfer: ${transfer.name}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg transition-colors font-medium"
+                    className="flex items-center justify-center gap-1 bg-[#0b5d3a] hover:bg-[#0a4b31] text-white px-3 py-2 rounded-lg transition-colors font-medium"
                     aria-label={`Consultar ${transfer.name} pelo WhatsApp`}
                   >
                     <MessageCircle size={18} />

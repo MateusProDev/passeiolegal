@@ -23,9 +23,12 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
   useEffect(() => {
     if (testimonials.length <= 1) return;
 
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mediaQuery.matches || window.innerWidth < 768) return;
+
     const interval = setInterval(() => {
       setActiveIndex((current) => (current + 1) % testimonials.length);
-    }, 5000);
+    }, 9000);
 
     return () => clearInterval(interval);
   }, [testimonials.length]);

@@ -7,6 +7,7 @@ import { Clock, Users, ChevronLeft, ChevronRight, MessageCircle } from 'lucide-r
 import { metaPixelEvents } from '@/utils/metaPixel';
 import WhatsAppConversionLink from './WhatsAppConversionLink';
 import OtherToursCarousel from './OtherToursCarousel';
+import { ProductJsonLd } from '@/components/seo/JsonLd';
 
 interface Tour {
   id: string;
@@ -27,7 +28,7 @@ interface ToursProps {
 
 export default function Tours({ tours }: ToursProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(Math.min(tours.length || 1, 3));
   const [isPaused, setIsPaused] = useState(false);
 
   const featuredTours = tours
@@ -133,10 +134,19 @@ export default function Tours({ tours }: ToursProps) {
             onTouchCancel={() => setIsPaused(false)}
           >
             {visibleTours.map((tour) => (
-              <article
-                key={tour.id}
-                className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col group"
-              >
+              <React.Fragment key={tour.id}>
+                {tour.mainImageUrl && tour.price > 0 && (
+                  <ProductJsonLd
+                    name={tour.name}
+                    description={tour.description}
+                    image={tour.mainImageUrl}
+                    price={tour.price}
+                    url={`${process.env.NEXT_PUBLIC_APP_URL || 'https://passeiolegal.com'}/passeios/${tour.slug || tour.id}`}
+                  />
+                )}
+                <article
+                  className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col group"
+                >
                 <div className="relative h-48 w-full">
                   {tour.mainImageUrl ? (
                     <Image
@@ -159,13 +169,15 @@ export default function Tours({ tours }: ToursProps) {
                 </div>
 
                 <div className="p-6 flex flex-col flex-1">
-                  <Link
-                    href={`/passeios/${tour.slug || tour.id}`}
-                    className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors"
-                    onClick={() => handleTourClick(tour.name)}
-                  >
-                    {tour.name}
-                  </Link>
+                  <h3>
+                    <Link
+                      href={`/passeios/${tour.slug || tour.id}`}
+                      className="block text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors"
+                      onClick={() => handleTourClick(tour.name)}
+                    >
+                      {tour.name}
+                    </Link>
+                  </h3>
                   <p className="text-gray-600 mb-4 line-clamp-2 flex-1">{tour.description}</p>
 
                   <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
@@ -199,7 +211,8 @@ export default function Tours({ tours }: ToursProps) {
                     </Link>
                   </div>
                 </div>
-              </article>
+                </article>
+              </React.Fragment>
             ))}
           </div>
 

@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     default: "Passeio Legal - Tours e Transfers",
     template: "%s | Passeio Legal",
   },
-  description: "Descubra os melhores passeios e transfers com a Passeio Legal. Experiências únicas de turismo com conforto e segurança.",
+  description: "Reserve passeios e transfers em Fortaleza com conforto e segurança. Praias, dunas, buggy e muito mais. Garanta sua vaga!",
   keywords: ["tours", "transfers", "travel", "passeios", "turismo", "viagens", "excursões", "passeio legal", "turismo brasil"],
   authors: [{ name: "Passeio Legal" }],
   creator: "Passeio Legal",
@@ -137,12 +137,15 @@ export default function RootLayout({
           url={baseUrl}
           description="Descubra os melhores passeios turísticos e serviços de transfer em Fortaleza e região com a Passeio Legal. Experiências únicas de turismo com conforto, segurança e profissionalismo."
           address={{
-            street: process.env.NEXT_PUBLIC_BUSINESS_STREET || "Porto das Dunas",
+            street: process.env.NEXT_PUBLIC_BUSINESS_STREET || "Avenida Oceano Atlântico",
+            number: process.env.NEXT_PUBLIC_BUSINESS_NUMBER || "683-685",
+            neighborhood: process.env.NEXT_PUBLIC_BUSINESS_NEIGHBORHOOD || "Porto das Dunas",
             city: process.env.NEXT_PUBLIC_BUSINESS_CITY || "Aquiraz",
             state: process.env.NEXT_PUBLIC_BUSINESS_STATE || "CE",
             zip: process.env.NEXT_PUBLIC_BUSINESS_ZIP || "61700-000",
           }}
           phone={process.env.NEXT_PUBLIC_BUSINESS_PHONE || "+5585997314093"}
+          email={process.env.NEXT_PUBLIC_BUSINESS_EMAIL || "passeiolegalfortaleza@gmail.com"}
         />
         <WebSiteJsonLd
           name="Passeio Legal"

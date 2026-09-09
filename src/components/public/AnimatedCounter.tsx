@@ -15,7 +15,7 @@ export default function AnimatedCounter({
   suffix = '', 
   prefix = '' 
 }: AnimatedCounterProps) {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(target);
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -40,17 +40,17 @@ export default function AnimatedCounter({
   useEffect(() => {
     if (!isVisible) return;
 
+    setCount(0);
+
     let startTime: number;
     let animationFrame: number;
 
     const animate = (currentTime: number) => {
       if (!startTime) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duration, 1);
-      
-      // Easing function for smooth animation
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
       const currentCount = Math.floor(easeOutQuart * target);
-      
+
       setCount(currentCount);
 
       if (progress < 1) {
@@ -66,7 +66,7 @@ export default function AnimatedCounter({
   }, [isVisible, target, duration]);
 
   return (
-    <div ref={ref} className="text-4xl font-bold text-primary-900 mb-2">
+    <div ref={ref} className="text-4xl font-bold text-primary-900 mb-2" aria-label={`${target}${suffix}`}>
       {prefix}{count.toLocaleString()}{suffix}
     </div>
   );

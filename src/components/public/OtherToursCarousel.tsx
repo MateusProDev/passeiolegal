@@ -23,7 +23,7 @@ interface OtherToursCarouselProps {
 
 export default function OtherToursCarousel({ tours }: OtherToursCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(Math.min(tours.length || 1, 3));
   const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
@@ -111,13 +111,15 @@ export default function OtherToursCarousel({ tours }: OtherToursCarouselProps) {
             </div>
 
             <div className="p-6 flex flex-col flex-1">
-              <Link
-                href={`/passeios/${tour.slug || tour.id}`}
-                className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors"
-                onClick={() => handleTourClick(tour.name)}
-              >
-                {tour.name}
-              </Link>
+              <h3>
+                <Link
+                  href={`/passeios/${tour.slug || tour.id}`}
+                  className="block text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors"
+                  onClick={() => handleTourClick(tour.name)}
+                >
+                  {tour.name}
+                </Link>
+              </h3>
               <p className="text-gray-600 mb-4 line-clamp-2 flex-1">{tour.description}</p>
 
               <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">

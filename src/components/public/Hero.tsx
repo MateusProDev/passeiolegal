@@ -60,14 +60,18 @@ export default function Hero({ banners }: HeroProps) {
     return (
       <section className="relative h-[600px] bg-gradient-to-r from-primary-600 to-secondary-600 flex items-center justify-center">
         <div className="text-center text-white px-4">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">Passeio Legal</h1>
-          <p className="text-xl md:text-2xl mb-8">Descubra experiências únicas de turismo</p>
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">Passeios e Transfers em Fortaleza e Região</h1>
+          <p className="text-xl md:text-2xl mb-8">Reserve experiências únicas com conforto, segurança e atendimento personalizado.</p>
         </div>
       </section>
     );
   }
 
   const currentBanner = banners[currentIndex];
+  const normalizedTitle = currentBanner.title?.trim();
+  const heroTitle = normalizedTitle && !normalizedTitle.toLowerCase().includes('top 3')
+    ? normalizedTitle
+    : 'Passeios e Transfers em Fortaleza e Região';
 
   return (
     <section
@@ -100,10 +104,10 @@ export default function Hero({ banners }: HeroProps) {
       <div className="relative h-full flex items-center justify-center text-white px-4">
         <div className="text-center max-w-4xl">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 animate-fade-in">
-            {currentBanner.title}
+            {heroTitle}
           </h1>
           <p className="text-xl md:text-2xl mb-8 animate-fade-in">
-            {currentBanner.subtitle}
+            {currentBanner.subtitle || 'Reserve experiências únicas em Fortaleza e região.'}
           </p>
           <WhatsAppConversionLink
             href={currentBanner.buttonLink}

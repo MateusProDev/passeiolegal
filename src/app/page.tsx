@@ -18,8 +18,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = getSiteUrl();
 
   return {
-    title: "Passeio Legal - Tours e Transfers em Fortaleza e Região",
-    description: "Descubra os melhores passeios turísticos e serviços de transfer em Fortaleza e região. Experiências únicas de turismo com conforto, segurança e profissionalismo. Passeios para praias, dunas, cachoeiras e muito mais.",
+    title: "Passeios e Transfers em Fortaleza e Região | Passeio Legal",
+    description: "Reserve passeios e transfers em Fortaleza com conforto e segurança. Praias, dunas, buggy e muito mais. Garanta sua vaga!",
     keywords: ["passeios fortaleza", "tours fortaleza", "transfer fortaleza", "turismo ceará", "passeio legal", "passeios praias", "transfer aeroporto fortaleza", "turismo nordeste", "excursões fortaleza", "viagens ceará"],
     openGraph: {
       type: "website",

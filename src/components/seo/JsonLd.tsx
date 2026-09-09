@@ -48,19 +48,23 @@ export function OrganizationJsonLd({ name, url, logo, description, contactInfo }
   return <JsonLd data={data} />;
 }
 
-export function LocalBusinessJsonLd({ name, url, logo, description, address, phone }: {
+export function LocalBusinessJsonLd({ name, url, logo, description, address, phone, email }: {
   name: string;
   url: string;
   logo?: string;
   description?: string;
   address?: {
     street: string;
+    number?: string;
+    neighborhood?: string;
     city: string;
     state: string;
     zip: string;
   };
   phone?: string;
+  email?: string;
 }) {
+  const streetAddress = address ? [address.street, address.number].filter(Boolean).join(', ') : undefined;
   const data = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
@@ -71,7 +75,8 @@ export function LocalBusinessJsonLd({ name, url, logo, description, address, pho
     ...(address && {
       address: {
         '@type': 'PostalAddress',
-        streetAddress: address.street,
+        ...(streetAddress && { streetAddress }),
+        ...(address.neighborhood && { addressDistrict: address.neighborhood }),
         addressLocality: address.city,
         addressRegion: address.state,
         postalCode: address.zip,
@@ -79,6 +84,26 @@ export function LocalBusinessJsonLd({ name, url, logo, description, address, pho
       },
     }),
     ...(phone && { telephone: phone }),
+    ...(email && { email }),
+  };
+
+  return <JsonLd data={data} />;
+}
+
+export function FAQJsonLd({ questions }: {
+  questions: Array<{ question: string; answer: string }>;
+}) {
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: questions.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
   };
 
   return <JsonLd data={data} />;

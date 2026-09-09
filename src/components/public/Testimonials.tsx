@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Star } from 'lucide-react';
 
@@ -15,6 +18,18 @@ interface TestimonialsProps {
 }
 
 export default function Testimonials({ testimonials }: TestimonialsProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (testimonials.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setActiveIndex((current) => (current + 1) % testimonials.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
+
   if (testimonials.length === 0) {
     return (
       <section className="py-14 bg-gray-50">
@@ -30,7 +45,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
     );
   }
 
-  const featuredTestimonial = testimonials[0];
+  const featuredTestimonial = testimonials[activeIndex];
 
   return (
     <section className="py-14 bg-gray-50">

@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Home, Info, Map, Menu, Newspaper, Phone, X, type LucideIcon } from 'lucide-react';
 
 interface MenuItem {
@@ -13,36 +12,11 @@ interface MenuItem {
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [settings, setSettings] = useState<any>(null);
-
-  useEffect(() => {
-    const cachedLogo = window.localStorage.getItem('passeiolegal:header-logo');
-    if (cachedLogo) {
-      setSettings({ headerLogo: cachedLogo });
-    }
-
-    const fetchSettings = async () => {
-      try {
-        const response = await fetch('/api/settings');
-        if (response.ok) {
-          const data = await response.json();
-          setSettings(data);
-          if (data.headerLogo) {
-            window.localStorage.setItem('passeiolegal:header-logo', data.headerLogo);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching settings:', error);
-      }
-    };
-
-    fetchSettings();
-  }, []);
 
   const menuItems: MenuItem[] = [
     { label: 'Início', href: '/', icon: Home },
-    ...(settings?.sections?.toursEnabled !== false ? [{ label: 'Passeios', href: '/passeios', icon: Map }] : []),
-    ...(settings?.sections?.transfersEnabled !== false ? [{ label: 'Transfer', href: '/transfer', icon: Map }] : []),
+    { label: 'Passeios', href: '/passeios', icon: Map },
+    { label: 'Transfer', href: '/transfer', icon: Map },
     { label: 'Blog', href: '/blog', icon: Newspaper },
     { label: 'Sobre', href: '/about', icon: Info },
     { label: 'Contato', href: '/contact', icon: Phone },
@@ -54,24 +28,11 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center" aria-label="Passeio Legal - Página inicial">
-            {settings?.headerLogo ? (
-              <div className="relative w-20 h-20">
-                <Image
-                  src={settings.headerLogo}
-                  alt={settings.headerLogoAlt || 'Passeio Legal'}
-                  fill
-                  className="object-contain"
-                  priority
-                  sizes="80px"
-                />
-              </div>
-            ) : (
-              <div className="w-20 h-20 flex items-center justify-center text-center">
-                <span className="text-white font-bold text-sm leading-tight">
-                  Passeio Legal
-                </span>
-              </div>
-            )}
+            <div className="w-20 h-20 flex items-center justify-center text-center">
+              <span className="text-white font-bold text-sm leading-tight">
+                Passeio Legal
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Menu */}

@@ -120,7 +120,11 @@ export default async function Home() {
       <Header />
       
       <Hero banners={banners} />
+
+      {toursEnabled && <Tours tours={tours} />}
       
+      {transfersEnabled && <Transfers transfers={transfers} />}
+
       <section id="about" className="py-14 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -142,10 +146,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-
-      {toursEnabled && <Tours tours={tours} />}
-      
-      {transfersEnabled && <Transfers transfers={transfers} />}
       
       <Testimonials testimonials={testimonials} />
       

@@ -1,4 +1,4 @@
-import dynamic from "next/dynamic";
+import dynamicImport from "next/dynamic";
 import { Metadata } from "next";
 import Header from "@/components/public/Header";
 import Hero from "@/components/public/Hero";
@@ -6,27 +6,27 @@ import AnimatedCounter from "@/components/public/AnimatedCounter";
 import { bannerService, tourService, transferService, testimonialService, blogService, faqService, settingsService } from "@/lib/firestore";
 import { getSiteUrl } from "@/lib/site-url";
 
-const Tours = dynamic(() => import("@/components/public/Tours"), {
+const Tours = dynamicImport(() => import("@/components/public/Tours"), {
   loading: () => <div className="h-[420px] w-full animate-pulse rounded-2xl bg-slate-100" />,
 });
 
-const Transfers = dynamic(() => import("@/components/public/Transfers"), {
+const Transfers = dynamicImport(() => import("@/components/public/Transfers"), {
   loading: () => <div className="h-[420px] w-full animate-pulse rounded-2xl bg-slate-100" />,
 });
 
-const Testimonials = dynamic(() => import("@/components/public/Testimonials"), {
+const Testimonials = dynamicImport(() => import("@/components/public/Testimonials"), {
   loading: () => <div className="h-[320px] w-full animate-pulse rounded-2xl bg-slate-100" />,
 });
 
-const Blog = dynamic(() => import("@/components/public/Blog"), {
+const Blog = dynamicImport(() => import("@/components/public/Blog"), {
   loading: () => <div className="h-[360px] w-full animate-pulse rounded-2xl bg-slate-100" />,
 });
 
-const FAQ = dynamic(() => import("@/components/public/FAQ"), {
+const FAQ = dynamicImport(() => import("@/components/public/FAQ"), {
   loading: () => <div className="h-[280px] w-full animate-pulse rounded-2xl bg-slate-100" />,
 });
 
-const Footer = dynamic(() => import("@/components/public/Footer"), {
+const Footer = dynamicImport(() => import("@/components/public/Footer"), {
   loading: () => <div className="h-[220px] w-full animate-pulse bg-slate-100" />,
 });
 

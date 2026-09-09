@@ -125,9 +125,9 @@ export default async function Home() {
       
       {transfersEnabled && <Transfers transfers={transfers} />}
 
-      <section id="about" className="py-14 bg-gray-50">
+      <section id="about" className="border-t border-gray-200 bg-white py-12 sm:py-16">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-10 sm:mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {aboutSection?.title || "Sobre a Passeio Legal"}
             </h2>
@@ -147,9 +147,9 @@ export default async function Home() {
         </div>
       </section>
       
-      <Testimonials testimonials={testimonials} />
-      
       <Blog posts={blogPosts} />
+
+      <Testimonials testimonials={testimonials} />
       
       <FAQ faqs={faqs} />
       

@@ -24,11 +24,11 @@ export default async function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-primary-800/70 bg-gradient-to-r from-primary-700 via-primary-600 to-primary-500 shadow-md">
-      <nav className="container mx-auto px-3 py-1.5 sm:px-4 sm:py-2" role="navigation" aria-label="Navegação principal">
+      <nav className="container mx-auto px-3 py-2 sm:px-4 sm:py-2" role="navigation" aria-label="Navegação principal">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center" aria-label="Passeio Legal - Página inicial">
             {logoUrl ? (
-              <div className="flex h-[52px] w-[52px] items-center justify-center overflow-hidden rounded-full bg-white/0 transition-transform duration-200 hover:scale-105 sm:h-[64px] sm:w-[64px] lg:h-[80px] lg:w-[80px]">
+              <div className="flex h-[58px] w-[58px] items-center justify-center overflow-hidden rounded-full bg-white/0 transition-transform duration-200 hover:scale-105 sm:h-[64px] sm:w-[64px] lg:h-[80px] lg:w-[80px]">
                 <Image
                   src={logoUrl}
                   alt={logoAlt}
@@ -38,7 +38,7 @@ export default async function Header() {
                 />
               </div>
             ) : (
-              <div className="flex h-[52px] w-[52px] items-center justify-center rounded-full border border-white/40 bg-white/10 text-lg font-black text-white transition-transform duration-200 hover:scale-105 sm:h-[64px] sm:w-[64px] sm:text-xl lg:h-[80px] lg:w-[80px]">
+              <div className="flex h-[58px] w-[58px] items-center justify-center rounded-full border border-white/40 bg-white/10 text-lg font-black text-white transition-transform duration-200 hover:scale-105 sm:h-[64px] sm:w-[64px] sm:text-xl lg:h-[80px] lg:w-[80px]">
                 PL
               </div>
             )}
@@ -65,13 +65,13 @@ export default async function Header() {
               <Menu size={24} />
             </summary>
 
-            <div className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-white/10 bg-primary-700 p-2 shadow-lg">
+            <div className="absolute right-0 top-full mt-2 w-[86vw] max-w-[320px] rounded-2xl border border-white/10 bg-primary-700/95 p-3 shadow-2xl backdrop-blur-sm">
               <ul className="space-y-2" role="menu">
                 {menuItems.map((item) => (
                   <li key={item.href} role="none">
                     <Link
                       href={item.href}
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 font-[var(--font-poppins)] font-semibold text-white transition-colors hover:bg-white/20"
+                      className="flex items-center gap-3 rounded-xl px-4 py-3 font-[var(--font-poppins)] text-base font-semibold text-white transition-colors hover:bg-white/20"
                       role="menuitem"
                     >
                       <item.icon size={18} strokeWidth={2.2} />

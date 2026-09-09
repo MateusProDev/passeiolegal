@@ -55,6 +55,7 @@ body {
   padding: 0;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 h1,
@@ -63,7 +64,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-poppins), sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 html {

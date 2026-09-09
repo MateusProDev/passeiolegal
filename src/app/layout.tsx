@@ -3,15 +3,7 @@ import { Providers } from "./providers";
 import "./globals.css";
 import { LocalBusinessJsonLd, WebSiteJsonLd } from "@/components/seo/JsonLd";
 import Script from "next/script";
-import { Poppins } from "next/font/google";
 import { getSiteUrl } from "@/lib/site-url";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-poppins",
-  display: "swap",
-});
 
 const baseUrl = getSiteUrl();
 const shouldLoadAnalytics = process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === "true";
@@ -95,7 +87,7 @@ export default function RootLayout({
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
         <meta name="theme-color" content="#ffffff" />
       </head>
-      <body className={poppins.variable}>
+      <body className="antialiased">
         {shouldLoadAnalytics && process.env.NEXT_PUBLIC_GA_ID && (
           <Script id="marketing-scripts" strategy="afterInteractive">
             {`

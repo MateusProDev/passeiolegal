@@ -24,7 +24,7 @@ export default async function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-primary-800/70 bg-gradient-to-r from-primary-700 via-primary-600 to-primary-500 shadow-md">
-      <nav className="container mx-auto px-4 py-2" role="navigation" aria-label="Navegação principal">
+      <nav className="container mx-auto px-3 py-1.5 sm:px-4 sm:py-2" role="navigation" aria-label="Navegação principal">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center" aria-label="Passeio Legal - Página inicial">
             {logoUrl ? (

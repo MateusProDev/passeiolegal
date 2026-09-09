@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
+  reactStrictMode: true,
+  swcMinify: true,
+  poweredByHeader: false,
   typescript: {
     ignoreBuildErrors: false,
   },
@@ -52,6 +56,9 @@ const nextConfig = {
   },
   redirects: async () => {
     return [];
+  },
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
   },
 };
 

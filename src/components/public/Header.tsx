@@ -24,11 +24,11 @@ export default async function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-primary-800/70 bg-gradient-to-r from-primary-700 via-primary-600 to-primary-500 shadow-md">
-      <nav className="container mx-auto px-3 py-2 sm:px-4 sm:py-2" role="navigation" aria-label="Navegação principal">
+      <nav className="container mx-auto px-3 py-3 sm:px-4 sm:py-2" role="navigation" aria-label="Navegação principal">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center" aria-label="Passeio Legal - Página inicial">
             {logoUrl ? (
-              <div className="flex h-[58px] w-[58px] items-center justify-center overflow-hidden rounded-full bg-white/0 transition-transform duration-200 hover:scale-105 sm:h-[64px] sm:w-[64px] lg:h-[80px] lg:w-[80px]">
+              <div className="flex h-[72px] w-[72px] items-center justify-center overflow-hidden rounded-full bg-white/0 transition-transform duration-200 hover:scale-105 sm:h-[64px] sm:w-[64px] lg:h-[80px] lg:w-[80px]">
                 <Image
                   src={logoUrl}
                   alt={logoAlt}
@@ -38,7 +38,7 @@ export default async function Header() {
                 />
               </div>
             ) : (
-              <div className="flex h-[58px] w-[58px] items-center justify-center rounded-full border border-white/40 bg-white/10 text-lg font-black text-white transition-transform duration-200 hover:scale-105 sm:h-[64px] sm:w-[64px] sm:text-xl lg:h-[80px] lg:w-[80px]">
+              <div className="flex h-[72px] w-[72px] items-center justify-center rounded-full border border-white/40 bg-white/10 text-lg font-black text-white transition-transform duration-200 hover:scale-105 sm:h-[64px] sm:w-[64px] sm:text-xl lg:h-[80px] lg:w-[80px]">
                 PL
               </div>
             )}

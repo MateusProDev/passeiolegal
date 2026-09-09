@@ -97,22 +97,34 @@ export default function RootLayout({
           id="ahrefs-analytics"
           src="https://analytics.ahrefs.com/analytics.js"
           data-key="jlyllrk8/5uFaW9szI/bug"
-          strategy="beforeInteractive"
+          strategy="lazyOnload"
         />
       </head>
       <body className={poppins.variable}>
         <Script id="marketing-scripts" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-11405399413');
-            ${process.env.NEXT_PUBLIC_GA_ID ? `gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');` : ''}
+            window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
 
-            var googleScript = document.createElement('script');
-            googleScript.async = true;
-            googleScript.src = 'https://www.googletagmanager.com/gtag/js?id=AW-11405399413';
-            document.head.appendChild(googleScript);
+            function loadMarketingScripts() {
+              window.gtag('js', new Date());
+              window.gtag('config', 'AW-11405399413');
+              ${process.env.NEXT_PUBLIC_GA_ID ? `window.gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');` : ''}
+
+              if (!document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) {
+                var googleScript = document.createElement('script');
+                googleScript.async = true;
+                googleScript.defer = true;
+                googleScript.src = 'https://www.googletagmanager.com/gtag/js?id=AW-11405399413';
+                document.head.appendChild(googleScript);
+              }
+            }
+
+            if ('requestIdleCallback' in window) {
+              requestIdleCallback(loadMarketingScripts, { timeout: 2000 });
+            } else {
+              setTimeout(loadMarketingScripts, 1500);
+            }
           `}
         </Script>
 

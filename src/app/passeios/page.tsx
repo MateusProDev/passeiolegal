@@ -9,6 +9,7 @@ import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
 import { getSiteUrl } from '@/lib/site-url';
+import { fetchSettingsCached } from '@/lib/settings-cache';
 
 interface Tour {
   id: string;
@@ -44,12 +45,12 @@ export default function PasseiosPage() {
       try {
         const [allTours, settingsData] = await Promise.all([
           tourService.getAll(false),
-          fetch('/api/settings').then(res => res.ok ? res.json() : null)
+          fetchSettingsCached()
         ]);
-        
+
         setTours(allTours);
         setFilteredTours(allTours);
-        
+
         if (settingsData?.sections?.toursEnabled === false) {
           setSectionDisabled(true);
         }

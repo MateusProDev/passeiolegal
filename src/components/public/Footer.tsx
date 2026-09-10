@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { metaPixelEvents } from '@/utils/metaPixel';
 import WhatsAppConversionLink, { isWhatsAppUrl } from './WhatsAppConversionLink';
+import { fetchSettingsCached } from '@/lib/settings-cache';
 
 interface SocialLink {
   icon: any;
@@ -21,11 +22,8 @@ export default function Footer() {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await fetch('/api/settings');
-        if (response.ok) {
-          const data = await response.json();
-          setSettings(data);
-        }
+        const data = await fetchSettingsCached();
+        setSettings(data ?? null);
       } catch (error) {
         console.error('Error fetching settings:', error);
       }

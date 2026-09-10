@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
 import { metaPixelEvents } from '@/utils/metaPixel';
+import { fetchSettingsCached } from '@/lib/settings-cache';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -17,11 +18,8 @@ export default function Contact() {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await fetch('/api/settings');
-        if (response.ok) {
-          const data = await response.json();
-          setSettings(data);
-        }
+        const data = await fetchSettingsCached();
+        setSettings(data ?? null);
       } catch (error) {
         console.error('Error fetching settings:', error);
       }

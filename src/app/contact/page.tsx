@@ -7,6 +7,7 @@ import { Mail, Phone, MapPin, MessageCircle, Send } from "lucide-react";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import WhatsAppConversionLink from "@/components/public/WhatsAppConversionLink";
 import { getSiteUrl } from "@/lib/site-url";
+import { fetchSettingsCached } from "@/lib/settings-cache";
 
 const baseUrl = getSiteUrl();
 
@@ -24,11 +25,8 @@ export default function ContactPage() {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await fetch("/api/settings");
-        if (response.ok) {
-          const data = await response.json();
-          setSettings(data);
-        }
+        const data = await fetchSettingsCached();
+        setSettings(data ?? null);
       } catch (error) {
         console.error("Error fetching settings:", error);
       }

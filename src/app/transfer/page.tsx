@@ -9,6 +9,7 @@ import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
 import { getSiteUrl } from '@/lib/site-url';
+import { fetchSettingsCached } from '@/lib/settings-cache';
 
 interface Transfer {
   id: string;
@@ -41,12 +42,12 @@ export default function TransfersPage() {
       try {
         const [allTransfers, settingsData] = await Promise.all([
           transferService.getAll(false),
-          fetch('/api/settings').then(res => res.ok ? res.json() : null)
+          fetchSettingsCached()
         ]);
-        
+
         setTransfers(allTransfers);
         setFilteredTransfers(allTransfers);
-        
+
         if (settingsData?.sections?.transfersEnabled === false) {
           setSectionDisabled(true);
         }

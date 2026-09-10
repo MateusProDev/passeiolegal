@@ -81,26 +81,6 @@ export default function Transfers({ transfers }: TransfersProps) {
         </div>
 
         <div className="relative">
-          {/* Navigation Arrows */}
-          {displayTransfers.length > itemsPerPage && (
-            <>
-              <button
-                onClick={goToPrevious}
-                className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg p-2 md:p-3 rounded-full transition-colors z-10 border border-gray-200"
-                aria-label="Transfer anterior"
-              >
-                <ChevronLeft size={20} className="text-gray-700 md:w-6 md:h-6" />
-              </button>
-              <button
-                onClick={goToNext}
-                className="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg p-2 md:p-3 rounded-full transition-colors z-10 border border-gray-200"
-                aria-label="Próximo transfer"
-              >
-                <ChevronRight size={20} className="text-gray-700 md:w-6 md:h-6" />
-              </button>
-            </>
-          )}
-
           {/* Carousel */}
           <div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
@@ -111,10 +91,28 @@ export default function Transfers({ transfers }: TransfersProps) {
             onTouchCancel={() => setIsPaused(false)}
           >
             {visibleTransfers.map((transfer) => (
-              <article
-                key={transfer.id}
-                className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow flex flex-col group"
-              >
+              <div key={transfer.id} className="relative group">
+                {displayTransfers.length > itemsPerPage && (
+                  <>
+                    <button
+                      onClick={goToPrevious}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-gray-700 shadow-md transition hover:bg-white"
+                      aria-label={`Transfer anterior: ${transfer.name}`}
+                    >
+                      <ChevronLeft size={18} />
+                    </button>
+                    <button
+                      onClick={goToNext}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-gray-700 shadow-md transition hover:bg-white"
+                      aria-label={`Próximo transfer: ${transfer.name}`}
+                    >
+                      <ChevronRight size={18} />
+                    </button>
+                  </>
+                )}
+                <article
+                  className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow flex flex-col group"
+                >
                 <div className="relative h-40 mb-4 w-full">
                   {transfer.imageUrl ? (
                     <Image
@@ -171,7 +169,8 @@ export default function Transfers({ transfers }: TransfersProps) {
                     <span className="sm:hidden">WhatsApp</span>
                   </WhatsAppConversionLink>
                 </div>
-              </article>
+                </article>
+              </div>
             ))}
           </div>
 

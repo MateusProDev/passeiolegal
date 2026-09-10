@@ -63,25 +63,6 @@ export default function OtherToursCarousel({ tours }: OtherToursCarouselProps) {
 
   return (
     <div className="relative">
-      {tours.length > itemsPerPage && (
-        <>
-          <button
-            onClick={goToPrevious}
-            className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg p-2 md:p-3 rounded-full transition-colors z-10 border border-gray-200"
-            aria-label="Passeio anterior"
-          >
-            <ChevronLeft size={20} className="text-gray-700 md:w-6 md:h-6" />
-          </button>
-          <button
-            onClick={goToNext}
-            className="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg p-2 md:p-3 rounded-full transition-colors z-10 border border-gray-200"
-            aria-label="Próximo passeio"
-          >
-            <ChevronRight size={20} className="text-gray-700 md:w-6 md:h-6" />
-          </button>
-        </>
-      )}
-
       <div
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-2 md:px-0"
         onMouseEnter={() => setIsPaused(true)}
@@ -91,7 +72,26 @@ export default function OtherToursCarousel({ tours }: OtherToursCarouselProps) {
         onTouchCancel={() => setIsPaused(false)}
       >
         {visibleTours.map((tour) => (
-          <article key={tour.id} className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col group">
+          <div key={tour.id} className="relative group">
+            {tours.length > itemsPerPage && (
+              <>
+                <button
+                  onClick={goToPrevious}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-gray-700 shadow-md transition hover:bg-white"
+                  aria-label={`Passeio anterior: ${tour.name}`}
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  onClick={goToNext}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-gray-700 shadow-md transition hover:bg-white"
+                  aria-label={`Próximo passeio: ${tour.name}`}
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </>
+            )}
+            <article className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col group">
             <div className="relative h-48 w-full">
               {tour.mainImageUrl ? (
                 <Image
@@ -151,7 +151,8 @@ export default function OtherToursCarousel({ tours }: OtherToursCarouselProps) {
                 </Link>
               </div>
             </div>
-          </article>
+            </article>
+          </div>
         ))}
       </div>
 

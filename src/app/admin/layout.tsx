@@ -88,6 +88,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             FAQ
           </Link>
           <Link
+            href="/admin/leads"
+            className="block px-4 py-2 rounded-md hover:bg-accent transition-colors"
+          >
+            Leads
+          </Link>
+          <Link
             href="/admin/settings"
             className="block px-4 py-2 rounded-md hover:bg-accent transition-colors"
           >

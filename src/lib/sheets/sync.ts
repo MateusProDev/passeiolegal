@@ -1,0 +1,148 @@
+import { google } from 'googleapis';
+
+const SHEET_NAME = 'Leads';
+const HEADER_ROW = [
+  'Data',
+  'Código',
+  'Status',
+  'GCLID',
+  'UTM Source',
+  'UTM Medium',
+  'UTM Campaign',
+  'UTM Content',
+  'UTM Term',
+  'Landing Page',
+  'Atualizado em',
+  'Observação',
+];
+
+function getSheetAuth() {
+  const clientEmail = process.env.GOOGLE_SHEETS_CLIENT_EMAIL;
+  const privateKey = process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n');
+
+  if (!clientEmail || !privateKey) {
+    throw new Error('Credenciais do Google Sheets ausentes.');
+  }
+
+  return new google.auth.JWT({
+    email: clientEmail,
+    key: privateKey,
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  });
+}
+
+const sheets = google.sheets({
+  version: 'v4',
+  auth: getSheetAuth(),
+});
+
+export async function ensureHeaders() {
+  try {
+    const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
+    if (!spreadsheetId) return;
+
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${SHEET_NAME}!1:1`,
+    });
+
+    const existingHeader = response.data.values?.[0] ?? [];
+
+    if (!existingHeader.length || existingHeader.join('|') !== HEADER_ROW.join('|')) {
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: `${SHEET_NAME}!A1:L1`,
+        valueInputOption: 'RAW',
+        requestBody: {
+          values: [HEADER_ROW],
+        },
+      });
+    }
+  } catch (error) {
+    console.error('[sheets] ensureHeaders error:', error);
+  }
+}
+
+export async function appendLead(lead: Record<string, any>) {
+  try {
+    const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
+    if (!spreadsheetId) return;
+
+    await ensureHeaders();
+
+    const row = [
+      lead.createdAt || new Date().toISOString(),
+      lead.code || '',
+      lead.status || 'visitou',
+      lead.gclid || '',
+      lead.utms?.utm_source || '',
+      lead.utms?.utm_medium || '',
+      lead.utms?.utm_campaign || '',
+      lead.utms?.utm_content || '',
+      lead.utms?.utm_term || '',
+      lead.landingPage || '',
+      lead.status_updated_at || lead.createdAt || new Date().toISOString(),
+      lead.observacao || '',
+    ];
+
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range: `${SHEET_NAME}!A:L`,
+      valueInputOption: 'RAW',
+      insertDataOption: 'INSERT_ROWS',
+      requestBody: {
+        values: [row],
+      },
+    });
+  } catch (error) {
+    console.error('[sheets] appendLead error:', error);
+  }
+}
+
+export async function updateLeadStatus(code: string, status: string, updatedAt: string, observacao?: string) {
+  try {
+    const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
+    if (!spreadsheetId || !code) return;
+
+    await ensureHeaders();
+
+    const readResponse = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${SHEET_NAME}!A:L`,
+    });
+
+    const rows = (readResponse.data.values ?? []) as string[][];
+    if (!rows.length) return;
+
+    const header = rows[0].map((cell: string) => String(cell).trim().toLowerCase());
+    const codeIndex = header.indexOf('código');
+    if (codeIndex === -1) return;
+
+    const rowIndex = rows.findIndex((row: string[], idx: number) => {
+      if (idx === 0) return false;
+      return String(row[codeIndex] || '').trim() === String(code).trim();
+    });
+
+    if (rowIndex === -1) return;
+
+    const targetRow = rows[rowIndex];
+    const statusIndex = header.indexOf('status');
+    const updatedAtIndex = header.indexOf('atualizado em');
+    const observationIndex = header.indexOf('observação');
+
+    if (statusIndex !== -1) targetRow[statusIndex] = status;
+    if (updatedAtIndex !== -1) targetRow[updatedAtIndex] = updatedAt;
+    if (observationIndex !== -1) targetRow[observationIndex] = observacao || targetRow[observationIndex] || '';
+
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: `${SHEET_NAME}!A${rowIndex + 1}:L${rowIndex + 1}`,
+      valueInputOption: 'RAW',
+      requestBody: {
+        values: [targetRow],
+      },
+    });
+  } catch (error) {
+    console.error('[sheets] updateLeadStatus error:', error);
+  }
+}

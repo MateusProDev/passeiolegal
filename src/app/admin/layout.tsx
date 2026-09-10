@@ -36,75 +36,75 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen flex-col bg-gray-100 lg:flex-row">
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-gray-200 shadow-lg relative">
-        <div className="p-6 border-b border-border">
-          <h1 className="text-2xl font-bold text-primary">Passeio Legal</h1>
+      <aside className="w-full border-b border-gray-200 bg-white shadow-lg lg:sticky lg:top-0 lg:h-screen lg:w-64 lg:border-b-0 lg:border-r">
+        <div className="border-b border-border p-4 lg:p-6">
+          <h1 className="text-xl font-bold text-primary sm:text-2xl">Passeio Legal</h1>
           <p className="text-sm text-muted-foreground">Painel administrativo</p>
         </div>
 
-        <nav className="p-6 space-y-2">
+        <nav className="flex flex-wrap gap-2 p-4 lg:block lg:space-y-2 lg:p-6">
           <Link
             href="/admin/dashboard"
-            className="block px-4 py-2 rounded-md hover:bg-accent transition-colors"
+            className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Painel
           </Link>
           <Link
             href="/admin/banners"
-            className="block px-4 py-2 rounded-md hover:bg-accent transition-colors"
+            className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Banners
           </Link>
           <Link
             href="/admin/tours"
-            className="block px-4 py-2 rounded-md hover:bg-accent transition-colors"
+            className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Passeios
           </Link>
           <Link
             href="/admin/transfers"
-            className="block px-4 py-2 rounded-md hover:bg-accent transition-colors"
+            className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Transfers
           </Link>
           <Link
             href="/admin/testimonials"
-            className="block px-4 py-2 rounded-md hover:bg-accent transition-colors"
+            className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Depoimentos
           </Link>
           <Link
             href="/admin/blog"
-            className="block px-4 py-2 rounded-md hover:bg-accent transition-colors"
+            className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Blog
           </Link>
           <Link
             href="/admin/faq"
-            className="block px-4 py-2 rounded-md hover:bg-accent transition-colors"
+            className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             FAQ
           </Link>
           <Link
             href="/admin/leads"
-            className="block px-4 py-2 rounded-md hover:bg-accent transition-colors"
+            className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Leads
           </Link>
           <Link
             href="/admin/settings"
-            className="block px-4 py-2 rounded-md hover:bg-accent transition-colors"
+            className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Configurações
           </Link>
         </nav>
 
-        <div className="absolute bottom-6 left-6 right-6 border-t border-border pt-6">
+        <div className="border-t border-border p-4 lg:absolute lg:bottom-6 lg:left-6 lg:right-6 lg:p-0 lg:pt-6">
           <button
             onClick={handleLogout}
-            className="w-full px-4 py-2 bg-destructive text-destructive-foreground rounded-md hover:bg-destructive/90 transition-colors text-sm font-medium"
+            className="w-full rounded-md bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground transition-colors hover:bg-destructive/90"
           >
             Sair
           </button>
@@ -112,7 +112,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 min-h-screen bg-gray-100 p-8">
+      <main className="min-h-screen flex-1 bg-gray-100 p-4 sm:p-6 lg:p-8">
         {children}
       </main>
     </div>

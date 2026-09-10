@@ -33,13 +33,13 @@ export function LeadsFilters() {
   }
 
   return (
-    <div className="grid gap-3 md:grid-cols-4">
+    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
       <label className="text-sm text-slate-600">
         <span className="mb-1 block">Status</span>
         <select
           value={status}
           onChange={(event) => updateFilter('status', event.target.value)}
-          className="w-full rounded-md border border-slate-200 bg-white px-3 py-2"
+          className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
         >
           {STATUS_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
@@ -55,7 +55,7 @@ export function LeadsFilters() {
           value={campaign}
           onChange={(event) => updateFilter('campaign', event.target.value)}
           placeholder="utm_campaign"
-          className="w-full rounded-md border border-slate-200 bg-white px-3 py-2"
+          className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
         />
       </label>
 
@@ -65,7 +65,7 @@ export function LeadsFilters() {
           type="date"
           value={from}
           onChange={(event) => updateFilter('from', event.target.value)}
-          className="w-full rounded-md border border-slate-200 bg-white px-3 py-2"
+          className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
         />
       </label>
 
@@ -75,7 +75,7 @@ export function LeadsFilters() {
           type="date"
           value={to}
           onChange={(event) => updateFilter('to', event.target.value)}
-          className="w-full rounded-md border border-slate-200 bg-white px-3 py-2"
+          className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
         />
       </label>
     </div>

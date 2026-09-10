@@ -99,7 +99,7 @@ function LeadsPageContent() {
     <div className="space-y-6">
       <Toaster position="top-right" />
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-7">
+      <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 xl:grid-cols-7">
         {[
           ['Total', summary.total],
           ['Visitou', summary.visitou],
@@ -109,9 +109,9 @@ function LeadsPageContent() {
           ['Não Respondeu', summary.nao_respondeu],
           ['Perdido', summary.perdido],
         ].map(([label, value]) => (
-          <div key={String(label)} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-            <p className="text-xs uppercase tracking-wide text-slate-500">{label}</p>
-            <p className="mt-2 text-2xl font-bold text-slate-900">{String(value)}</p>
+          <div key={String(label)} className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
+            <p className="text-[10px] uppercase tracking-wide text-slate-500 sm:text-xs">{label}</p>
+            <p className="mt-2 text-xl font-bold text-slate-900 sm:text-2xl">{String(value)}</p>
           </div>
         ))}
       </div>

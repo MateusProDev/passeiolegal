@@ -96,61 +96,63 @@ export function LeadsTable({ leads }: LeadsTableProps) {
 
   return (
     <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
-      <table className="min-w-full divide-y divide-slate-200 text-left">
-        <thead className="bg-slate-50">
-          <tr>
-            <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Data</th>
-            <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Código</th>
-            <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Status</th>
-            <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">GCLID</th>
-            <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Campanha</th>
-            <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Landing Page</th>
-            <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Ações</th>
-          </tr>
-        </thead>
-
-        <tbody className="divide-y divide-slate-200">
-          {visibleRows.map((lead) => (
-            <tr key={lead.code} className="align-top">
-              <td className="px-4 py-3 text-sm text-slate-600">
-                {lead.createdAt ? new Date(lead.createdAt).toLocaleString('pt-BR') : '-'}
-              </td>
-              <td className="px-4 py-3 text-sm font-medium text-slate-800">{lead.code}</td>
-              <td className="px-4 py-3"><StatusBadge status={lead.status} /></td>
-              <td className="px-4 py-3 text-sm text-slate-600">{lead.gclid || '-'}</td>
-              <td className="px-4 py-3 text-sm text-slate-600">{lead.utms?.utm_campaign || '-'}</td>
-              <td className="px-4 py-3 text-sm text-slate-600">{lead.landingPage || '-'}</td>
-              <td className="px-4 py-3">
-                <div className="space-y-2">
-                  <button
-                    type="button"
-                    onClick={() => openWhatsApp(lead)}
-                    className="block w-full rounded-md bg-green-600 px-2 py-1.5 text-xs font-medium text-white"
-                  >
-                    Abrir WhatsApp
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => viewDetails(lead)}
-                    className="block w-full rounded-md border border-slate-200 px-2 py-1.5 text-xs font-medium text-slate-700"
-                  >
-                    Ver detalhes
-                  </button>
-
-                  <StatusSelect
-                    value={lead.status}
-                    code={lead.code}
-                    onChange={(nextStatus, observacao) => handleStatusChange(lead.code, nextStatus, observacao)}
-                  />
-                </div>
-              </td>
+      <div className="min-w-[820px]">
+        <table className="min-w-full divide-y divide-slate-200 text-left">
+          <thead className="bg-slate-50">
+            <tr>
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Data</th>
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Código</th>
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Status</th>
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">GCLID</th>
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Campanha</th>
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Landing Page</th>
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
 
-      <div className="flex items-center justify-between border-t border-slate-200 px-4 py-3">
+          <tbody className="divide-y divide-slate-200">
+            {visibleRows.map((lead) => (
+              <tr key={lead.code} className="align-top">
+                <td className="px-4 py-3 text-sm text-slate-600">
+                  {lead.createdAt ? new Date(lead.createdAt).toLocaleString('pt-BR') : '-'}
+                </td>
+                <td className="px-4 py-3 text-sm font-medium text-slate-800">{lead.code}</td>
+                <td className="px-4 py-3"><StatusBadge status={lead.status} /></td>
+                <td className="px-4 py-3 text-sm text-slate-600">{lead.gclid || '-'}</td>
+                <td className="px-4 py-3 text-sm text-slate-600">{lead.utms?.utm_campaign || '-'}</td>
+                <td className="px-4 py-3 text-sm text-slate-600">{lead.landingPage || '-'}</td>
+                <td className="px-4 py-3">
+                  <div className="space-y-2">
+                    <button
+                      type="button"
+                      onClick={() => openWhatsApp(lead)}
+                      className="block w-full rounded-md bg-green-600 px-2 py-1.5 text-xs font-medium text-white"
+                    >
+                      Abrir WhatsApp
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => viewDetails(lead)}
+                      className="block w-full rounded-md border border-slate-200 px-2 py-1.5 text-xs font-medium text-slate-700"
+                    >
+                      Ver detalhes
+                    </button>
+
+                    <StatusSelect
+                      value={lead.status}
+                      code={lead.code}
+                      onChange={(nextStatus, observacao) => handleStatusChange(lead.code, nextStatus, observacao)}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="flex items-center justify-between gap-2 border-t border-slate-200 px-3 py-3 sm:px-4">
         <button
           type="button"
           disabled={page === 1}
@@ -160,7 +162,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
           Anterior
         </button>
 
-        <span className="text-sm text-slate-600">Página {page} de {totalPages}</span>
+        <span className="text-xs text-slate-600 sm:text-sm">Página {page} de {totalPages}</span>
 
         <button
           type="button"

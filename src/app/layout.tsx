@@ -11,6 +11,7 @@ import CookieBanner from "@/components/CookieBanner";
 const baseUrl = getSiteUrl();
 const shouldLoadAnalytics = process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === "true";
 const googleAdsTagId = `AW-${process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID || "11405399413"}`;
+const googleTagId = process.env.NEXT_PUBLIC_GA_ID || googleAdsTagId;
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -95,7 +96,7 @@ export default function RootLayout({
         {shouldLoadAnalytics && (
           <>
             <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${googleAdsTagId}`}
+              src={`https://www.googletagmanager.com/gtag/js?id=${googleTagId}`}
               strategy="afterInteractive"
             />
             <Script id="google-ads-tag" strategy="afterInteractive">
@@ -103,24 +104,8 @@ export default function RootLayout({
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){window.dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', '${googleAdsTagId}');
-              `}
-            </Script>
-          </>
-        )}
-
-        {shouldLoadAnalytics && process.env.NEXT_PUBLIC_GA_ID && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="marketing-scripts" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){window.dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+                gtag('config', '${googleTagId}');
+                ${googleTagId !== googleAdsTagId ? `gtag('config', '${googleAdsTagId}');` : ''}
               `}
             </Script>
           </>

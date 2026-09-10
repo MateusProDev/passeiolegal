@@ -97,7 +97,7 @@ export default function Tours({ tours }: ToursProps) {
         <div className="relative">
           {/* Carousel */}
           <div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-2 md:px-0"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-2 md:px-0 transition-all duration-300 ease-out"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
             onTouchStart={() => setIsPaused(true)}
@@ -135,7 +135,7 @@ export default function Tours({ tours }: ToursProps) {
                     </>
                   )}
                   <article
-                    className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col group"
+                    className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 ease-out flex flex-col group"
                   >
                 <div className="relative h-48 w-full">
                   {tour.mainImageUrl ? (

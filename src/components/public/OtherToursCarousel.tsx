@@ -36,24 +36,22 @@ export default function OtherToursCarousel({ tours }: OtherToursCarouselProps) {
     return () => mediaQuery.removeEventListener?.('change', updateReducedMotion);
   }, []);
 
+  const totalGroups = Math.max(1, Math.ceil(tours.length / itemsPerPage));
+
   useEffect(() => {
     if (tours.length <= itemsPerPage || isPaused) return;
 
     const timer = setInterval(() => {
-      setCurrentIndex((previousIndex) => {
-        const maxIndex = Math.max(0, tours.length - itemsPerPage);
-        return previousIndex >= maxIndex ? 0 : previousIndex + 1;
-      });
+      setCurrentIndex((previousIndex) => (previousIndex + 1) % totalGroups);
     }, 9000);
 
     return () => clearInterval(timer);
-  }, [itemsPerPage, isPaused, tours.length]);
+  }, [itemsPerPage, isPaused, tours.length, totalGroups]);
 
-  const maxIndex = Math.max(0, tours.length - itemsPerPage);
-  const visibleTours = tours.slice(currentIndex, currentIndex + itemsPerPage);
+  const visibleTours = tours.slice(currentIndex * itemsPerPage, currentIndex * itemsPerPage + itemsPerPage);
 
-  const goToPrevious = () => setCurrentIndex((previousIndex) => Math.max(0, previousIndex - 1));
-  const goToNext = () => setCurrentIndex((previousIndex) => Math.min(maxIndex, previousIndex + 1));
+  const goToPrevious = () => setCurrentIndex((previousIndex) => (previousIndex - 1 + totalGroups) % totalGroups);
+  const goToNext = () => setCurrentIndex((previousIndex) => (previousIndex + 1) % totalGroups);
   const handleTourClick = (tourName: string) => {
     metaPixelEvents.customEvent('ViewTourList', {
       content_name: tourName,
@@ -158,15 +156,15 @@ export default function OtherToursCarousel({ tours }: OtherToursCarouselProps) {
 
       {tours.length > itemsPerPage && (
         <div className="flex justify-center space-x-2 mt-8">
-          {Array.from({ length: Math.ceil(tours.length / itemsPerPage) }).map((_, index) => (
+          {Array.from({ length: totalGroups }).map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentIndex(Math.min(index * itemsPerPage, maxIndex))}
+              onClick={() => setCurrentIndex(index)}
               className="relative flex h-11 w-11 items-center justify-center rounded-full"
               aria-label={`Ir para grupo ${index + 1}`}
             >
               <span className={`h-3 w-3 rounded-full transition-colors ${
-                Math.floor(currentIndex / itemsPerPage) === index ? 'bg-primary-600' : 'bg-gray-300'
+                currentIndex === index ? 'bg-primary-600' : 'bg-gray-300'
               }`} />
             </button>
           ))}

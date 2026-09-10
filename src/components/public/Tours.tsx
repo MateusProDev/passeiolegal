@@ -56,34 +56,31 @@ export default function Tours({ tours }: ToursProps) {
     });
   };
 
+  const totalGroups = Math.max(1, Math.ceil(displayTours.length / itemsPerPage));
+
   useEffect(() => {
     if (displayTours.length <= itemsPerPage || isPaused) return;
 
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => {
-        const maxIndex = Math.max(0, displayTours.length - itemsPerPage);
-        return prev >= maxIndex ? 0 : prev + 1;
-      });
+      setCurrentIndex((prev) => (prev + 1) % totalGroups);
     }, 9000);
 
     return () => clearInterval(timer);
-  }, [displayTours.length, itemsPerPage, isPaused]);
+  }, [displayTours.length, itemsPerPage, isPaused, totalGroups]);
 
   const goToSlide = (index: number) => {
-    const maxIndex = Math.max(0, displayTours.length - itemsPerPage);
-    setCurrentIndex(Math.min(index, maxIndex));
+    setCurrentIndex(((index % totalGroups) + totalGroups) % totalGroups);
   };
 
   const goToPrevious = () => {
-    setCurrentIndex((prev) => Math.max(0, prev - 1));
+    setCurrentIndex((prev) => (prev - 1 + totalGroups) % totalGroups);
   };
 
   const goToNext = () => {
-    const maxIndex = Math.max(0, displayTours.length - itemsPerPage);
-    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
+    setCurrentIndex((prev) => (prev + 1) % totalGroups);
   };
 
-  const visibleTours = displayTours.slice(currentIndex, currentIndex + itemsPerPage);
+  const visibleTours = displayTours.slice(currentIndex * itemsPerPage, currentIndex * itemsPerPage + itemsPerPage);
 
   return (
     <section id="tours" className="py-14 bg-gray-100">
@@ -213,15 +210,15 @@ export default function Tours({ tours }: ToursProps) {
           {/* Dots */}
           {displayTours.length > itemsPerPage && (
             <div className="flex justify-center space-x-2 mt-8">
-              {Array.from({ length: Math.ceil(displayTours.length / itemsPerPage) }).map((_, index) => (
+              {Array.from({ length: totalGroups }).map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => goToSlide(index * itemsPerPage)}
+                  onClick={() => goToSlide(index)}
                   className="relative flex h-11 w-11 items-center justify-center rounded-full"
                   aria-label={`Ir para grupo ${index + 1}`}
                 >
                   <span className={`h-3 w-3 rounded-full transition-colors ${
-                    Math.floor(currentIndex / itemsPerPage) === index ? 'bg-primary-600' : 'bg-gray-300'
+                    currentIndex === index ? 'bg-primary-600' : 'bg-gray-300'
                   }`} />
                 </button>
               ))}

@@ -39,34 +39,31 @@ export default function Transfers({ transfers }: TransfersProps) {
     return () => mediaQuery.removeEventListener?.('change', updateReducedMotion);
   }, []);
 
+  const totalGroups = Math.max(1, Math.ceil(displayTransfers.length / itemsPerPage));
+
   useEffect(() => {
     if (displayTransfers.length <= itemsPerPage || isPaused) return;
 
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => {
-        const maxIndex = Math.max(0, displayTransfers.length - itemsPerPage);
-        return prev >= maxIndex ? 0 : prev + 1;
-      });
+      setCurrentIndex((prev) => (prev + 1) % totalGroups);
     }, 9000);
 
     return () => clearInterval(timer);
-  }, [displayTransfers.length, itemsPerPage, isPaused]);
+  }, [displayTransfers.length, itemsPerPage, isPaused, totalGroups]);
 
   const goToSlide = (index: number) => {
-    const maxIndex = Math.max(0, displayTransfers.length - itemsPerPage);
-    setCurrentIndex(Math.min(index, maxIndex));
+    setCurrentIndex(((index % totalGroups) + totalGroups) % totalGroups);
   };
 
   const goToPrevious = () => {
-    setCurrentIndex((prev) => Math.max(0, prev - 1));
+    setCurrentIndex((prev) => (prev - 1 + totalGroups) % totalGroups);
   };
 
   const goToNext = () => {
-    const maxIndex = Math.max(0, displayTransfers.length - itemsPerPage);
-    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
+    setCurrentIndex((prev) => (prev + 1) % totalGroups);
   };
 
-  const visibleTransfers = displayTransfers.slice(currentIndex, currentIndex + itemsPerPage);
+  const visibleTransfers = displayTransfers.slice(currentIndex * itemsPerPage, currentIndex * itemsPerPage + itemsPerPage);
 
   return (
     <section id="transfers" className="py-14 bg-gray-100">
@@ -177,15 +174,15 @@ export default function Transfers({ transfers }: TransfersProps) {
           {/* Dots */}
           {displayTransfers.length > itemsPerPage && (
             <div className="flex justify-center space-x-2 mt-8">
-              {Array.from({ length: Math.ceil(displayTransfers.length / itemsPerPage) }).map((_, index) => (
+              {Array.from({ length: totalGroups }).map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => goToSlide(index * itemsPerPage)}
+                  onClick={() => goToSlide(index)}
                   className="relative flex h-11 w-11 items-center justify-center rounded-full"
                   aria-label={`Ir para grupo ${index + 1}`}
                 >
                   <span className={`h-3 w-3 rounded-full transition-colors ${
-                    Math.floor(currentIndex / itemsPerPage) === index ? 'bg-primary-600' : 'bg-gray-300'
+                    currentIndex === index ? 'bg-primary-600' : 'bg-gray-300'
                   }`} />
                 </button>
               ))}

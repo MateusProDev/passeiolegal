@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Toaster } from 'react-hot-toast';
 import { LeadsFilters } from '@/components/admin/LeadsFilters';
 import { LeadsTable } from '@/components/admin/LeadsTable';
+import { getFreshAdminIdToken } from '@/lib/firebase/client';
 
 type LeadStatus =
   | 'visitou'
@@ -46,7 +47,7 @@ function LeadsPageContent() {
     async function loadLeads() {
       try {
         const params = new URLSearchParams(searchParams.toString());
-        const token = localStorage.getItem('admin_id_token');
+        const token = await getFreshAdminIdToken();
 
         if (!token) {
           setLeads([]);

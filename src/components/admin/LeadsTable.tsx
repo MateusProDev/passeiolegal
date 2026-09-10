@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { getFreshAdminIdToken } from '@/lib/firebase/client';
 import { StatusBadge, type LeadStatus } from './StatusBadge';
 import { StatusSelect } from './StatusSelect';
 
@@ -38,7 +39,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
   }, [items, page]);
 
   async function getAdminToken() {
-    const token = localStorage.getItem('admin_id_token');
+    const token = await getFreshAdminIdToken();
     if (!token) {
       throw new Error('Token de autenticação ausente');
     }

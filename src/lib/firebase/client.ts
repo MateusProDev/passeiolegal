@@ -51,7 +51,11 @@ export function subscribeToAdminAuth(callback: (user: User | null) => void) {
   return onAuthStateChanged(auth, callback);
 }
 
-export async function getCurrentAdminIdToken() {
+export async function getCurrentAdminIdToken(forceRefresh = false) {
   if (!auth || !auth.currentUser) return null;
-  return auth.currentUser.getIdToken();
+  return auth.currentUser.getIdToken(forceRefresh);
+}
+
+export async function getFreshAdminIdToken() {
+  return getCurrentAdminIdToken(true);
 }

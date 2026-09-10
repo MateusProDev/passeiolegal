@@ -26,7 +26,7 @@ export default function AdminLoginPage() {
       }
 
       try {
-        const token = await user.getIdToken();
+        const token = await user.getIdToken(true);
         localStorage.setItem('admin_id_token', token);
         router.replace('/admin/leads');
       } catch (error) {
@@ -51,7 +51,7 @@ export default function AdminLoginPage() {
         return;
       }
 
-      const token = await user.getIdToken();
+      const token = await user.getIdToken(true);
       localStorage.setItem('admin_id_token', token);
       router.replace('/admin/leads');
     } catch (error) {

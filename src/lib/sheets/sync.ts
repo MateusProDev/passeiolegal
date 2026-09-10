@@ -103,20 +103,7 @@ export async function appendLead(lead: Record<string, any>) {
 
     await ensureHeaders();
 
-    const row = [
-      lead.createdAt || new Date().toISOString(),
-      lead.code || '',
-      lead.status || 'visitou',
-      lead.gclid || '',
-      lead.utms?.utm_source || '',
-      lead.utms?.utm_medium || '',
-      lead.utms?.utm_campaign || '',
-      lead.utms?.utm_content || '',
-      lead.utms?.utm_term || '',
-      lead.landingPage || '',
-      lead.status_updated_at || lead.createdAt || new Date().toISOString(),
-      lead.observacao || '',
-    ];
+    const row = leadToRow(lead);
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
@@ -130,6 +117,66 @@ export async function appendLead(lead: Record<string, any>) {
   } catch (error) {
     console.error('[sheets] appendLead error:', error);
   }
+}
+
+function leadToRow(lead: Record<string, any>) {
+  return [
+    lead.createdAt || new Date().toISOString(),
+    lead.code || '',
+    lead.status || 'visitou',
+    lead.gclid || '',
+    lead.utms?.utm_source || '',
+    lead.utms?.utm_medium || '',
+    lead.utms?.utm_campaign || '',
+    lead.utms?.utm_content || '',
+    lead.utms?.utm_term || '',
+    lead.landingPage || '',
+    lead.status_updated_at || lead.createdAt || new Date().toISOString(),
+    lead.observacao || '',
+  ];
+}
+
+export async function syncMissingLeads(leads: Record<string, any>[]) {
+  const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
+  const sheets = getSheetClient();
+
+  if (!spreadsheetId || !sheets) {
+    throw new Error('Credenciais do Google Sheets ausentes');
+  }
+
+  await ensureHeaders();
+
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range: `${SHEET_NAME}!A:L`,
+  });
+  const existingCodes = new Set(
+    (response.data.values ?? [])
+      .slice(1)
+      .map((row) => String(row[1] || '').trim())
+      .filter(Boolean)
+  );
+  const missingLeads = leads.filter((lead) => {
+    const code = String(lead.code || '').trim();
+    return code && !existingCodes.has(code);
+  });
+
+  if (missingLeads.length) {
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range: `${SHEET_NAME}!A:L`,
+      valueInputOption: 'RAW',
+      insertDataOption: 'INSERT_ROWS',
+      requestBody: {
+        values: missingLeads.map(leadToRow),
+      },
+    });
+  }
+
+  return {
+    found: leads.length,
+    inserted: missingLeads.length,
+  };
 }
 
 export async function updateLeadStatus(code: string, status: string, updatedAt: string, observacao?: string) {

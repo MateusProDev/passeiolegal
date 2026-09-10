@@ -33,6 +33,7 @@ function LeadsPageContent() {
   const searchParams = useSearchParams();
   const [leads, setLeads] = useState<LeadRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [syncingSheets, setSyncingSheets] = useState(false);
   const [summary, setSummary] = useState<Record<string, number>>({
     total: 0,
     visitou: 0,
@@ -96,6 +97,33 @@ function LeadsPageContent() {
     loadLeads();
   }, [searchParams]);
 
+  async function syncHistoricalLeads() {
+    setSyncingSheets(true);
+    try {
+      const token = await getFreshAdminIdToken();
+      if (!token) throw new Error('Sessão expirada');
+
+      const response = await fetch('/api/admin/sync-sheets', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const payload = await response.json();
+
+      if (!response.ok) {
+        throw new Error(payload.error || 'Não foi possível sincronizar');
+      }
+
+      window.alert(
+        `Sincronização concluída: ${payload.inserted} lead(s) inserido(s) de ${payload.found} encontrado(s).`
+      );
+    } catch (error) {
+      console.error('[admin/leads] sync sheets error:', error);
+      window.alert(error instanceof Error ? error.message : 'Erro ao sincronizar a planilha');
+    } finally {
+      setSyncingSheets(false);
+    }
+  }
+
   return (
     <div className="space-y-6">
       <Toaster position="top-right" />
@@ -118,7 +146,17 @@ function LeadsPageContent() {
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <LeadsFilters />
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <LeadsFilters />
+          <button
+            type="button"
+            onClick={syncHistoricalLeads}
+            disabled={syncingSheets}
+            className="inline-flex min-h-10 items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-wait disabled:opacity-60"
+          >
+            {syncingSheets ? 'Sincronizando...' : 'Sincronizar planilha'}
+          </button>
+        </div>
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">

@@ -18,7 +18,7 @@ const HEADER_ROW = [
 
 function getSheetClient() {
   const clientEmail = process.env.GOOGLE_SHEETS_CLIENT_EMAIL;
-  const privateKey = process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n');
+    const privateKey = normalizePrivateKey(process.env.GOOGLE_SHEETS_PRIVATE_KEY);
   const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
 
   if (!clientEmail || !privateKey || !spreadsheetId) {
@@ -33,6 +33,28 @@ function getSheetClient() {
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     }),
   });
+}
+function normalizePrivateKey(value?: string) {
+  if (!value) return undefined;
+
+  let normalized = value.trim();
+
+  try {
+    const parsed = JSON.parse(normalized);
+    if (typeof parsed === 'string') normalized = parsed;
+    else if (parsed && typeof parsed.private_key === 'string') {
+      normalized = parsed.private_key;
+    }
+  } catch {
+    // The environment variable may contain only the PEM value.
+  }
+
+  normalized = normalized.replace(/^['"]|['"]$/g, '');
+  normalized = normalized.replace(/\\n/g, '\n').replace(/\\r/g, '');
+
+  return normalized.includes('-----BEGIN PRIVATE KEY-----')
+    ? normalized
+    : undefined;
 }
 
 export async function ensureHeaders() {

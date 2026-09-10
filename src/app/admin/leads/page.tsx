@@ -48,9 +48,25 @@ function LeadsPageContent() {
         const params = new URLSearchParams(searchParams.toString());
         const token = localStorage.getItem('admin_id_token');
 
+        if (!token) {
+          setLeads([]);
+          setSummary({
+            total: 0,
+            visitou: 0,
+            clicou_whatsapp: 0,
+            enviou_mensagem: 0,
+            fechou: 0,
+            nao_respondeu: 0,
+            perdido: 0,
+          });
+          setLoading(false);
+          window.location.href = '/admin/login?redirect=/admin/leads';
+          return;
+        }
+
         const response = await fetch(`/api/admin/leads?${params.toString()}`, {
           headers: {
-            Authorization: `Bearer ${token || ''}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 

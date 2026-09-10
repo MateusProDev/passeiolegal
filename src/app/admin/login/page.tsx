@@ -13,13 +13,25 @@ export default function AdminLoginPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = subscribeToAdminAuth((user) => {
-      if (!user) return;
+    const unsubscribe = subscribeToAdminAuth(async (user) => {
+      if (!user) {
+        localStorage.removeItem('admin_id_token');
+        return;
+      }
 
       const email = (user.email || '').toLowerCase();
-      if (ADMIN_EMAILS.includes(email)) {
-        localStorage.setItem('admin_id_token', '');
+      if (!ADMIN_EMAILS.includes(email)) {
+        localStorage.removeItem('admin_id_token');
+        return;
+      }
+
+      try {
+        const token = await user.getIdToken();
+        localStorage.setItem('admin_id_token', token);
         router.replace('/admin/leads');
+      } catch (error) {
+        console.error('[admin/login] failed to refresh id token:', error);
+        localStorage.removeItem('admin_id_token');
       }
     });
 

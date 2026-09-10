@@ -33,6 +33,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status') || '';
     const campaign = searchParams.get('campaign') || '';
+    const code = searchParams.get('code') || '';
     const from = searchParams.get('from') || '';
     const to = searchParams.get('to') || '';
 
@@ -51,6 +52,7 @@ export async function GET(request: NextRequest) {
       const normalizedStatus = lead.status || 'visitou';
       const matchesStatus = !status || normalizedStatus === status;
       const matchesCampaign = !campaign || (lead.utms?.utm_campaign || '').toLowerCase().includes(campaign.toLowerCase());
+      const matchesCode = !code || String(lead.code || '').toLowerCase().includes(code.toLowerCase());
 
       const createdAtValue = lead.createdAt || lead.timestamp || lead.status_updated_at;
       const createdAt = createdAtValue ? new Date(createdAtValue) : null;
@@ -63,7 +65,7 @@ export async function GET(request: NextRequest) {
         matchesDate = matchesDate && createdAt <= new Date(`${to}T23:59:59.999Z`);
       }
 
-      return matchesStatus && matchesCampaign && matchesDate;
+      return matchesStatus && matchesCampaign && matchesCode && matchesDate;
     });
 
     leads.sort((a: any, b: any) => {

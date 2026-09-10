@@ -18,6 +18,7 @@ export function LeadsFilters() {
 
   const status = searchParams.get('status') || '';
   const campaign = searchParams.get('campaign') || '';
+  const code = searchParams.get('code') || '';
   const from = searchParams.get('from') || '';
   const to = searchParams.get('to') || '';
 
@@ -33,7 +34,7 @@ export function LeadsFilters() {
   }
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
       <label className="text-sm text-slate-600">
         <span className="mb-1 block">Status</span>
         <select
@@ -47,6 +48,16 @@ export function LeadsFilters() {
             </option>
           ))}
         </select>
+      </label>
+
+      <label className="text-sm text-slate-600">
+        <span className="mb-1 block">Código</span>
+        <input
+          value={code}
+          onChange={(event) => updateFilter('code', event.target.value)}
+          placeholder="Pesquisar código"
+          className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
+        />
       </label>
 
       <label className="text-sm text-slate-600">

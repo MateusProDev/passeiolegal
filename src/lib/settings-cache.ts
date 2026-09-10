@@ -1,3 +1,5 @@
+import type { SiteSettings } from '@/types';
+
 const SETTINGS_CACHE_KEY = 'passeio_legal_settings_cache';
 const SETTINGS_CACHE_TTL_MS = 5 * 60 * 1000;
 
@@ -38,7 +40,7 @@ export function setCachedSettings<T = unknown>(data: T, ttlMs = SETTINGS_CACHE_T
   window.localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(entry));
 }
 
-export async function fetchSettingsCached<T = unknown>(fetcher: typeof fetch = fetch): Promise<T | null> {
+export async function fetchSettingsCached<T = SiteSettings>(fetcher: typeof fetch = fetch): Promise<T | null> {
   const cached = getCachedSettings<T>();
   if (cached) return cached;
 

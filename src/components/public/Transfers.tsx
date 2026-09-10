@@ -63,7 +63,12 @@ export default function Transfers({ transfers }: TransfersProps) {
     setCurrentIndex((prev) => (prev + 1) % totalGroups);
   };
 
-  const visibleTransfers = displayTransfers.slice(currentIndex * itemsPerPage, currentIndex * itemsPerPage + itemsPerPage);
+  const visibleTransfers = displayTransfers.length === 0
+    ? []
+    : Array.from({ length: itemsPerPage }, (_, index) => {
+        const itemIndex = (currentIndex * itemsPerPage + index) % displayTransfers.length;
+        return displayTransfers[itemIndex];
+      });
 
   return (
     <section id="transfers" className="py-14 bg-gray-100">
@@ -93,17 +98,17 @@ export default function Transfers({ transfers }: TransfersProps) {
                   <>
                     <button
                       onClick={goToPrevious}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-gray-700 shadow-md transition hover:bg-white"
+                      className="absolute -left-3 md:-left-4 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full border border-gray-200 bg-white/95 text-gray-700 shadow-lg transition hover:bg-white"
                       aria-label={`Transfer anterior: ${transfer.name}`}
                     >
-                      <ChevronLeft size={18} />
+                      <ChevronLeft size={20} className="md:w-6 md:h-6" />
                     </button>
                     <button
                       onClick={goToNext}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-gray-700 shadow-md transition hover:bg-white"
+                      className="absolute -right-3 md:-right-4 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full border border-gray-200 bg-white/95 text-gray-700 shadow-lg transition hover:bg-white"
                       aria-label={`Próximo transfer: ${transfer.name}`}
                     >
-                      <ChevronRight size={18} />
+                      <ChevronRight size={20} className="md:w-6 md:h-6" />
                     </button>
                   </>
                 )}

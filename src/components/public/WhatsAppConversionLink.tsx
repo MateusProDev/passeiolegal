@@ -2,8 +2,6 @@
 
 import type { AnchorHTMLAttributes, MouseEvent, ReactNode } from "react";
 
-const GOOGLE_ADS_SEND_TO = "AW-11405399413/ZmQjCLeD4O0cEPWqwr4q";
-
 declare global {
   interface Window {
     dataLayer?: unknown[];

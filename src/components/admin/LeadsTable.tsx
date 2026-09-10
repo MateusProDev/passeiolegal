@@ -27,6 +27,7 @@ type LeadsTableProps = {
 export function LeadsTable({ leads }: LeadsTableProps) {
   const [items, setItems] = useState(leads);
   const [page, setPage] = useState(1);
+  const [selectedLead, setSelectedLead] = useState<LeadRow | null>(null);
   const pageSize = 10;
 
   const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
@@ -91,11 +92,55 @@ export function LeadsTable({ leads }: LeadsTableProps) {
   }
 
   function viewDetails(lead: LeadRow) {
-    alert(JSON.stringify(lead, null, 2));
+    setSelectedLead(lead);
+  }
+
+  function formatLeadDetails(lead: LeadRow) {
+    return [
+      ['Data', lead.createdAt ? new Date(lead.createdAt).toLocaleString('pt-BR') : '-'],
+      ['Código', lead.code || '-'],
+      ['Status', lead.status || '-'],
+      ['GCLID', lead.gclid || '-'],
+      ['Campanha', lead.utms?.utm_campaign || '-'],
+      ['Fonte', lead.utms?.utm_source || '-'],
+      ['Meio', lead.utms?.utm_medium || '-'],
+      ['Landing Page', lead.landingPage || '-'],
+      ['Observação', lead.observacao || 'Sem observação'],
+    ];
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+    <>
+      {selectedLead && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4">
+          <div className="w-full max-w-lg rounded-2xl bg-white p-5 shadow-2xl ring-1 ring-slate-200">
+            <div className="mb-4 flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Detalhes do lead</p>
+                <h3 className="mt-1 text-xl font-bold text-slate-900">{selectedLead.code}</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedLead(null)}
+                className="rounded-md border border-slate-200 px-2.5 py-1 text-sm text-slate-600 hover:bg-slate-100"
+              >
+                Fechar
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              {formatLeadDetails(selectedLead).map(([label, value]) => (
+                <div key={label} className="flex gap-3 rounded-lg border border-slate-100 bg-slate-50 p-2.5">
+                  <span className="min-w-[110px] text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</span>
+                  <span className="break-all text-sm text-slate-700">{String(value)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
       <div className="min-w-[820px]">
         <table className="min-w-full divide-y divide-slate-200 text-left">
           <thead className="bg-slate-50">
@@ -121,23 +166,25 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                 <td className="px-4 py-3 text-sm text-slate-600">{lead.gclid || '-'}</td>
                 <td className="px-4 py-3 text-sm text-slate-600">{lead.utms?.utm_campaign || '-'}</td>
                 <td className="px-4 py-3 text-sm text-slate-600">{lead.landingPage || '-'}</td>
-                <td className="px-4 py-3">
-                  <div className="space-y-2">
-                    <button
-                      type="button"
-                      onClick={() => openWhatsApp(lead)}
-                      className="block w-full rounded-md bg-green-600 px-2 py-1.5 text-xs font-medium text-white"
-                    >
-                      Abrir WhatsApp
-                    </button>
+                <td className="px-3 py-3 sm:px-4">
+                  <div className="w-[220px] space-y-2 sm:w-[240px]">
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => openWhatsApp(lead)}
+                        className="rounded-md bg-green-600 px-2 py-1.5 text-[11px] font-medium text-white transition hover:bg-green-700 sm:text-xs"
+                      >
+                        Abrir WhatsApp
+                      </button>
 
-                    <button
-                      type="button"
-                      onClick={() => viewDetails(lead)}
-                      className="block w-full rounded-md border border-slate-200 px-2 py-1.5 text-xs font-medium text-slate-700"
-                    >
-                      Ver detalhes
-                    </button>
+                      <button
+                        type="button"
+                        onClick={() => viewDetails(lead)}
+                        className="rounded-md border border-slate-200 px-2 py-1.5 text-[11px] font-medium text-slate-700 transition hover:bg-slate-100 sm:text-xs"
+                      >
+                        Ver detalhes
+                      </button>
+                    </div>
 
                     <StatusSelect
                       value={lead.status}

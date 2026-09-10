@@ -23,11 +23,11 @@ export function StatusSelect({ value, code, onChange }: StatusSelectProps) {
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 rounded-lg border border-slate-200 bg-slate-50 p-2">
       <select
         value={nextStatus}
         onChange={(event) => setNextStatus(event.target.value as LeadStatus)}
-        className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-700"
+        className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-700 sm:text-sm"
       >
         <option value="visitou">Visitou</option>
         <option value="clicou_whatsapp">Clicou WhatsApp</option>
@@ -41,13 +41,13 @@ export function StatusSelect({ value, code, onChange }: StatusSelectProps) {
         value={observacao}
         onChange={(event) => setObservacao(event.target.value)}
         placeholder="Observação opcional"
-        className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-700"
-        rows={2}
+        className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-700 sm:text-sm"
+        rows={1}
       />
 
       <button
         onClick={handleSave}
-        className="w-full rounded-md bg-slate-900 px-3 py-2 text-xs font-medium text-white hover:bg-slate-700"
+        className="w-full rounded-md bg-slate-900 px-3 py-1.5 text-[11px] font-medium text-white hover:bg-slate-700 sm:text-xs"
       >
         Salvar status
       </button>

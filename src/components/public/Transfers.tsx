@@ -25,7 +25,7 @@ interface TransfersProps {
 export default function Transfers({ transfers }: TransfersProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const itemsPerPage = 4;
+  const itemsPerPage = 3;
 
   const displayTransfers = transfers.slice(0, 8);
 
@@ -86,17 +86,17 @@ export default function Transfers({ transfers }: TransfersProps) {
             <>
               <button
                 onClick={goToPrevious}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 bg-gray-50/90 hover:bg-gray-50 shadow-lg p-3 rounded-full transition-colors z-10"
+                className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg p-2 md:p-3 rounded-full transition-colors z-10 border border-gray-200"
                 aria-label="Transfer anterior"
               >
-                <ChevronLeft size={24} className="text-gray-700" />
+                <ChevronLeft size={20} className="text-gray-700 md:w-6 md:h-6" />
               </button>
               <button
                 onClick={goToNext}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 bg-gray-50/90 hover:bg-gray-50 shadow-lg p-3 rounded-full transition-colors z-10"
+                className="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg p-2 md:p-3 rounded-full transition-colors z-10 border border-gray-200"
                 aria-label="Próximo transfer"
               >
-                <ChevronRight size={24} className="text-gray-700" />
+                <ChevronRight size={20} className="text-gray-700 md:w-6 md:h-6" />
               </button>
             </>
           )}

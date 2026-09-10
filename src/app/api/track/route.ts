@@ -7,7 +7,7 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const TrackSchema = z.object({
-  event: z.enum(['visitou', 'clicou_whatsapp']).optional(),
+  event: z.enum(['visitou', 'clicou_whatsapp', 'enviou_mensagem', 'clicou_cta']).optional(),
   code: z.string().min(4).max(20),
   gclid: z.string().nullable().optional(),
   utms: z.object({
@@ -41,13 +41,21 @@ export async function POST(request: NextRequest) {
     const eventType = parsed.data.event || 'visitou';
     const now = new Date().toISOString();
 
+    const resolveStatus = (type: string, previousStatus?: string) => {
+      if (type === 'visitou') return 'visitou';
+      if (type === 'clicou_whatsapp') return 'clicou_whatsapp';
+      if (type === 'enviou_mensagem') return 'enviou_mensagem';
+      if (type === 'clicou_cta') return previousStatus || 'visitou';
+      return previousStatus || 'visitou';
+    };
+
     const payload = {
       ...parsed.data,
       event: eventType,
       ip,
       timestamp: now,
       createdAt: now,
-      status: eventType === 'visitou' ? 'visitou' : 'clicou_whatsapp',
+      status: 'visitou',
       status_updated_at: now,
       updatedAt: now,
     };
@@ -56,15 +64,25 @@ export async function POST(request: NextRequest) {
     const current = await ref.get();
 
     if (!current.exists) {
-      await ref.set(payload, { merge: true });
+      const initialStatus = resolveStatus(eventType);
+      await ref.set({
+        ...payload,
+        status: initialStatus,
+        status_updated_at: now,
+        updatedAt: now,
+      }, { merge: true });
       try {
-        await appendLead(payload);
+        await appendLead({
+          ...payload,
+          status: initialStatus,
+          status_updated_at: now,
+        });
       } catch (sheetError) {
         console.error('[track] appendLead error:', sheetError);
       }
     } else {
       const previousStatus = current.data()?.status || 'visitou';
-      const nextStatus = eventType === 'clicou_whatsapp' ? 'clicou_whatsapp' : previousStatus || 'visitou';
+      const nextStatus = resolveStatus(eventType, previousStatus);
 
       await ref.set(
         {

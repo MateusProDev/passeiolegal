@@ -65,6 +65,10 @@ export async function PATCH(
       { merge: true }
     );
 
+    if (status === 'enviou_mensagem' && !current.data()?.qualified_at) {
+      await ref.set({ qualified_at: updatedAt }, { merge: true });
+    }
+
     if (status === 'fechou' && !current.data()?.converted_at) {
       await uploadConversion({
         gclid: current.data()?.gclid || null,

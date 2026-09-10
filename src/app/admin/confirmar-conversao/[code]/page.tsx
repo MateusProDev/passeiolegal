@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { googleAdsConversion } from '@/lib/google-ads';
 
 export default function ConfirmarConversaoPage() {
   const params = useParams<{ code: string }>();
@@ -13,8 +14,10 @@ export default function ConfirmarConversaoPage() {
       try {
         if (typeof window === 'undefined') return;
 
+        const sendTo = `${googleAdsConversion.id}/${googleAdsConversion.label}`;
+
         window.gtag?.('event', 'conversion', {
-          send_to: 'AW-11405399413/-lb-CLTxj_McEPWqwr4q',
+          send_to: sendTo,
           transaction_id: code,
           value: 0,
           currency: 'BRL',

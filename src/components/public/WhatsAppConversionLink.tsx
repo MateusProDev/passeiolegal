@@ -65,13 +65,44 @@ export default function WhatsAppConversionLink({
     }
 
     if (trackConversion) {
-      // O clique em WhatsApp é evento secundário e não deve contar como conversão final.
-      // A conversão real só deve ocorrer quando o status do lead virar 'fechou' no painel admin.
-      if (typeof window.gtag === 'function') {
-        window.gtag('event', 'clicou_whatsapp', {
-          event_category: 'whatsapp',
-          event_label: codeFromStorage || 'lead_sem_codigo',
-        });
+      const eventLabel = codeFromStorage || 'lead_sem_codigo';
+      const conversionKey = `google_ads_whatsapp_${eventLabel}`;
+
+      if (!window.sessionStorage.getItem(conversionKey)) {
+        window.sessionStorage.setItem(conversionKey, '1');
+
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'contact', {
+            method: 'whatsapp',
+            value: 1,
+            currency: 'BRL',
+            event_label: eventLabel,
+          });
+
+          window.gtag('event', 'conversion', {
+            send_to: 'AW-11405399413/-lb-CLTxj_McEPWqwr4q',
+            value: 1,
+            currency: 'BRL',
+            transaction_id: eventLabel,
+          });
+        }
+
+        if (window.dataLayer) {
+          window.dataLayer.push({
+            event: 'contact',
+            method: 'whatsapp',
+            value: 1,
+            currency: 'BRL',
+            event_label: eventLabel,
+          });
+          window.dataLayer.push({
+            event: 'conversion',
+            send_to: 'AW-11405399413/-lb-CLTxj_McEPWqwr4q',
+            value: 1,
+            currency: 'BRL',
+            transaction_id: eventLabel,
+          });
+        }
       }
 
       if (target === '_blank') {

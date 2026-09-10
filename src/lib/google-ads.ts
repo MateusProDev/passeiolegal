@@ -8,10 +8,12 @@ export function trackGoogleAdsLead({
   conversionId = googleAdsConversion.id,
   conversionLabel = googleAdsConversion.label,
   value = 0,
+  transactionId,
 }: {
   conversionId?: string;
   conversionLabel?: string;
   value?: number;
+  transactionId?: string;
 } = {}) {
   if (typeof window === 'undefined') return;
 
@@ -20,12 +22,22 @@ export function trackGoogleAdsLead({
     gtag?: (...args: unknown[]) => void;
   };
 
+  const conversionData = {
+    send_to: `${conversionId}/${conversionLabel}`,
+    value,
+    currency: 'BRL',
+    ...(transactionId ? { transaction_id: transactionId } : {}),
+  };
+
   if (typeof win.gtag === 'function') {
-    win.gtag('event', 'conversion', {
-      send_to: `${conversionId}/${conversionLabel}`,
+    win.gtag('event', 'contact', {
+      method: 'whatsapp',
       value,
       currency: 'BRL',
+      event_label: transactionId || 'lead_sem_codigo',
     });
+
+    win.gtag('event', 'conversion', conversionData);
     return;
   }
 

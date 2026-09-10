@@ -10,6 +10,7 @@ import CookieBanner from "@/components/CookieBanner";
 
 const baseUrl = getSiteUrl();
 const shouldLoadAnalytics = process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === "true";
+const googleAdsTagId = `AW-${process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID || "11405399413"}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -91,6 +92,23 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body className="antialiased">
+        {shouldLoadAnalytics && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${googleAdsTagId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-ads-tag" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){window.dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${googleAdsTagId}');
+              `}
+            </Script>
+          </>
+        )}
+
         {shouldLoadAnalytics && process.env.NEXT_PUBLIC_GA_ID && (
           <>
             <Script

@@ -12,15 +12,29 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const hasValidFirebaseConfig = () => {
+  const values = Object.values(firebaseConfig);
+  return values.every((value) => {
+    if (typeof value !== "string") return false;
+    const normalized = value.trim();
+    return normalized.length > 0 && !normalized.startsWith("your_") && !normalized.startsWith("replace_") && !normalized.includes("example");
+  });
+};
 
-// Initialize Firebase services
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const storage = getStorage(app);
+const app = hasValidFirebaseConfig()
+  ? getApps().length === 0
+    ? initializeApp(firebaseConfig)
+    : getApp()
+  : null;
 
-// Use emulator in development (optional)
+export const auth = app ? getAuth(app) : null;
+export const db = app ? getFirestore(app) : null;
+export const storage = app ? getStorage(app) : null;
+
+if (!app) {
+  console.warn("Firebase config incomplete or using placeholder values. Firebase client services are disabled until valid env vars are provided.");
+}
+
 if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
   // Emulator setup would go here
 }

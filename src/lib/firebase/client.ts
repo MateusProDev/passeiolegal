@@ -10,9 +10,18 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const hasValidFirebaseConfig = () => {
+  const values = Object.values(firebaseConfig);
+  return values.every((value) => {
+    if (typeof value !== 'string') return false;
+    const normalized = value.trim();
+    return normalized.length > 0 && !normalized.startsWith('your_') && !normalized.startsWith('replace_') && !normalized.includes('example');
+  });
+};
 
-export const auth = getAuth(app);
+const app = hasValidFirebaseConfig() ? (getApps().length ? getApp() : initializeApp(firebaseConfig)) : null;
+
+export const auth = app ? getAuth(app) : null;
 export const googleProvider = new GoogleAuthProvider();
 
 googleProvider.setCustomParameters({
@@ -20,19 +29,29 @@ googleProvider.setCustomParameters({
 });
 
 export async function signInWithGoogle() {
+  if (!auth) {
+    throw new Error('Firebase Auth não está configurado. Verifique as variáveis NEXT_PUBLIC_FIREBASE_*');
+  }
+
   const result = await signInWithPopup(auth, googleProvider);
   return result.user;
 }
 
 export async function logoutAdmin() {
+  if (!auth) return;
   await signOut(auth);
 }
 
 export function subscribeToAdminAuth(callback: (user: User | null) => void) {
+  if (!auth) {
+    callback(null);
+    return () => undefined;
+  }
+
   return onAuthStateChanged(auth, callback);
 }
 
 export async function getCurrentAdminIdToken() {
-  if (!auth.currentUser) return null;
+  if (!auth || !auth.currentUser) return null;
   return auth.currentUser.getIdToken();
 }

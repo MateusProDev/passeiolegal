@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export default function TesteGclidPage() {
+function TesteGclidContent() {
   const searchParams = useSearchParams();
   const [code, setCode] = useState('');
 
@@ -42,5 +42,13 @@ export default function TesteGclidPage() {
         </p>
       </div>
     </main>
+  );
+}
+
+export default function TesteGclidPage() {
+  return (
+    <Suspense fallback={<main className="p-8 text-slate-700">Carregando...</main>}>
+      <TesteGclidContent />
+    </Suspense>
   );
 }

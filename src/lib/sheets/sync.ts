@@ -16,30 +16,35 @@ const HEADER_ROW = [
   'Observação',
 ];
 
-function getSheetAuth() {
+function getSheetClient() {
   const clientEmail = process.env.GOOGLE_SHEETS_CLIENT_EMAIL;
   const privateKey = process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n');
+  const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
 
-  if (!clientEmail || !privateKey) {
-    throw new Error('Credenciais do Google Sheets ausentes.');
+  if (!clientEmail || !privateKey || !spreadsheetId) {
+    return null;
   }
 
-  return new google.auth.JWT({
-    email: clientEmail,
-    key: privateKey,
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  return google.sheets({
+    version: 'v4',
+    auth: new google.auth.JWT({
+      email: clientEmail,
+      key: privateKey,
+      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    }),
   });
 }
-
-const sheets = google.sheets({
-  version: 'v4',
-  auth: getSheetAuth(),
-});
 
 export async function ensureHeaders() {
   try {
     const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
     if (!spreadsheetId) return;
+
+    const sheets = getSheetClient();
+    if (!sheets) {
+      console.warn('[sheets] Credenciais do Google Sheets ausentes.');
+      return;
+    }
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
@@ -67,6 +72,12 @@ export async function appendLead(lead: Record<string, any>) {
   try {
     const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
     if (!spreadsheetId) return;
+
+    const sheets = getSheetClient();
+    if (!sheets) {
+      console.warn('[sheets] Credenciais do Google Sheets ausentes.');
+      return;
+    }
 
     await ensureHeaders();
 
@@ -103,6 +114,12 @@ export async function updateLeadStatus(code: string, status: string, updatedAt: 
   try {
     const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
     if (!spreadsheetId || !code) return;
+
+    const sheets = getSheetClient();
+    if (!sheets) {
+      console.warn('[sheets] Credenciais do Google Sheets ausentes.');
+      return;
+    }
 
     await ensureHeaders();
 

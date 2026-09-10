@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { saveTrackingIfNeeded } from '@/lib/tracking/capture';
 import { injectTrackingCodeIntoWhatsAppUrl } from '@/lib/tracking/whatsapp';
 
-export default function TrackingProvider() {
+function TrackingProviderInner() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -69,4 +69,12 @@ export default function TrackingProvider() {
   }, []);
 
   return null;
+}
+
+export default function TrackingProvider() {
+  return (
+    <Suspense fallback={null}>
+      <TrackingProviderInner />
+    </Suspense>
+  );
 }

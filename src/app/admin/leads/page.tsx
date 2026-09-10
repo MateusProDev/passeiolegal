@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Toaster } from 'react-hot-toast';
 import { LeadsFilters } from '@/components/admin/LeadsFilters';
@@ -28,7 +28,7 @@ type LeadRecord = {
   observacao?: string;
 };
 
-export default function AdminLeadsPage() {
+function LeadsPageContent() {
   const searchParams = useSearchParams();
   const [leads, setLeads] = useState<LeadRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -112,5 +112,13 @@ export default function AdminLeadsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function AdminLeadsPage() {
+  return (
+    <Suspense fallback={<div className="p-4 text-sm text-slate-600">Carregando leads...</div>}>
+      <LeadsPageContent />
+    </Suspense>
   );
 }

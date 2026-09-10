@@ -22,6 +22,11 @@ import * as Types from "@/types";
 export const firebaseService = {
   // Create
   async create<T>(collectionName: string, data: Partial<T>) {
+    if (!db) {
+      console.warn("Firebase is not configured. Skipping create for collection:", collectionName);
+      return "";
+    }
+
     try {
       const docRef = await addDoc(collection(db, collectionName), {
         ...data,
@@ -44,6 +49,10 @@ export const firebaseService = {
 
   // Read single
   async get<T>(collectionName: string, id: string): Promise<T | null> {
+    if (!db) {
+      return null;
+    }
+
     try {
       const docRef = doc(db, collectionName, id);
       const docSnap = await getDoc(docRef);
@@ -62,6 +71,10 @@ export const firebaseService = {
     collectionName: string,
     constraints?: QueryConstraint[]
   ): Promise<T[]> {
+    if (!db) {
+      return [];
+    }
+
     try {
       let q: Query = collection(db, collectionName);
       if (constraints && constraints.length > 0) {
@@ -84,6 +97,10 @@ export const firebaseService = {
     id: string,
     data: Partial<T>
   ): Promise<void> {
+    if (!db) {
+      return;
+    }
+
     try {
       const docRef = doc(db, collectionName, id);
       await updateDoc(docRef, {
@@ -105,6 +122,10 @@ export const firebaseService = {
 
   // Delete
   async delete(collectionName: string, id: string): Promise<void> {
+    if (!db) {
+      return;
+    }
+
     try {
       const docRef = doc(db, collectionName, id);
       await deleteDoc(docRef);
@@ -126,6 +147,10 @@ export const firebaseService = {
     collectionName: string,
     data: Array<{ id: string; data: Partial<T> }>
   ): Promise<void> {
+    if (!db) {
+      return;
+    }
+
     try {
       for (const item of data) {
         const docRef = doc(db, collectionName, item.id);
@@ -396,6 +421,10 @@ export const activityLogService = {
     entityId: string,
     changes?: Record<string, unknown>
   ) {
+    if (!db) {
+      return "";
+    }
+
     return firebaseService.create<Types.ActivityLog>("activityLogs", {
       userId,
       action,
@@ -407,6 +436,10 @@ export const activityLogService = {
   },
 
   async getRecent(limit?: number) {
+    if (!db) {
+      return [];
+    }
+
     const constraints: QueryConstraint[] = [orderBy("timestamp", "desc")];
     if (limit) constraints.push(firestoreLimit(limit));
     return firebaseService.getMany<Types.ActivityLog>(

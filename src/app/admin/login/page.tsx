@@ -32,7 +32,9 @@ export default function AdminLoginPage() {
       const email = (user.email || '').toLowerCase();
 
       if (!ADMIN_EMAILS.includes(email)) {
-        await auth.signOut();
+        if (auth) {
+          await auth.signOut();
+        }
         alert('Seu e-mail não está na whitelist do painel.');
         return;
       }

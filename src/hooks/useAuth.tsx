@@ -28,6 +28,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!auth) {
+      setUser(null);
+      setLoading(false);
+      return;
+    }
+
     // Listen for auth state changes
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
@@ -43,6 +49,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(
     async (email: string, password: string) => {
+      if (!auth) {
+        throw new Error("Firebase Auth não está configurado.");
+      }
+
       try {
         await signInWithEmailAndPassword(auth, email, password);
       } catch (error) {
@@ -53,6 +63,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   const logout = useCallback(async () => {
+    if (!auth) {
+      setUser(null);
+      return;
+    }
+
     try {
       await signOut(auth);
       setUser(null);

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Providers } from "./providers";
 import "./globals.css";
 import { LocalBusinessJsonLd, WebSiteJsonLd } from "@/components/seo/JsonLd";
@@ -142,7 +143,9 @@ export default function RootLayout({
           url={baseUrl}
           description="Descubra os melhores passeios turísticos e serviços de transfer em Fortaleza e região com a Passeio Legal"
         />
-        <TrackingProvider />
+        <Suspense fallback={null}>
+          <TrackingProvider />
+        </Suspense>
         <Providers>
           {children}
         </Providers>

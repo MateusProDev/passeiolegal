@@ -6,7 +6,7 @@ type UploadConversionParams = {
 };
 
 function getGoogleAdsMode(): 'api' | 'gtag' {
-  return process.env.GOOGLE_ADS_CONVERSION_MODE === 'api' ? 'api' : 'gtag';
+  return 'api';
 }
 
 async function uploadConversionViaGtag({
@@ -20,7 +20,7 @@ async function uploadConversionViaGtag({
 }) {
   try {
     if (typeof window !== 'undefined') {
-      const sendTo = 'AW-11405399413/-lb-CLTxj_McEPWqwr4q';
+      const sendTo = 'AW-11405399413/ZmQjCLeD4O0cEPWqwr4q';
       window.gtag?.('event', 'conversion', {
         send_to: sendTo,
         transaction_id: code,
@@ -78,7 +78,10 @@ async function uploadConversionViaApi({
       throw new Error('Google Ads API access token ausente.');
     }
 
-    const conversionAction = 'AW-11405399413/-lb-CLTxj_McEPWqwr4q';
+    const conversionAction = `customers/${customerId}/conversionActions/7757625524`;
+    if (!gclid) {
+      return { mode: 'api', code, ok: false, reason: 'missing_gclid' };
+    }
     const conversionDateTime = new Date().toISOString().slice(0, 19).replace('T', ' ') + '+00:00';
     const apiUrl = `https://googleads.googleapis.com/v18/customers/${customerId}:uploadClickConversions`;
 

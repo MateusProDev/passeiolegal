@@ -70,12 +70,19 @@ export async function PATCH(
     }
 
     if (status === 'fechou' && !current.data()?.converted_at) {
-      await uploadConversion({
+      const conversion = await uploadConversion({
         gclid: current.data()?.gclid || null,
         code,
         value: 0,
         currency: 'BRL',
       });
+
+      if (!conversion.ok) {
+        return Response.json(
+          { error: 'Lead fechado, mas a conversão não foi enviada ao Google Ads', reason: conversion.reason },
+          { status: 502 }
+        );
+      }
 
       await ref.set({ converted_at: updatedAt }, { merge: true });
     }

@@ -80,7 +80,7 @@ export default function WhatsAppConversionLink({
           });
 
           window.gtag('event', 'conversion', {
-            send_to: 'AW-11405399413/-lb-CLTxj_McEPWqwr4q',
+            send_to: 'AW-11405399413/ZmQjCLeD4O0cEPWqwr4q',
             value: 1,
             currency: 'BRL',
             transaction_id: eventLabel,

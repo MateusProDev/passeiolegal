@@ -1,6 +1,6 @@
 export const googleAdsConversion = {
   id: process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID || '11405399413',
-  label: process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL || '-lb-CLTxj_McEPWqwr4q',
+  label: process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL || 'ZmQjCLeD4O0cEPWqwr4q',
   name: process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_NAME || 'Lead WhatsApp - Passeios',
 };
 

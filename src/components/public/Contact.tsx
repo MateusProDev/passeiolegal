@@ -4,6 +4,13 @@ import { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
 import { metaPixelEvents } from '@/utils/metaPixel';
 import { fetchSettingsCached } from '@/lib/settings-cache';
+import { parseLeadTrackingFromStorage } from '@/lib/tracking/capture';
+
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -40,6 +47,25 @@ export default function Contact() {
 
     // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const tracking = parseLeadTrackingFromStorage();
+
+    if (tracking?.code) {
+      fetch('/api/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        keepalive: true,
+        body: JSON.stringify({
+          event: 'enviou_mensagem',
+          code: tracking.code,
+          gclid: tracking.gclid || null,
+          utms: tracking.utms || {},
+          landingPage: window.location.pathname,
+          userAgent: navigator.userAgent,
+          observacao: 'Formulário de contato enviado',
+        }),
+      }).catch(() => undefined);
+    }
 
     alert('Mensagem enviada com sucesso!');
     setFormData({ name: '', email: '', phone: '', message: '' });

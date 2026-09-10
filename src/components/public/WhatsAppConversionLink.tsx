@@ -87,22 +87,6 @@ export default function WhatsAppConversionLink({
           });
         }
 
-        if (window.dataLayer) {
-          window.dataLayer.push({
-            event: 'contact',
-            method: 'whatsapp',
-            value: 1,
-            currency: 'BRL',
-            event_label: eventLabel,
-          });
-          window.dataLayer.push({
-            event: 'conversion',
-            send_to: 'AW-11405399413/-lb-CLTxj_McEPWqwr4q',
-            value: 1,
-            currency: 'BRL',
-            transaction_id: eventLabel,
-          });
-        }
       }
 
       if (target === '_blank') {

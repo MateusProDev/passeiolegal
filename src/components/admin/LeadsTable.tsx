@@ -141,39 +141,41 @@ export function LeadsTable({ leads }: LeadsTableProps) {
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
-        <div className="min-w-[820px]">
-          <table className="min-w-full divide-y divide-slate-200 text-left">
+      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+        <div className="w-full overflow-x-auto">
+          <table className="w-full min-w-0 table-auto divide-y divide-slate-200 text-left">
             <thead className="bg-slate-50">
               <tr>
-                <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Data</th>
-                <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Código</th>
-                <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Status</th>
-                <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">GCLID</th>
-                <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Campanha</th>
-                <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Landing Page</th>
-                <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Ações</th>
+                <th className="px-3 py-3 text-[10px] font-semibold uppercase tracking-wide text-slate-600 sm:px-4 sm:text-xs">Data</th>
+                <th className="px-3 py-3 text-[10px] font-semibold uppercase tracking-wide text-slate-600 sm:px-4 sm:text-xs">Código</th>
+                <th className="px-3 py-3 text-[10px] font-semibold uppercase tracking-wide text-slate-600 sm:px-4 sm:text-xs">Status</th>
+                <th className="px-3 py-3 text-[10px] font-semibold uppercase tracking-wide text-slate-600 sm:px-4 sm:text-xs">GCLID</th>
+                <th className="px-3 py-3 text-[10px] font-semibold uppercase tracking-wide text-slate-600 sm:px-4 sm:text-xs">Campanha</th>
+                <th className="px-3 py-3 text-[10px] font-semibold uppercase tracking-wide text-slate-600 sm:px-4 sm:text-xs">Landing Page</th>
+                <th className="px-3 py-3 text-[10px] font-semibold uppercase tracking-wide text-slate-600 sm:px-4 sm:text-xs">Ações</th>
               </tr>
             </thead>
 
             <tbody className="divide-y divide-slate-200">
               {visibleRows.map((lead) => (
                 <tr key={lead.code} className="align-top">
-                  <td className="px-4 py-3 text-sm text-slate-600">
+                  <td className="px-3 py-3 text-xs text-slate-600 sm:px-4 sm:text-sm">
                     {lead.createdAt ? new Date(lead.createdAt).toLocaleString('pt-BR') : '-'}
                   </td>
-                  <td className="px-4 py-3 text-sm font-medium text-slate-800">{lead.code}</td>
-                  <td className="px-4 py-3"><StatusBadge status={lead.status} /></td>
-                  <td className="px-4 py-3 text-sm text-slate-600">{lead.gclid || '-'}</td>
-                  <td className="px-4 py-3 text-sm text-slate-600">{lead.utms?.utm_campaign || '-'}</td>
-                  <td className="px-4 py-3 text-sm text-slate-600">{lead.landingPage || '-'}</td>
+                  <td className="px-3 py-3 text-xs font-medium text-slate-800 sm:px-4 sm:text-sm">{lead.code}</td>
+                  <td className="px-3 py-3 sm:px-4"><StatusBadge status={lead.status} /></td>
+                  <td className="px-3 py-3 text-xs text-slate-600 sm:px-4 sm:text-sm">{lead.gclid || '-'}</td>
+                  <td className="px-3 py-3 text-xs text-slate-600 sm:px-4 sm:text-sm">{lead.utms?.utm_campaign || '-'}</td>
+                  <td className="px-3 py-3 text-xs text-slate-600 sm:px-4 sm:text-sm">
+                    <span className="block max-w-[180px] break-all">{lead.landingPage || '-'}</span>
+                  </td>
                   <td className="px-3 py-3 sm:px-4">
-                    <div className="w-[220px] space-y-2 sm:w-[240px]">
-                      <div className="grid grid-cols-2 gap-2">
+                    <div className="w-full max-w-[240px] space-y-2">
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                         <button
                           type="button"
                           onClick={() => openWhatsApp(lead)}
-                          className="rounded-md bg-green-600 px-2 py-1.5 text-[11px] font-medium text-white transition hover:bg-green-700 sm:text-xs"
+                          className="rounded-md bg-green-600 px-2 py-1.5 text-[10px] font-medium text-white transition hover:bg-green-700 sm:text-xs"
                         >
                           Abrir WhatsApp
                         </button>
@@ -181,7 +183,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                         <button
                           type="button"
                           onClick={() => viewDetails(lead)}
-                          className="rounded-md border border-slate-200 px-2 py-1.5 text-[11px] font-medium text-slate-700 transition hover:bg-slate-100 sm:text-xs"
+                          className="rounded-md border border-slate-200 px-2 py-1.5 text-[10px] font-medium text-slate-700 transition hover:bg-slate-100 sm:text-xs"
                         >
                           Ver detalhes
                         </button>

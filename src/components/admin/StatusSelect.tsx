@@ -23,19 +23,28 @@ export function StatusSelect({ value, code, onChange }: StatusSelectProps) {
   }
 
   return (
-    <div className="space-y-2 rounded-lg border border-slate-200 bg-slate-50 p-2">
-      <select
-        value={nextStatus}
-        onChange={(event) => setNextStatus(event.target.value as LeadStatus)}
-        className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-700 sm:text-sm"
-      >
-        <option value="visitou">Visitou</option>
-        <option value="clicou_whatsapp">Clicou WhatsApp</option>
-        <option value="enviou_mensagem">Enviou mensagem</option>
-        <option value="fechou">Fechou</option>
-        <option value="nao_respondeu">Não respondeu</option>
-        <option value="perdido">Perdido</option>
-      </select>
+    <div className="flex flex-col gap-2 rounded-lg border border-slate-200 bg-slate-50 p-2">
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <select
+          value={nextStatus}
+          onChange={(event) => setNextStatus(event.target.value as LeadStatus)}
+          className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-700 sm:text-sm"
+        >
+          <option value="visitou">Visitou</option>
+          <option value="clicou_whatsapp">Clicou WhatsApp</option>
+          <option value="enviou_mensagem">Enviou mensagem</option>
+          <option value="fechou">Fechou</option>
+          <option value="nao_respondeu">Não respondeu</option>
+          <option value="perdido">Perdido</option>
+        </select>
+
+        <button
+          onClick={handleSave}
+          className="whitespace-nowrap rounded-md bg-slate-900 px-3 py-1.5 text-[11px] font-medium text-white hover:bg-slate-700 sm:text-xs"
+        >
+          Salvar status
+        </button>
+      </div>
 
       <textarea
         value={observacao}
@@ -44,13 +53,6 @@ export function StatusSelect({ value, code, onChange }: StatusSelectProps) {
         className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-700 sm:text-sm"
         rows={1}
       />
-
-      <button
-        onClick={handleSave}
-        className="w-full rounded-md bg-slate-900 px-3 py-1.5 text-[11px] font-medium text-white hover:bg-slate-700 sm:text-xs"
-      >
-        Salvar status
-      </button>
     </div>
   );
 }

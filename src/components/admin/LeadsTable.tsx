@@ -152,51 +152,57 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                 <th className="px-3 py-3 text-[10px] font-semibold uppercase tracking-wide text-slate-600 sm:px-4 sm:text-xs">GCLID</th>
                 <th className="px-3 py-3 text-[10px] font-semibold uppercase tracking-wide text-slate-600 sm:px-4 sm:text-xs">Campanha</th>
                 <th className="px-3 py-3 text-[10px] font-semibold uppercase tracking-wide text-slate-600 sm:px-4 sm:text-xs">Landing Page</th>
-                <th className="px-3 py-3 text-[10px] font-semibold uppercase tracking-wide text-slate-600 sm:px-4 sm:text-xs">Ações</th>
               </tr>
             </thead>
 
             <tbody className="divide-y divide-slate-200">
               {visibleRows.map((lead) => (
-                <tr key={lead.code} className="align-top">
-                  <td className="px-3 py-3 text-xs text-slate-600 sm:px-4 sm:text-sm">
-                    {lead.createdAt ? new Date(lead.createdAt).toLocaleString('pt-BR') : '-'}
-                  </td>
-                  <td className="px-3 py-3 text-xs font-medium text-slate-800 sm:px-4 sm:text-sm">{lead.code}</td>
-                  <td className="px-3 py-3 sm:px-4"><StatusBadge status={lead.status} /></td>
-                  <td className="px-3 py-3 text-xs text-slate-600 sm:px-4 sm:text-sm">{lead.gclid || '-'}</td>
-                  <td className="px-3 py-3 text-xs text-slate-600 sm:px-4 sm:text-sm">{lead.utms?.utm_campaign || '-'}</td>
-                  <td className="px-3 py-3 text-xs text-slate-600 sm:px-4 sm:text-sm">
-                    <span className="block max-w-[180px] break-all">{lead.landingPage || '-'}</span>
-                  </td>
-                  <td className="px-3 py-3 sm:px-4">
-                    <div className="w-full max-w-[240px] space-y-2">
-                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                        <button
-                          type="button"
-                          onClick={() => openWhatsApp(lead)}
-                          className="rounded-md bg-green-600 px-2 py-1.5 text-[10px] font-medium text-white transition hover:bg-green-700 sm:text-xs"
-                        >
-                          Abrir WhatsApp
-                        </button>
+                <>
+                  <tr key={`${lead.code}-data`} className="align-top">
+                    <td className="px-3 py-3 text-xs text-slate-600 sm:px-4 sm:text-sm">
+                      {lead.createdAt ? new Date(lead.createdAt).toLocaleString('pt-BR') : '-'}
+                    </td>
+                    <td className="px-3 py-3 text-xs font-medium text-slate-800 sm:px-4 sm:text-sm">{lead.code}</td>
+                    <td className="px-3 py-3 sm:px-4"><StatusBadge status={lead.status} /></td>
+                    <td className="px-3 py-3 text-xs text-slate-600 sm:px-4 sm:text-sm">{lead.gclid || '-'}</td>
+                    <td className="px-3 py-3 text-xs text-slate-600 sm:px-4 sm:text-sm">{lead.utms?.utm_campaign || '-'}</td>
+                    <td className="px-3 py-3 text-xs text-slate-600 sm:px-4 sm:text-sm">
+                      <span className="block max-w-[180px] break-all">{lead.landingPage || '-'}</span>
+                    </td>
+                  </tr>
 
-                        <button
-                          type="button"
-                          onClick={() => viewDetails(lead)}
-                          className="rounded-md border border-slate-200 px-2 py-1.5 text-[10px] font-medium text-slate-700 transition hover:bg-slate-100 sm:text-xs"
-                        >
-                          Ver detalhes
-                        </button>
+                  <tr key={`${lead.code}-actions`} className="bg-slate-50/70">
+                    <td colSpan={6} className="px-3 py-3 sm:px-4">
+                      <div className="space-y-2">
+                        <div className="flex flex-col gap-2 sm:flex-row">
+                          <button
+                            type="button"
+                            onClick={() => openWhatsApp(lead)}
+                            className="rounded-md bg-green-600 px-2 py-1.5 text-[10px] font-medium text-white transition hover:bg-green-700 sm:text-xs"
+                          >
+                            Abrir WhatsApp
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => viewDetails(lead)}
+                            className="rounded-md border border-slate-200 bg-white px-2 py-1.5 text-[10px] font-medium text-slate-700 transition hover:bg-slate-100 sm:text-xs"
+                          >
+                            Ver detalhes
+                          </button>
+                        </div>
+
+                        <div className="max-w-[420px]">
+                          <StatusSelect
+                            value={lead.status}
+                            code={lead.code}
+                            onChange={(nextStatus, observacao) => handleStatusChange(lead.code, nextStatus, observacao)}
+                          />
+                        </div>
                       </div>
-
-                      <StatusSelect
-                        value={lead.status}
-                        code={lead.code}
-                        onChange={(nextStatus, observacao) => handleStatusChange(lead.code, nextStatus, observacao)}
-                      />
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                </>
               ))}
             </tbody>
           </table>

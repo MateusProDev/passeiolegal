@@ -5,6 +5,13 @@ type UploadConversionParams = {
   currency?: string;
 };
 
+type ConversionResult = {
+  mode: 'api' | 'gtag';
+  code: string;
+  ok: boolean;
+  reason?: string;
+};
+
 function getGoogleAdsMode(): 'api' | 'gtag' {
   return 'api';
 }
@@ -17,7 +24,7 @@ async function uploadConversionViaGtag({
   code: string;
   value: number;
   currency: string;
-}) {
+}): Promise<ConversionResult> {
   try {
     if (typeof window !== 'undefined') {
       const sendTo = 'AW-11405399413/ZmQjCLeD4O0cEPWqwr4q';
@@ -40,7 +47,7 @@ async function uploadConversionViaApi({
   code,
   value = 0,
   currency = 'BRL',
-}: UploadConversionParams) {
+}: UploadConversionParams): Promise<ConversionResult> {
   try {
     const customerId = process.env.GOOGLE_ADS_CUSTOMER_ID;
     const developerToken = process.env.GOOGLE_ADS_DEVELOPER_TOKEN;

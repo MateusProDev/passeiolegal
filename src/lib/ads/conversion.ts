@@ -109,6 +109,7 @@ async function uploadConversionViaApi({
           order_id: code,
         },
       ],
+      partial_failure: true,
       validate_only: false,
     };
 

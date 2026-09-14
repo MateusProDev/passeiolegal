@@ -52,7 +52,7 @@ async function uploadConversionViaApi({
     const customerId = process.env.GOOGLE_ADS_CUSTOMER_ID?.replace(/-/g, '');
     const developerToken = process.env.GOOGLE_ADS_DEVELOPER_TOKEN;
     const loginCustomerId = process.env.GOOGLE_ADS_LOGIN_CUSTOMER_ID?.replace(/-/g, '');
-    const apiVersion = process.env.GOOGLE_ADS_API_VERSION || 'v20';
+    const apiVersion = process.env.GOOGLE_ADS_API_VERSION || 'v25';
     const conversionActionId = process.env.GOOGLE_ADS_CONVERSION_ACTION_ID || '7757625524';
     const clientId = process.env.GOOGLE_ADS_CLIENT_ID;
     const clientSecret = process.env.GOOGLE_ADS_CLIENT_SECRET;

@@ -53,6 +53,7 @@ export async function PATCH(
     const current = await ref.get();
     const previousStatus = current.exists ? current.data()?.status || 'visitou' : 'visitou';
     const updatedAt = new Date().toISOString();
+    let conversion: Awaited<ReturnType<typeof uploadConversion>> | undefined;
 
     await ref.set(
       {
@@ -70,26 +71,29 @@ export async function PATCH(
     }
 
     if (status === 'fechou' && !current.data()?.converted_at) {
-      const conversion = await uploadConversion({
+      conversion = await uploadConversion({
         gclid: current.data()?.gclid || null,
         code,
         value: 0,
         currency: 'BRL',
       });
 
-      if (!conversion.ok) {
-        return Response.json(
-          { error: 'Lead fechado, mas a conversão não foi enviada ao Google Ads', reason: conversion.reason },
-          { status: 502 }
-        );
+      if (conversion.ok) {
+        await ref.set({ converted_at: updatedAt }, { merge: true });
       }
-
-      await ref.set({ converted_at: updatedAt }, { merge: true });
     }
 
     await updateLeadStatus(code, status, updatedAt, observacao || '');
 
-    return Response.json({ ok: true, status, previousStatus, updated_at: updatedAt });
+    return Response.json({
+      ok: true,
+      status,
+      previousStatus,
+      updated_at: updatedAt,
+      conversion: conversion
+        ? { ok: conversion.ok, reason: conversion.reason }
+        : undefined,
+    });
   } catch (error) {
     console.error('[api/admin/lead] error:', error);
     return Response.json({ error: 'Erro ao atualizar lead' }, { status: 500 });

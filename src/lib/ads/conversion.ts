@@ -49,9 +49,11 @@ async function uploadConversionViaApi({
   currency = 'BRL',
 }: UploadConversionParams): Promise<ConversionResult> {
   try {
-    const customerId = process.env.GOOGLE_ADS_CUSTOMER_ID;
+    const customerId = process.env.GOOGLE_ADS_CUSTOMER_ID?.replace(/-/g, '');
     const developerToken = process.env.GOOGLE_ADS_DEVELOPER_TOKEN;
-    const loginCustomerId = process.env.GOOGLE_ADS_LOGIN_CUSTOMER_ID;
+    const loginCustomerId = process.env.GOOGLE_ADS_LOGIN_CUSTOMER_ID?.replace(/-/g, '');
+    const apiVersion = process.env.GOOGLE_ADS_API_VERSION || 'v20';
+    const conversionActionId = process.env.GOOGLE_ADS_CONVERSION_ACTION_ID || '7757625524';
     const clientId = process.env.GOOGLE_ADS_CLIENT_ID;
     const clientSecret = process.env.GOOGLE_ADS_CLIENT_SECRET;
     const refreshToken = process.env.GOOGLE_ADS_REFRESH_TOKEN;
@@ -76,6 +78,10 @@ async function uploadConversionViaApi({
 
     if (!tokenResponse.ok) {
       const text = await tokenResponse.text();
+      if (text.includes('invalid_grant')) {
+        console.error('[ads] Google OAuth refresh token inválido ou revogado.');
+        return { mode: 'api', code, ok: false, reason: 'oauth_invalid_grant' };
+      }
       throw new Error(`Google OAuth refresh falhou: ${text}`);
     }
 
@@ -85,12 +91,12 @@ async function uploadConversionViaApi({
       throw new Error('Google Ads API access token ausente.');
     }
 
-    const conversionAction = `customers/${customerId}/conversionActions/7757625524`;
+    const conversionAction = `customers/${customerId}/conversionActions/${conversionActionId}`;
     if (!gclid) {
       return { mode: 'api', code, ok: false, reason: 'missing_gclid' };
     }
     const conversionDateTime = new Date().toISOString().slice(0, 19).replace('T', ' ') + '+00:00';
-    const apiUrl = `https://googleads.googleapis.com/v18/customers/${customerId}:uploadClickConversions`;
+    const apiUrl = `https://googleads.googleapis.com/${apiVersion}/customers/${customerId}:uploadClickConversions`;
 
     const payload = {
       conversions: [
@@ -112,7 +118,7 @@ async function uploadConversionViaApi({
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
         'developer-token': developerToken,
-        'login-customer-id': loginCustomerId || customerId,
+        ...(loginCustomerId ? { 'login-customer-id': loginCustomerId } : {}),
       },
       body: JSON.stringify(payload),
     });

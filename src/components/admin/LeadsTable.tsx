@@ -78,7 +78,11 @@ export function LeadsTable({ leads }: LeadsTableProps) {
         )
       );
 
-      toast.success('Status atualizado com sucesso');
+      if (nextStatus === 'fechou' && payload.conversion && !payload.conversion.ok) {
+        toast.success('Lead fechado. Conversão pendente no Google Ads.');
+      } else {
+        toast.success('Status atualizado com sucesso');
+      }
     } catch (error: any) {
       console.error(error);
       toast.error(error.message || 'Erro ao atualizar status');

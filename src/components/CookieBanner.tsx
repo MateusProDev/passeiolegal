@@ -12,6 +12,7 @@ export default function CookieBanner() {
 
   const accept = () => {
     localStorage.setItem('lgpd_consent', 'true');
+    window.dispatchEvent(new Event('lgpd-consent-changed'));
     setVisible(false);
   };
 
@@ -26,8 +27,12 @@ export default function CookieBanner() {
     <div className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 p-4 shadow-2xl backdrop-blur">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="text-sm text-slate-700">
-          Usamos cookies para rastrear a origem da visita e melhorar campanhas de publicidade.
-          Só ativamos o tracking após o seu consentimento.
+          <p className="font-semibold text-slate-900">Podemos melhorar seu atendimento?</p>
+          <p>
+            Com sua autorização, usamos cookies para identificar a origem do contato e medir campanhas.
+            Isso ajuda a abrir o WhatsApp com seu código de atendimento e não envia mensagens em seu nome.
+          </p>
+          <p className="mt-1 text-xs text-slate-500">Você pode recusar. Nesse caso, o WhatsApp continuará funcionando, mas sem rastreamento de campanha.</p>
         </div>
 
         <div className="flex gap-3">

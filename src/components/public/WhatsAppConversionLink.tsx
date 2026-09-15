@@ -1,6 +1,8 @@
 "use client";
 
 import type { AnchorHTMLAttributes, MouseEvent, ReactNode } from "react";
+import { parseLeadTrackingFromStorage } from '@/lib/tracking/capture';
+import { injectTrackingCodeIntoWhatsAppUrl } from '@/lib/tracking/whatsapp';
 
 declare global {
   interface Window {
@@ -38,15 +40,9 @@ export default function WhatsAppConversionLink({
     event.preventDefault();
     onClick?.();
 
-    const codeFromStorage = (() => {
-      try {
-        const raw = localStorage.getItem('lead_tracking');
-        if (!raw) return null;
-        return JSON.parse(raw)?.code || null;
-      } catch {
-        return null;
-      }
-    })();
+    const tracking = parseLeadTrackingFromStorage();
+    const codeFromStorage = tracking?.code || null;
+    const finalHref = injectTrackingCodeIntoWhatsAppUrl(href, codeFromStorage || undefined);
 
     if (codeFromStorage) {
       fetch('/api/track', {
@@ -56,8 +52,8 @@ export default function WhatsAppConversionLink({
         body: JSON.stringify({
           event: 'clicou_whatsapp',
           code: codeFromStorage,
-          gclid: null,
-          utms: {},
+          gclid: tracking?.gclid || null,
+          utms: tracking?.utms || {},
           landingPage: window.location.pathname,
           userAgent: navigator.userAgent,
         }),
@@ -90,20 +86,20 @@ export default function WhatsAppConversionLink({
       }
 
       if (target === '_blank') {
-        window.open(href, '_blank', 'noopener,noreferrer');
+        window.open(finalHref, '_blank', 'noopener,noreferrer');
         return;
       }
 
-      window.location.href = href;
+      window.location.href = finalHref;
       return;
     }
 
     if (target === '_blank') {
-      window.open(href, '_blank', 'noopener,noreferrer');
+      window.open(finalHref, '_blank', 'noopener,noreferrer');
       return;
     }
 
-    window.location.href = href;
+    window.location.href = finalHref;
   };
   return (
     <a href={href} target={target} onClick={handleClick} {...props}>

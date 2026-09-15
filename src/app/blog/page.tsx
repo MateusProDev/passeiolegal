@@ -25,7 +25,6 @@ interface BlogPost {
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
   
   const baseUrl = getSiteUrl();
   const breadcrumbItems = [
@@ -41,8 +40,6 @@ export default function BlogPage() {
         setPosts(publishedPosts);
       } catch (error) {
         console.error('Error fetching blog posts:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -64,14 +61,6 @@ export default function BlogPage() {
     const words = content.split(/\s+/).length;
     return Math.ceil(words / wordsPerMinute);
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
 
   return (
     <main className="min-h-screen bg-gray-50 pt-24">

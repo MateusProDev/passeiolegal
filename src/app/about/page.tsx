@@ -9,7 +9,7 @@ import { getSiteUrl } from "@/lib/site-url";
 const baseUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-  title: "Sobre Nós - Passeio Legal",
+  title: "Sobre Nós",
   description: "Conheça a Passeio Legal - Há mais de 10 anos oferecendo experiências únicas de turismo com conforto, segurança e profissionalismo.",
   openGraph: {
     title: "Sobre Nós - Passeio Legal",

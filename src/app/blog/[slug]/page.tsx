@@ -24,12 +24,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     if (!post) {
       return {
-        title: 'Post não encontrado | Passeio Legal',
+        title: 'Post não encontrado',
       };
     }
 
     return {
-      title: `${post.title || 'Post'} | Passeio Legal`,
+      title: post.title || 'Post',
       description: post.summary || `Leia o artigo completo no blog da Passeio Legal. Dicas de turismo em Fortaleza e região.`,
       openGraph: {
         type: "article",
@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   } catch (error) {
     return {
-      title: 'Post não encontrado | Passeio Legal',
+      title: 'Post não encontrado',
     };
   }
 }

@@ -27,7 +27,6 @@ interface Tour {
 export default function PasseiosPage() {
   const [tours, setTours] = useState<Tour[]>([]);
   const [filteredTours, setFilteredTours] = useState<Tour[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [durationFilter, setDurationFilter] = useState<'all' | 'short' | 'medium' | 'long'>('all');
@@ -56,8 +55,6 @@ export default function PasseiosPage() {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -111,14 +108,6 @@ export default function PasseiosPage() {
 
     setFilteredTours(filtered);
   }, [searchTerm, durationFilter, showFeaturedOnly, tours]);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
 
   return (
     <main className="min-h-screen bg-gray-50 pt-24">

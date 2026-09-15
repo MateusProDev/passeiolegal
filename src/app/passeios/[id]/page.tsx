@@ -40,14 +40,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!tour) {
     return {
-      title: "Passeio não encontrado | Passeio Legal",
+      title: "Passeio não encontrado",
       robots: "noindex, nofollow",
     };
   }
 
   // SEO: Title otimizado (até 60 caracteres)
   const title = tour.name.length > 50 ? tour.name.substring(0, 50) + "..." : tour.name;
-  const fullTitle = `${title} | Passeio Legal - Passeios em Fortaleza`;
 
   // SEO: Description persuasiva com CTA (até 160 caracteres)
   const description = tour.description 
@@ -67,7 +66,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   ].join(", ");
 
   return {
-    title: fullTitle,
+    title,
     description,
     keywords,
     robots: {

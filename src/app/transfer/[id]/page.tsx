@@ -38,13 +38,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!transfer) {
     return {
-      title: "Transfer não encontrado | Passeio Legal",
+      title: "Transfer não encontrado",
       robots: "noindex, nofollow",
     };
   }
 
   return {
-    title: `${transfer.name} | Passeio Legal`,
+    title: transfer.name,
     description: transfer.description || `Reserve ${transfer.name} com a Passeio Legal. Serviços de transfer em Fortaleza e região com conforto e segurança.`,
     openGraph: {
       type: "website",

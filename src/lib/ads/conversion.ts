@@ -124,9 +124,26 @@ async function uploadConversionViaApi({
       body: JSON.stringify(payload),
     });
 
+    const responseBody = (await response.json().catch(() => null)) as {
+      partial_failure_error?: {
+        message?: string;
+        details?: unknown[];
+      };
+    } | null;
+
     if (!response.ok) {
-      const text = await response.text();
-      throw new Error(`Google Ads upload falhou: ${text}`);
+      throw new Error(`Google Ads upload falhou: ${JSON.stringify(responseBody)}`);
+    }
+
+    if (responseBody?.partial_failure_error) {
+      const error = responseBody.partial_failure_error;
+      const reason = error.message || 'partial_failure';
+      console.error('[ads] Google Ads rejeitou a conversão:', {
+        code,
+        reason,
+        details: error.details,
+      });
+      return { mode: 'api', code, ok: false, reason };
     }
 
     return { mode: 'api', code, ok: true };

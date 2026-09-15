@@ -29,10 +29,15 @@ export default function CookieBanner() {
         <div className="text-sm text-slate-700">
           <p className="font-semibold text-slate-900">Podemos melhorar seu atendimento?</p>
           <p>
-            Com sua autorização, usamos cookies para identificar a origem do contato e medir campanhas.
-            Isso ajuda a abrir o WhatsApp com seu código de atendimento e não envia mensagens em seu nome.
+            Com sua autorização, usamos cookies e dados de navegação para facilitar seu atendimento.
+            Isso ajuda a abrir o WhatsApp com seu código de referência e não envia mensagens em seu nome.
           </p>
-          <p className="mt-1 text-xs text-slate-500">Você pode recusar. Nesse caso, o WhatsApp continuará funcionando, mas sem rastreamento de campanha.</p>
+          <p className="mt-1 text-xs text-slate-500">
+            Você pode recusar. Nesse caso, o WhatsApp continuará funcionando, mas sem o código de referência.
+            <a href="/politica-de-privacidade" className="ml-1 underline hover:text-slate-700">
+              Saiba quais dados são coletados
+            </a>
+          </p>
         </div>
 
         <div className="flex gap-3">

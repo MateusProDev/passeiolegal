@@ -1,7 +1,6 @@
 "use client";
 
 import { ReactNode } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
@@ -45,60 +44,60 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </div>
 
         <nav className="flex flex-wrap gap-2 p-4 lg:block lg:space-y-2 lg:p-6">
-          <Link
+          <a
             href="/admin/dashboard"
             className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Painel
-          </Link>
-          <Link
+          </a>
+          <a
             href="/admin/banners"
             className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Banners
-          </Link>
-          <Link
+          </a>
+          <a
             href="/admin/tours"
             className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Passeios
-          </Link>
-          <Link
+          </a>
+          <a
             href="/admin/transfers"
             className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Transfers
-          </Link>
-          <Link
+          </a>
+          <a
             href="/admin/testimonials"
             className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Depoimentos
-          </Link>
-          <Link
+          </a>
+          <a
             href="/admin/blog"
             className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Blog
-          </Link>
-          <Link
+          </a>
+          <a
             href="/admin/faq"
             className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             FAQ
-          </Link>
-          <Link
+          </a>
+          <a
             href="/admin/leads"
             className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Leads
-          </Link>
-          <Link
+          </a>
+          <a
             href="/admin/settings"
             className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent lg:px-4"
           >
             Configurações
-          </Link>
+          </a>
         </nav>
 
         <div className="border-t border-border p-4 lg:absolute lg:bottom-6 lg:left-6 lg:right-6 lg:p-0 lg:pt-6">

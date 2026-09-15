@@ -64,7 +64,14 @@ export function LocalBusinessJsonLd({ name, url, logo, description, address, pho
   phone?: string;
   email?: string;
 }) {
-  const streetAddress = address ? [address.street, address.number].filter(Boolean).join(', ') : undefined;
+  const streetAddress = address
+    ? [
+        [address.street, address.number].filter(Boolean).join(', '),
+        address.neighborhood,
+      ]
+        .filter(Boolean)
+        .join(' - ')
+    : undefined;
   const data = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
@@ -76,7 +83,6 @@ export function LocalBusinessJsonLd({ name, url, logo, description, address, pho
       address: {
         '@type': 'PostalAddress',
         ...(streetAddress && { streetAddress }),
-        ...(address.neighborhood && { addressDistrict: address.neighborhood }),
         addressLocality: address.city,
         addressRegion: address.state,
         postalCode: address.zip,

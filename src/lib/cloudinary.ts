@@ -11,7 +11,7 @@ export interface CloudinaryUploadResult {
   resource_type: string;
   width: number;
   height: number;
-}
+} 
 
 export interface CloudinaryDeleteResult {
   result: string;

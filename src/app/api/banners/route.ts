@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { bannerService } from "@/lib/firestore";
 
 // GET /api/banners - Get all banners
@@ -34,6 +35,7 @@ export async function POST(request: NextRequest) {
     }
 
     const id = await bannerService.create(body);
+    revalidatePath("/");
     return NextResponse.json(
       { id, message: "Banner created successfully" },
       { status: 201 }

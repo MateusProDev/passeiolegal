@@ -169,9 +169,14 @@ export const firebaseService = {
 // Specialized collection services
 export const bannerService = {
   async getAll() {
-    return firebaseService.getMany<Types.Banner>("banners", [
+    const banners = await firebaseService.getMany<Types.Banner>("banners", [
       where("active", "==", true),
     ]);
+    return banners.sort((first, second) => {
+      const firstOrder = first.order ?? Number.MAX_SAFE_INTEGER;
+      const secondOrder = second.order ?? Number.MAX_SAFE_INTEGER;
+      return firstOrder - secondOrder;
+    });
   },
 
   async getById(id: string) {

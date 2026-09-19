@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { bannerService } from "@/lib/firestore";
 
 // GET /api/banners/[id] - Get single banner
@@ -32,6 +33,7 @@ export async function PUT(
   try {
     const body = await request.json();
     await bannerService.update(params.id, body);
+    revalidatePath("/");
     return NextResponse.json({ message: "Banner updated successfully" });
   } catch (error) {
     console.error("Error updating banner:", error);
@@ -49,6 +51,7 @@ export async function DELETE(
 ) {
   try {
     await bannerService.delete(params.id);
+    revalidatePath("/");
     return NextResponse.json({ message: "Banner deleted successfully" });
   } catch (error) {
     console.error("Error deleting banner:", error);

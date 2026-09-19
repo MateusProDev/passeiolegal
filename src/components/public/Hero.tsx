@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 interface Banner {
@@ -15,9 +18,26 @@ interface HeroProps {
 }
 
 export default function Hero({ banners }: HeroProps) {
-  const safeBanner = banners.find((banner) => banner?.imageUrl)?.imageUrl
-    ? banners.find((banner) => banner?.imageUrl)
-    : null;
+  const availableBanners = banners.filter((banner) => banner?.imageUrl);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (currentIndex >= availableBanners.length) {
+      setCurrentIndex(0);
+    }
+  }, [availableBanners.length, currentIndex]);
+
+  useEffect(() => {
+    if (availableBanners.length < 2) return;
+
+    const interval = window.setInterval(() => {
+      setCurrentIndex((index) => (index + 1) % availableBanners.length);
+    }, 6000);
+
+    return () => window.clearInterval(interval);
+  }, [availableBanners.length]);
+
+  const safeBanner = availableBanners[currentIndex] || null;
 
   if (!safeBanner) {
     return (
@@ -31,10 +51,7 @@ export default function Hero({ banners }: HeroProps) {
   }
 
   const currentBanner = safeBanner;
-  const normalizedTitle = currentBanner.title?.trim();
-  const heroTitle = normalizedTitle && !normalizedTitle.toLowerCase().includes('top 3')
-    ? normalizedTitle
-    : 'Passeios e Transfers em Fortaleza e Região';
+  const heroTitle = currentBanner.title?.trim() || 'Passeios e Transfers em Fortaleza e Região';
 
   return (
     <section className="relative h-[600px] overflow-hidden" aria-label="Banner principal">
@@ -75,6 +92,21 @@ export default function Hero({ banners }: HeroProps) {
           </a>
         </div>
       </div>
+
+      {availableBanners.length > 1 && (
+        <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2" aria-label="Selecionar banner">
+          {availableBanners.map((banner, index) => (
+            <button
+              key={banner.id}
+              type="button"
+              onClick={() => setCurrentIndex(index)}
+              className={`h-2 rounded-full transition-all ${index === currentIndex ? 'w-8 bg-white' : 'w-2 bg-white/60'}`}
+              aria-label={`Exibir banner ${index + 1}`}
+              aria-current={index === currentIndex ? 'true' : undefined}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

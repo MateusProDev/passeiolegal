@@ -116,11 +116,19 @@ export default async function PasseioDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // Busca passeios relacionados para recomendação
-  const relatedTours = tour.recommendedTourIds?.length
-    ? await tourService.getRecommended(tour.recommendedTourIds, tour.id, 3)
-    : await tourService.getRelated(tour.id, 3);
-  const faqs = await faqService.getAll();
+  const [relatedTours, faqs] = await Promise.all([
+    (tour.recommendedTourIds?.length
+      ? tourService.getRecommended(tour.recommendedTourIds, tour.id, 3)
+      : tourService.getRelated(tour.id, 3)
+    ).catch((error) => {
+      console.error("Error fetching related tours:", error);
+      return [];
+    }),
+    faqService.getAll().catch((error) => {
+      console.error("Error fetching FAQs:", error);
+      return [];
+    }),
+  ]);
   const galleryImages = [
     {
       id: "main",

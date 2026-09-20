@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Clock, Users, Search, SlidersHorizontal } from 'lucide-react';
-import { tourService } from '@/lib/firestore';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
@@ -32,6 +31,8 @@ export default function PasseiosPage() {
   const [durationFilter, setDurationFilter] = useState<'all' | 'short' | 'medium' | 'long'>('all');
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   const [sectionDisabled, setSectionDisabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   
   const baseUrl = getSiteUrl();
   const breadcrumbItems = [
@@ -43,18 +44,27 @@ export default function PasseiosPage() {
     const fetchData = async () => {
       try {
         const [allTours, settingsData] = await Promise.all([
-          tourService.getAll(false),
+          fetch('/api/tours').then(async (response) => {
+            if (!response.ok) throw new Error(`Failed to fetch tours: ${response.status}`);
+            const data = await response.json();
+            if (!Array.isArray(data)) throw new Error('Invalid tours response');
+            return data as Tour[];
+          }),
           fetchSettingsCached()
         ]);
 
         setTours(allTours);
         setFilteredTours(allTours);
+        setLoadError(false);
 
         if (settingsData?.sections?.toursEnabled === false) {
           setSectionDisabled(true);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
+        setLoadError(true);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -192,7 +202,21 @@ export default function PasseiosPage() {
         </div>
 
         {/* Tours Grid */}
-        {filteredTours.length === 0 ? (
+        {isLoading ? (
+          <div className="text-center py-12" aria-live="polite">
+            <p className="text-gray-600 text-lg">Carregando passeios...</p>
+          </div>
+        ) : loadError ? (
+          <div className="text-center py-12" role="alert">
+            <p className="text-gray-600 text-lg">Não foi possível carregar os passeios.</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-4 text-primary-600 hover:text-primary-700 font-medium"
+            >
+              Tentar novamente
+            </button>
+          </div>
+        ) : filteredTours.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-600 text-lg">Nenhum passeio encontrado com os filtros selecionados.</p>
             <button

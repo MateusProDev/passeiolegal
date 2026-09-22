@@ -142,13 +142,13 @@ export default function Tours({ tours }: ToursProps) {
                   <article
                     className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 ease-out flex flex-col group"
                   >
-                <div className="relative h-48 w-full">
+                <div className="relative aspect-square w-full overflow-hidden">
                   {tour.mainImageUrl ? (
                     <Image
                       src={tour.mainImageUrl}
                       alt={tour.mainImageAlt || tour.name}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) calc(50vw - 2rem), calc(100vw - 4rem)"
                     />
                   ) : (

@@ -119,8 +119,8 @@ export default function PasseiosClient({ tours, sectionDisabled, loadError }: Pa
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredTours.map((tour) => (
               <article key={tour.id} className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
-                <div className="relative h-48 w-full">
-                  {tour.mainImageUrl ? <Image src={tour.mainImageUrl} alt={tour.mainImageAlt || tour.name} fill className="object-cover" unoptimized /> : <div className="w-full h-full bg-gray-200 flex items-center justify-center"><span className="text-gray-400">Sem imagem</span></div>}
+                <div className="relative aspect-square w-full overflow-hidden">
+                  {tour.mainImageUrl ? <Image src={tour.mainImageUrl} alt={tour.mainImageAlt || tour.name} fill className="h-full w-full object-cover object-center" unoptimized /> : <div className="w-full h-full bg-gray-200 flex items-center justify-center"><span className="text-gray-400">Sem imagem</span></div>}
                   {tour.featured && <span className="absolute top-4 right-4 bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-semibold">Destaque</span>}
                 </div>
                 <div className="p-6 flex flex-col flex-1">

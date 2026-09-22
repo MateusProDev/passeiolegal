@@ -40,11 +40,11 @@ export default function RecommendedTours({ tours }: RecommendedToursProps) {
               className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100"
             >
               {/* Imagem */}
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative aspect-square w-full overflow-hidden">
                 <img
                   src={tour.mainImageUrl}
                   alt={`${tour.name} - Passeio em Fortaleza`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                 />
                 {tour.featured && (
                   <div className="absolute top-3 right-3 bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">

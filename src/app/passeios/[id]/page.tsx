@@ -2,13 +2,13 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
-import { faqService, tourService } from "@/lib/firestore";
+import { tourService } from "@/lib/firestore";
 import { Clock, Check, X, Users, AlertCircle, Sparkles, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import TourConversionBar from "@/components/public/TourConversionBar";
 import TourTrustBadges from "@/components/public/TourTrustBadges";
-import FAQ from "@/components/public/FAQ";
+import TourFAQ from "@/components/public/TourFAQ";
 import RecommendedTours from "@/components/public/RecommendedTours";
 import TourTracking from "@/components/public/TourTracking";
 import DetailGallery from "@/components/public/DetailGallery";
@@ -116,19 +116,13 @@ export default async function PasseioDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const [relatedTours, faqs] = await Promise.all([
-    (tour.recommendedTourIds?.length
-      ? tourService.getRecommended(tour.recommendedTourIds, tour.id, 3)
-      : tourService.getRelated(tour.id, 3)
-    ).catch((error) => {
-      console.error("Error fetching related tours:", error);
-      return [];
-    }),
-    faqService.getAll().catch((error) => {
-      console.error("Error fetching FAQs:", error);
-      return [];
-    }),
-  ]);
+  const relatedTours = await (tour.recommendedTourIds?.length
+    ? tourService.getRecommended(tour.recommendedTourIds, tour.id, 3)
+    : tourService.getRelated(tour.id, 3)
+  ).catch((error) => {
+    console.error("Error fetching related tours:", error);
+    return [];
+  });
   const galleryImages = [
     {
       id: "main",
@@ -295,7 +289,7 @@ export default async function PasseioDetailPage({ params }: PageProps) {
       <TourTrustBadges />
 
       {/* FAQ */}
-      <FAQ faqs={faqs} />
+      <TourFAQ faqs={tour.faqs} />
 
       {/* Passeios Recomendados */}
       <RecommendedTours tours={relatedTours} />

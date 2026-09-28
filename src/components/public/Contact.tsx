@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
-import { metaPixelEvents } from '@/utils/metaPixel';
-import { fetchSettingsCached } from '@/lib/settings-cache';
-import { parseLeadTrackingFromStorage } from '@/lib/tracking/capture';
+import { useState, useEffect } from "react";
+import { Mail, Phone, MapPin, Send, MessageCircle, Check } from "lucide-react";
+import { metaPixelEvents } from "@/utils/metaPixel";
+import { fetchSettingsCached } from "@/lib/settings-cache";
+import { parseLeadTrackingFromStorage } from "@/lib/tracking/capture";
 
 declare global {
   interface Window {
@@ -12,74 +12,131 @@ declare global {
   }
 }
 
+interface ContactSettings {
+  contactInfo?: {
+    phone?: string;
+    email?: string;
+    whatsapp?: string;
+    address?: string;
+  };
+  whatsappConfig?: {
+    number?: string;
+    defaultMessage?: string;
+  };
+}
+
+/* Número de fallback, usado apenas se as configurações do site não carregarem. */
+const FALLBACK_WHATSAPP = "5585997314093";
+
+function buildWhatsAppUrl(number: string, message: string) {
+  const digits = (number || FALLBACK_WHATSAPP).replace(/\D/g, "");
+  return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
+}
+
 export default function Contact() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: '',
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [settings, setSettings] = useState<any>(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [waUrl, setWaUrl] = useState("");
+  const [error, setError] = useState("");
+  const [settings, setSettings] = useState<ContactSettings | null>(null);
 
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const data = await fetchSettingsCached();
+        const data = await fetchSettingsCached<ContactSettings>();
         setSettings(data ?? null);
       } catch (error) {
-        console.error('Error fetching settings:', error);
+        console.error("Error fetching settings:", error);
       }
     };
 
     fetchSettings();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  const contactInfo = settings?.contactInfo || {};
+  const whatsappNumber = settings?.whatsappConfig?.number || FALLBACK_WHATSAPP;
 
-    // Track lead event
-    metaPixelEvents.lead({
-      content_name: 'Contact Form',
-      content_category: 'Contact'
-    });
-
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    const tracking = parseLeadTrackingFromStorage();
-
-    if (tracking?.code) {
-      fetch('/api/track', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        keepalive: true,
-        body: JSON.stringify({
-          event: 'enviou_mensagem',
-          code: tracking.code,
-          gclid: tracking.gclid || null,
-          utms: tracking.utms || {},
-          landingPage: window.location.pathname,
-          userAgent: navigator.userAgent,
-          observacao: 'Formulário de contato enviado',
-        }),
-      }).catch(() => undefined);
-    }
-
-    alert('Mensagem enviada com sucesso!');
-    setFormData({ name: '', email: '', phone: '', message: '' });
-    setIsSubmitting(false);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const contactInfo = settings?.contactInfo || {};
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError("");
+
+    metaPixelEvents.lead({
+      content_name: "Contact Form",
+      content_category: "Contact",
+    });
+
+    try {
+      /* O lead é registrado no Firestore via /api/track, que já trata
+         o evento enviou_mensagem. Se o tracking não existir, o contato
+         segue pelo WhatsApp de qualquer forma. */
+      const tracking = parseLeadTrackingFromStorage();
+
+      const observacao = [
+        `Nome: ${formData.name}`,
+        `E-mail: ${formData.email}`,
+        formData.phone ? `Telefone: ${formData.phone}` : null,
+        `Mensagem: ${formData.message}`,
+      ]
+        .filter(Boolean)
+        .join(" | ");
+
+      if (tracking?.code) {
+        await fetch("/api/track", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          keepalive: true,
+          body: JSON.stringify({
+            event: "enviou_mensagem",
+            code: tracking.code,
+            gclid: tracking.gclid || null,
+            utms: tracking.utms || {},
+            landingPage: window.location.pathname,
+            userAgent: navigator.userAgent,
+            observacao,
+          }),
+        }).catch(() => undefined);
+      }
+
+      /* Conversa imediata no WhatsApp, já com tudo o que foi preenchido. */
+      const message = [
+        "Olá! Vim pelo site da Passeio Legal e gostaria de falar com vocês.",
+        "",
+        `*Nome:* ${formData.name}`,
+        `*E-mail:* ${formData.email}`,
+        formData.phone ? `*Telefone:* ${formData.phone}` : null,
+        "",
+        `*Mensagem:* ${formData.message}`,
+      ]
+        .filter(Boolean)
+        .join("\n");
+
+      setWaUrl(buildWhatsAppUrl(whatsappNumber, message));
+      setIsSubmitted(true);
+    } catch (err) {
+      console.error("Erro ao enviar contato:", err);
+      setError(
+        "Não foi possível enviar agora. Fale com a gente pelo WhatsApp enquanto isso."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section id="contact" className="py-14 bg-white">
@@ -147,84 +204,135 @@ export default function Contact() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                  Nome Completo
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  placeholder="Seu nome"
-                />
-              </div>
+            <div>
+              {isSubmitted ? (
+                <div className="space-y-5">
+                  <div className="flex items-center gap-3 text-green-700">
+                    <span className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center">
+                      <Check size={20} />
+                    </span>
+                    <p className="font-semibold text-lg">
+                      Recebemos seus dados, {formData.name}!
+                    </p>
+                  </div>
+                  <p className="text-gray-600">
+                    Falta um passo: toque no botão abaixo para abrir o WhatsApp
+                    com sua mensagem já preenchida.{" "}
+                    <strong>
+                      Se a janela não abrir sozinha, o botão resolve.
+                    </strong>
+                  </p>
+                  <a
+                    href={waUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-[#25D366] hover:bg-[#1da851] text-white font-semibold px-8 py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle size={20} />
+                    Abrir conversa no WhatsApp
+                  </a>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Nome Completo
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="Seu nome"
+                    />
+                  </div>
 
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  E-mail
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  placeholder="seu@email.com"
-                />
-              </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      E-mail
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="seu@email.com"
+                    />
+                  </div>
 
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                  Telefone
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  placeholder="(11) 99999-9999"
-                />
-              </div>
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Telefone
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="(85) 99999-9999"
+                    />
+                  </div>
 
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                  Mensagem
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
-                  placeholder="Como podemos ajudar?"
-                />
-              </div>
+                  <div>
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Mensagem
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                      rows={4}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                      placeholder="Como podemos ajudar?"
+                    />
+                  </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 text-white font-semibold px-8 py-3 rounded-lg transition-colors flex items-center justify-center space-x-2"
-              >
-                <Send size={20} />
-                <span>{isSubmitting ? 'Enviando...' : 'Enviar Mensagem'}</span>
-              </button>
-            </form>
+                  {error && (
+                    <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm">
+                      {error}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 text-white font-semibold px-8 py-3 rounded-lg transition-colors flex items-center justify-center space-x-2"
+                  >
+                    <Send size={20} />
+                    <span>
+                      {isSubmitting ? "Enviando..." : "Enviar e abrir o WhatsApp"}
+                    </span>
+                  </button>
+                </form>
+              )}
+            </div>
 
             {/* Map */}
             <div className="w-full h-80 rounded-lg overflow-hidden shadow-lg">
               <iframe
-                src="https://www.bing.com/maps/embed?h=400&w=600&cp=-3.847030~-38.391151&lvl=15&typ=d&sty=r&src=SHELL&FORM=MBEDV8"
+                src="https://www.google.com/maps?q=Avenida+Oceano+Atlantico+683+-+Porto+das+Dunas,+Aquiraz+-+CE,+61700-000&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}

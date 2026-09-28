@@ -92,6 +92,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
                     src={featuredTestimonial.clientPhoto}
                     alt={featuredTestimonial.clientPhotoAlt || featuredTestimonial.clientName}
                     fill
+                    unoptimized
                     className="object-cover"
                     sizes="64px"
                   />

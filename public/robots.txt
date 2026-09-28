@@ -2,5 +2,12 @@
 User-agent: *
 Allow: /
 
+# Editor e páginas internas de teste não devem ser indexadas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /login
+Disallow: /test-page
+Disallow: /teste-gclid
+
 # Sitemap
-Sitemap: https://passeiolegal.com/sitemap.xml
+Sitemap: https://www.passeiolegal.com/sitemap.xml

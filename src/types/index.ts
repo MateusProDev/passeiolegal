@@ -53,6 +53,7 @@ export interface Transfer {
   id: string;
   slug?: string;
   recommendedTransferIds?: string[];
+  featuredOnHome?: boolean;
   name: string;
   description: string;
   imageUrl: string;

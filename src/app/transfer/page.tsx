@@ -4,12 +4,10 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Car, Users, Search } from 'lucide-react';
-import { transferService } from '@/lib/firestore';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
 import { getSiteUrl } from '@/lib/site-url';
-import { fetchSettingsCached } from '@/lib/settings-cache';
 
 interface Transfer {
   id: string;
@@ -39,9 +37,16 @@ export default function TransfersPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const [transfersResponse, settingsResponse] = await Promise.all([
+          fetch('/api/transfers?active=true', { cache: 'no-store' }),
+          fetch('/api/settings', { cache: 'no-store' }),
+        ]);
+        if (!transfersResponse.ok || !settingsResponse.ok) {
+          throw new Error('Falha ao carregar os transfers.');
+        }
         const [allTransfers, settingsData] = await Promise.all([
-          transferService.getAll(false),
-          fetchSettingsCached()
+          transfersResponse.json(),
+          settingsResponse.json(),
         ]);
 
         setTransfers(allTransfers);

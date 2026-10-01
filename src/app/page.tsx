@@ -31,7 +31,7 @@ const Footer = dynamicImport(() => import("@/components/public/Footer"), {
 });
 
 // Cache the homepage briefly to keep content fresh without rendering it on every request.
-export const revalidate = 300;
+export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = getSiteUrl();
@@ -73,7 +73,7 @@ async function getPageData() {
     const [banners, tours, transfers, testimonials, blogPosts, faqs, settings] = await Promise.all([
       bannerService.getAll(),
       tourService.getAll(false),
-      transferService.getAll(false),
+      transferService.getAll(true),
       testimonialService.getAll(),
       blogService.getAll(false),
       faqService.getAll(),
@@ -108,6 +108,8 @@ export default async function Home() {
   
   const toursEnabled = settings?.sections?.toursEnabled ?? true;
   const transfersEnabled = settings?.sections?.transfersEnabled ?? true;
+  const featuredTransfers = transfers.filter((transfer) => transfer.featuredOnHome);
+  const homeTransfers = (featuredTransfers.length > 0 ? featuredTransfers : transfers).slice(0, 3);
   const aboutSection = settings?.aboutSection;
   const aboutStats = aboutSection?.stats || [
     { value: 4, label: "Anos de Experiência" },
@@ -123,7 +125,7 @@ export default async function Home() {
 
       {toursEnabled && <Tours tours={tours} />}
       
-      {transfersEnabled && <Transfers transfers={transfers} />}
+      {transfersEnabled && <Transfers transfers={homeTransfers} />}
 
       <section id="about" className="border-t border-gray-200 bg-white py-12 sm:py-16">
         <div className="container mx-auto px-4">

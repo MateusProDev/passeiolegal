@@ -22,6 +22,7 @@ export default function EditTransfer() {
     capacity: "",
     vehicleType: "",
     active: true,
+    featuredOnHome: false,
     imageUrl: "",
     imageAlt: "",
     galleryImages: [] as GalleryImage[],
@@ -47,6 +48,7 @@ export default function EditTransfer() {
           capacity: transfer.capacity ? transfer.capacity.toString() : "",
           vehicleType: transfer.vehicleType || "",
           active: transfer.active ?? true,
+          featuredOnHome: transfer.featuredOnHome ?? false,
           imageUrl: transfer.imageUrl || "",
           imageAlt: transfer.imageAlt || "",
           galleryImages: Array.isArray(transfer.galleryImages) ? transfer.galleryImages.slice(0, 2) : [],
@@ -199,6 +201,16 @@ export default function EditTransfer() {
                   </label>
                 ))}
               </div>
+            </div>
+            <div className="flex items-center gap-2 border-t pt-4">
+              <input
+                type="checkbox"
+                checked={formData.featuredOnHome}
+                disabled={!formData.featuredOnHome && (transfers || []).filter((item) => item.id !== params.id && item.featuredOnHome).length >= 3}
+                onChange={(e) => setFormData({ ...formData, featuredOnHome: e.target.checked })}
+                className="w-4 h-4"
+              />
+              <label className="text-sm font-medium">Exibir na página inicial (até 3 transfers)</label>
             </div>
             <div className="flex items-center gap-2">
               <input

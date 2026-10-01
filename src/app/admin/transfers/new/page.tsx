@@ -12,7 +12,7 @@ import { useTransfers } from "@/hooks/useApi";
 
 export default function NewTransfer() {
   const router = useRouter();
-  const { refetch } = useTransfers(false);
+  const { data: transfers, refetch } = useTransfers(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -20,6 +20,7 @@ export default function NewTransfer() {
     capacity: "",
     vehicleType: "",
     active: true,
+    featuredOnHome: false,
     imageUrl: "",
     imageAlt: "",
     galleryImages: [] as GalleryImage[],
@@ -42,6 +43,7 @@ export default function NewTransfer() {
           imageAlt: formData.imageAlt,
           galleryImages: formData.galleryImages,
           active: formData.active,
+          featuredOnHome: formData.featuredOnHome,
         }),
       });
 
@@ -141,6 +143,16 @@ export default function NewTransfer() {
                 className="w-4 h-4"
               />
               <label className="text-sm font-medium">Ativo</label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={formData.featuredOnHome}
+                disabled={!formData.featuredOnHome && (transfers || []).filter((item) => item.featuredOnHome).length >= 3}
+                onChange={(e) => setFormData({ ...formData, featuredOnHome: e.target.checked })}
+                className="w-4 h-4"
+              />
+              <label className="text-sm font-medium">Exibir na página inicial (até 3 transfers)</label>
             </div>
             <div className="flex gap-2">
               <Button type="submit" disabled={loading}>

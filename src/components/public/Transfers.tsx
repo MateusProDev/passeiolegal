@@ -12,7 +12,6 @@ interface Transfer {
   description: string;
   imageUrl: string;
   imageAlt: string;
-  price: number;
   vehicleType: string;
   capacity: number;
   slug?: string;

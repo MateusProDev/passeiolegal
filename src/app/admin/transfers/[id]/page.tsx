@@ -7,7 +7,7 @@ import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
 import ImageGalleryUpload from "@/components/ui/ImageGalleryUpload";
-import { GalleryImage } from "@/types";
+import { GalleryImage, TourFAQ } from "@/types";
 import { useTransfers } from "@/hooks/useApi";
 
 export default function EditTransfer() {
@@ -19,6 +19,7 @@ export default function EditTransfer() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+    longDescription: "",
     capacity: "",
     vehicleType: "",
     active: true,
@@ -27,6 +28,9 @@ export default function EditTransfer() {
     imageAlt: "",
     galleryImages: [] as GalleryImage[],
     recommendedTransferIds: [] as string[],
+    includesItems: "",
+    excludesItems: "",
+    faqs: [] as TourFAQ[],
   });
 
   useEffect(() => {
@@ -45,6 +49,7 @@ export default function EditTransfer() {
         setFormData({
           name: transfer.name || "",
           description: transfer.description || "",
+          longDescription: transfer.longDescription || "",
           capacity: transfer.capacity ? transfer.capacity.toString() : "",
           vehicleType: transfer.vehicleType || "",
           active: transfer.active ?? true,
@@ -53,6 +58,9 @@ export default function EditTransfer() {
           imageAlt: transfer.imageAlt || "",
           galleryImages: Array.isArray(transfer.galleryImages) ? transfer.galleryImages.slice(0, 2) : [],
           recommendedTransferIds: Array.isArray(transfer.recommendedTransferIds) ? transfer.recommendedTransferIds : [],
+          includesItems: Array.isArray(transfer.includesItems) ? transfer.includesItems.join(", ") : "",
+          excludesItems: Array.isArray(transfer.excludesItems) ? transfer.excludesItems.join(", ") : "",
+          faqs: Array.isArray(transfer.faqs) ? transfer.faqs : [],
         });
       } catch (error) {
         toast.error("Erro ao carregar transfer");
@@ -73,6 +81,9 @@ export default function EditTransfer() {
       const payload = {
         ...formData,
         capacity: parseInt(formData.capacity),
+        includesItems: formData.includesItems.split(",").map((item) => item.trim()).filter(Boolean),
+        excludesItems: formData.excludesItems.split(",").map((item) => item.trim()).filter(Boolean),
+        faqs: formData.faqs.filter((faq) => faq.question.trim() && faq.answer.trim()),
       };
 
       const response = await fetch(`/api/transfers/${params.id}`, {
@@ -136,6 +147,15 @@ export default function EditTransfer() {
               />
             </div>
             <div>
+              <label className="block text-sm font-medium mb-2">Descrição completa</label>
+              <textarea
+                value={formData.longDescription}
+                onChange={(e) => setFormData({ ...formData, longDescription: e.target.value })}
+                className="w-full px-3 py-2 border rounded"
+                rows={6}
+              />
+            </div>
+            <div>
               <label className="block text-sm font-medium mb-2">Capacidade (pessoas)</label>
               <input
                 type="number"
@@ -156,6 +176,69 @@ export default function EditTransfer() {
                 className="w-full px-3 py-2 border rounded"
                 placeholder="Ex: Sedan, SUV, Van"
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">O que está incluído (separado por vírgulas)</label>
+              <textarea
+                value={formData.includesItems}
+                onChange={(e) => setFormData({ ...formData, includesItems: e.target.value })}
+                className="w-full px-3 py-2 border rounded"
+                rows={3}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">O que não está incluído (separado por vírgulas)</label>
+              <textarea
+                value={formData.excludesItems}
+                onChange={(e) => setFormData({ ...formData, excludesItems: e.target.value })}
+                className="w-full px-3 py-2 border rounded"
+                rows={3}
+              />
+            </div>
+            <div className="space-y-4 border-t pt-4">
+              <div>
+                <h2 className="text-lg font-semibold">Perguntas frequentes deste transfer</h2>
+                <p className="text-sm text-muted-foreground">Inclua respostas específicas deste serviço. Perguntas gerais do site continuam aparecendo se esta lista ficar vazia.</p>
+              </div>
+              {formData.faqs.map((faq, index) => (
+                <div key={index} className="space-y-2 rounded border p-4">
+                  <label className="block text-sm font-medium">Pergunta {index + 1}</label>
+                  <input
+                    value={faq.question}
+                    onChange={(e) => {
+                      const faqs = [...formData.faqs];
+                      faqs[index] = { ...faqs[index], question: e.target.value };
+                      setFormData({ ...formData, faqs });
+                    }}
+                    className="w-full px-3 py-2 border rounded"
+                  />
+                  <label className="block text-sm font-medium">Resposta</label>
+                  <textarea
+                    value={faq.answer}
+                    onChange={(e) => {
+                      const faqs = [...formData.faqs];
+                      faqs[index] = { ...faqs[index], answer: e.target.value };
+                      setFormData({ ...formData, faqs });
+                    }}
+                    className="w-full px-3 py-2 border rounded"
+                    rows={3}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, faqs: formData.faqs.filter((_, faqIndex) => faqIndex !== index) })}
+                    className="text-sm text-destructive hover:underline"
+                  >
+                    Remover pergunta
+                  </button>
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setFormData({ ...formData, faqs: [...formData.faqs, { question: "", answer: "" }] })}
+              >
+                Adicionar pergunta
+              </Button>
             </div>
             <ImageUpload
               label="Imagem do Veículo"

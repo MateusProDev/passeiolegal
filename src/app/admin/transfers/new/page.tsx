@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
 import ImageGalleryUpload from "@/components/ui/ImageGalleryUpload";
-import { GalleryImage } from "@/types";
+import { GalleryImage, TourFAQ } from "@/types";
 import { useTransfers } from "@/hooks/useApi";
 
 export default function NewTransfer() {
@@ -17,6 +17,7 @@ export default function NewTransfer() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+    longDescription: "",
     capacity: "",
     vehicleType: "",
     active: true,
@@ -24,6 +25,9 @@ export default function NewTransfer() {
     imageUrl: "",
     imageAlt: "",
     galleryImages: [] as GalleryImage[],
+    includesItems: "",
+    excludesItems: "",
+    faqs: [] as TourFAQ[],
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -37,6 +41,7 @@ export default function NewTransfer() {
         body: JSON.stringify({
           name: formData.name,
           description: formData.description,
+          longDescription: formData.longDescription,
           capacity: parseInt(formData.capacity),
           vehicleType: formData.vehicleType,
           imageUrl: formData.imageUrl,
@@ -44,6 +49,9 @@ export default function NewTransfer() {
           galleryImages: formData.galleryImages,
           active: formData.active,
           featuredOnHome: formData.featuredOnHome,
+          includesItems: formData.includesItems.split(",").map((item) => item.trim()).filter(Boolean),
+          excludesItems: formData.excludesItems.split(",").map((item) => item.trim()).filter(Boolean),
+          faqs: formData.faqs.filter((faq) => faq.question.trim() && faq.answer.trim()),
         }),
       });
 
@@ -94,6 +102,15 @@ export default function NewTransfer() {
               />
             </div>
             <div>
+              <label className="block text-sm font-medium mb-2">Descrição completa</label>
+              <textarea
+                value={formData.longDescription}
+                onChange={(e) => setFormData({ ...formData, longDescription: e.target.value })}
+                className="w-full px-3 py-2 border rounded"
+                rows={6}
+              />
+            </div>
+            <div>
               <label className="block text-sm font-medium mb-2">Capacidade (pessoas)</label>
               <input
                 type="number"
@@ -114,6 +131,69 @@ export default function NewTransfer() {
                 className="w-full px-3 py-2 border rounded"
                 placeholder="Ex: Sedan, SUV, Van"
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">O que está incluído (separado por vírgulas)</label>
+              <textarea
+                value={formData.includesItems}
+                onChange={(e) => setFormData({ ...formData, includesItems: e.target.value })}
+                className="w-full px-3 py-2 border rounded"
+                rows={3}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">O que não está incluído (separado por vírgulas)</label>
+              <textarea
+                value={formData.excludesItems}
+                onChange={(e) => setFormData({ ...formData, excludesItems: e.target.value })}
+                className="w-full px-3 py-2 border rounded"
+                rows={3}
+              />
+            </div>
+            <div className="space-y-4 border-t pt-4">
+              <div>
+                <h2 className="text-lg font-semibold">Perguntas frequentes deste transfer</h2>
+                <p className="text-sm text-muted-foreground">Inclua respostas específicas deste serviço. Perguntas gerais do site continuam aparecendo se esta lista ficar vazia.</p>
+              </div>
+              {formData.faqs.map((faq, index) => (
+                <div key={index} className="space-y-2 rounded border p-4">
+                  <label className="block text-sm font-medium">Pergunta {index + 1}</label>
+                  <input
+                    value={faq.question}
+                    onChange={(e) => {
+                      const faqs = [...formData.faqs];
+                      faqs[index] = { ...faqs[index], question: e.target.value };
+                      setFormData({ ...formData, faqs });
+                    }}
+                    className="w-full px-3 py-2 border rounded"
+                  />
+                  <label className="block text-sm font-medium">Resposta</label>
+                  <textarea
+                    value={faq.answer}
+                    onChange={(e) => {
+                      const faqs = [...formData.faqs];
+                      faqs[index] = { ...faqs[index], answer: e.target.value };
+                      setFormData({ ...formData, faqs });
+                    }}
+                    className="w-full px-3 py-2 border rounded"
+                    rows={3}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, faqs: formData.faqs.filter((_, faqIndex) => faqIndex !== index) })}
+                    className="text-sm text-destructive hover:underline"
+                  >
+                    Remover pergunta
+                  </button>
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setFormData({ ...formData, faqs: [...formData.faqs, { question: "", answer: "" }] })}
+              >
+                Adicionar pergunta
+              </Button>
             </div>
             <ImageUpload
               label="Imagem do Veículo"

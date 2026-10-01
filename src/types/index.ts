@@ -56,10 +56,14 @@ export interface Transfer {
   featuredOnHome?: boolean;
   name: string;
   description: string;
+  longDescription?: string;
   imageUrl: string;
   imageAlt: string;
   galleryImages?: GalleryImage[];
-  price: number;
+  includesItems?: string[];
+  excludesItems?: string[];
+  faqs?: TourFAQ[];
+  price?: number;
   vehicleType: string;
   capacity: number;
   active: boolean;

@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import { tourService } from "@/lib/firestore";
@@ -19,10 +20,19 @@ interface PageProps {
   params: { id: string };
 }
 
-// Force dynamic rendering for real-time updates
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
-async function getTour(id: string): Promise<Types.Tour | null> {
+export async function generateStaticParams(): Promise<PageProps["params"][]> {
+  try {
+    const tours = await tourService.getAll(false);
+    return tours.map((tour) => ({ id: tour.slug || tour.id }));
+  } catch (error) {
+    console.error("Error generating tour pages:", error);
+    return [];
+  }
+}
+
+const getTour = cache(async (id: string): Promise<Types.Tour | null> => {
   try {
     // Tenta buscar pelo slug primeiro, se não encontrar tenta pelo ID
     const tour = await tourService.getBySlug(id);
@@ -32,7 +42,7 @@ async function getTour(id: string): Promise<Types.Tour | null> {
     console.error("Error fetching tour:", error);
     return null;
   }
-}
+});
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const baseUrl = getSiteUrl();

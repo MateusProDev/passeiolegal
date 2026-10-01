@@ -108,8 +108,6 @@ export default async function Home() {
   
   const toursEnabled = settings?.sections?.toursEnabled ?? true;
   const transfersEnabled = settings?.sections?.transfersEnabled ?? true;
-  const featuredTransfers = transfers.filter((transfer) => transfer.featuredOnHome);
-  const homeTransfers = (featuredTransfers.length > 0 ? featuredTransfers : transfers).slice(0, 3);
   const aboutSection = settings?.aboutSection;
   const aboutStats = aboutSection?.stats || [
     { value: 4, label: "Anos de Experiência" },
@@ -125,7 +123,7 @@ export default async function Home() {
 
       {toursEnabled && <Tours tours={tours} />}
       
-      {transfersEnabled && <Transfers transfers={homeTransfers} />}
+      {transfersEnabled && <Transfers transfers={transfers} />}
 
       <section id="about" className="border-t border-gray-200 bg-white py-12 sm:py-16">
         <div className="container mx-auto px-4">

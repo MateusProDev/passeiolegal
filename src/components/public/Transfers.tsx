@@ -5,17 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Car, Users, ChevronLeft, ChevronRight, MessageCircle } from 'lucide-react';
 import WhatsAppConversionLink from './WhatsAppConversionLink';
-
-interface Transfer {
-  id: string;
-  name: string;
-  description: string;
-  imageUrl: string;
-  imageAlt: string;
-  vehicleType: string;
-  capacity: number;
-  slug?: string;
-}
+import RecommendedTransfers from './RecommendedTransfers';
+import type { Transfer } from '@/types';
 
 interface TransfersProps {
   transfers: Transfer[];
@@ -26,7 +17,11 @@ export default function Transfers({ transfers }: TransfersProps) {
   const [isPaused, setIsPaused] = useState(false);
   const itemsPerPage = 3;
 
-  const displayTransfers = transfers.slice(0, 8);
+  const featuredTransfers = transfers.filter((transfer) => transfer.featuredOnHome);
+  const displayTransfers = featuredTransfers.length > 0 ? featuredTransfers : transfers.slice(0, 6);
+  const otherTransfers = featuredTransfers.length > 0
+    ? transfers.filter((transfer) => !transfer.featuredOnHome)
+    : transfers.slice(6);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -62,14 +57,11 @@ export default function Transfers({ transfers }: TransfersProps) {
     setCurrentIndex((prev) => (prev + 1) % totalGroups);
   };
 
-  const visibleTransfers = displayTransfers.length === 0
-    ? []
-    : Array.from({ length: itemsPerPage }, (_, index) => {
-        const itemIndex = (currentIndex * itemsPerPage + index) % displayTransfers.length;
-        return displayTransfers[itemIndex];
-      });
+  const startIndex = currentIndex * itemsPerPage;
+  const visibleTransfers = displayTransfers.slice(startIndex, startIndex + itemsPerPage);
 
   return (
+    <>
     <section id="transfers" className="py-14 bg-gray-100">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
@@ -84,7 +76,7 @@ export default function Transfers({ transfers }: TransfersProps) {
         <div className="relative">
           {/* Carousel */}
           <div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 transition-all duration-300 ease-out"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-2 md:px-0 transition-all duration-300 ease-out"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
             onTouchStart={() => setIsPaused(true)}
@@ -204,5 +196,9 @@ export default function Transfers({ transfers }: TransfersProps) {
         </div>
       </div>
     </section>
+    {otherTransfers.length > 0 && (
+      <RecommendedTransfers transfers={otherTransfers} />
+    )}
+    </>
   );
 }

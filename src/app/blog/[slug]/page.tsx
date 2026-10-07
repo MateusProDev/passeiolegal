@@ -16,6 +16,8 @@ interface PageProps {
   };
 }
 
+export const revalidate = 300;
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const baseUrl = getSiteUrl();
   try {

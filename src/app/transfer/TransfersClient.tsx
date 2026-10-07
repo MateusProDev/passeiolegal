@@ -34,8 +34,8 @@ export default function TransfersClient() {
     const fetchData = async () => {
       try {
         const [transfersResponse, settingsResponse] = await Promise.all([
-          fetch('/api/transfers?active=true', { cache: 'no-store' }),
-          fetch('/api/settings', { cache: 'no-store' }),
+          fetch('/api/transfers?active=true'),
+          fetch('/api/settings'),
         ]);
         if (!transfersResponse.ok || !settingsResponse.ok) {
           throw new Error('Falha ao carregar os transfers.');

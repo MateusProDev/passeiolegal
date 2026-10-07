@@ -5,7 +5,11 @@ import { settingsService } from "@/lib/firestore";
 export async function GET() {
   try {
     const settings = await settingsService.get();
-    return NextResponse.json(settings);
+    return NextResponse.json(settings, {
+      headers: {
+        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
+      },
+    });
   } catch (error) {
     console.error("Error fetching settings:", error);
     return NextResponse.json(

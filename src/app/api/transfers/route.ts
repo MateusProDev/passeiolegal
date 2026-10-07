@@ -7,7 +7,11 @@ export async function GET(request: NextRequest) {
     const onlyActive =
       request.nextUrl.searchParams.get("active") === "true";
     const transfers = await transferService.getAll(onlyActive);
-    return NextResponse.json(transfers);
+    return NextResponse.json(transfers, {
+      headers: {
+        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
+      },
+    });
   } catch (error) {
     console.error("Error fetching transfers:", error);
     return NextResponse.json(

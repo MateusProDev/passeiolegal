@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tourService } from "@/lib/firestore";
+import { PUBLIC_API_CACHE_HEADERS } from "@/lib/api-cache";
 
 // GET /api/tours - Get all tours
 export async function GET(request: NextRequest) {
@@ -7,7 +8,10 @@ export async function GET(request: NextRequest) {
     const onlyActive =
       request.nextUrl.searchParams.get("active") === "true";
     const tours = await tourService.getAll(onlyActive);
-    return NextResponse.json(tours);
+    return NextResponse.json(
+      tours,
+      onlyActive ? { headers: PUBLIC_API_CACHE_HEADERS } : undefined
+    );
   } catch (error) {
     console.error("Error fetching tours:", error);
     return NextResponse.json(

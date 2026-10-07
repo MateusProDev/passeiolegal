@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { transferService } from "@/lib/firestore";
+import { PUBLIC_API_CACHE_HEADERS } from "@/lib/api-cache";
 
 // GET /api/transfers - Get all transfers
 export async function GET(request: NextRequest) {
@@ -7,11 +8,10 @@ export async function GET(request: NextRequest) {
     const onlyActive =
       request.nextUrl.searchParams.get("active") === "true";
     const transfers = await transferService.getAll(onlyActive);
-    return NextResponse.json(transfers, {
-      headers: {
-        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
-      },
-    });
+    return NextResponse.json(
+      transfers,
+      onlyActive ? { headers: PUBLIC_API_CACHE_HEADERS } : undefined
+    );
   } catch (error) {
     console.error("Error fetching transfers:", error);
     return NextResponse.json(

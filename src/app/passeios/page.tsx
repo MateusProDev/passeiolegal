@@ -2,7 +2,7 @@ import { tourService, settingsService } from '@/lib/firestore';
 import PasseiosClient from './PasseiosClient';
 import type { Tour } from '@/types';
 
-export const revalidate = 300;
+export const revalidate = 86400;
 
 async function getPageData(): Promise<{ tours: Tour[]; sectionDisabled: boolean; loadError: boolean }> {
   try {

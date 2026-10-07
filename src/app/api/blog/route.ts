@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { blogService } from "@/lib/firestore";
+import { PUBLIC_API_CACHE_HEADERS } from "@/lib/api-cache";
 
 // GET /api/blog - Get all blog posts
 export async function GET(request: NextRequest) {
@@ -7,7 +8,10 @@ export async function GET(request: NextRequest) {
     const publishedParam = request.nextUrl.searchParams.get("published");
     const onlyPublished = publishedParam === "true" || publishedParam === null;
     const posts = await blogService.getAll(onlyPublished);
-    return NextResponse.json(posts);
+    return NextResponse.json(
+      posts,
+      onlyPublished ? { headers: PUBLIC_API_CACHE_HEADERS } : undefined
+    );
   } catch (error) {
     console.error("Error fetching blog posts:", error);
     return NextResponse.json(

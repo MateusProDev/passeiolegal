@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { settingsService } from "@/lib/firestore";
+import { PUBLIC_API_CACHE_HEADERS } from "@/lib/api-cache";
 
 // GET /api/settings - Get site settings
 export async function GET() {
   try {
     const settings = await settingsService.get();
     return NextResponse.json(settings, {
-      headers: {
-        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
-      },
+      headers: PUBLIC_API_CACHE_HEADERS,
     });
   } catch (error) {
     console.error("Error fetching settings:", error);

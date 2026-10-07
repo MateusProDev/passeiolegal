@@ -15,9 +15,17 @@ interface BlogPost {
 
 interface BlogProps {
   posts: BlogPost[];
+  titleEnabled?: boolean;
+  descriptionEnabled?: boolean;
+  buttonEnabled?: boolean;
 }
 
-export default function Blog({ posts }: BlogProps) {
+export default function Blog({
+  posts,
+  titleEnabled = true,
+  descriptionEnabled = true,
+  buttonEnabled = true,
+}: BlogProps) {
   const displayPosts = posts.filter(post => post.published).slice(0, 3);
 
   const formatDate = (date: any) => {
@@ -34,12 +42,12 @@ export default function Blog({ posts }: BlogProps) {
     <section id="blog" className="py-14 bg-gray-100">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          {titleEnabled && <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Nosso Blog
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          </h2>}
+          {descriptionEnabled && <p className="text-gray-600 max-w-2xl mx-auto">
             Dicas de viagem, destinos e muito mais
-          </p>
+          </p>}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -86,14 +94,14 @@ export default function Blog({ posts }: BlogProps) {
           ))}
         </div>
 
-        <div className="text-center mt-12">
+        {buttonEnabled && <div className="text-center mt-12">
           <Link
             href="/blog"
             className="inline-block bg-secondary-800 hover:bg-secondary-900 text-white px-8 py-3 rounded-lg transition-colors font-semibold"
           >
             Ver Todos os Artigos
           </Link>
-        </div>
+        </div>}
       </div>
     </section>
   );

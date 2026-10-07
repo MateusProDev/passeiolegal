@@ -24,9 +24,11 @@ interface Tour {
 
 interface ToursProps {
   tours: Tour[];
+  titleEnabled?: boolean;
+  descriptionEnabled?: boolean;
 }
 
-export default function Tours({ tours }: ToursProps) {
+export default function Tours({ tours, titleEnabled = true, descriptionEnabled = true }: ToursProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const itemsPerPage = 3;
@@ -91,12 +93,12 @@ export default function Tours({ tours }: ToursProps) {
     <section id="tours" className="py-14 bg-gray-100">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          {titleEnabled && <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Nossos Passeios
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          </h2>}
+          {descriptionEnabled && <p className="text-gray-600 max-w-2xl mx-auto">
             Descubra experiências únicas e memoráveis com nossos passeios cuidadosamente selecionados
-          </p>
+          </p>}
         </div>
 
         <div className="relative">

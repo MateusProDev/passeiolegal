@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/Input";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import ImageUpload from "@/components/ui/ImageUpload";
+import { setCachedSettings } from "@/lib/settings-cache";
+import type { SectionContentSettings, SectionSettings } from "@/types";
 
 const defaultAboutSection = {
   title: "Sobre a Passeio Legal",
@@ -16,6 +18,129 @@ const defaultAboutSection = {
     { value: 100, label: "Destinos" },
   ],
 };
+
+const sectionOptions: { key: keyof SectionSettings; label: string; description: string }[] = [
+  { key: "heroEnabled", label: "Banner principal", description: "Mostrar o banner principal na página inicial" },
+  { key: "toursEnabled", label: "Passeios", description: "Mostrar a seção de passeios na página inicial" },
+  { key: "transfersEnabled", label: "Transfers", description: "Mostrar a seção de transfers na página inicial" },
+  { key: "aboutEnabled", label: "Sobre", description: "Mostrar a seção sobre a empresa na página inicial" },
+  { key: "blogEnabled", label: "Blog", description: "Mostrar a seção do blog na página inicial" },
+  { key: "testimonialsEnabled", label: "Depoimentos", description: "Mostrar os depoimentos na página inicial" },
+  { key: "faqEnabled", label: "Perguntas frequentes", description: "Mostrar as perguntas frequentes na página inicial" },
+];
+
+const contentGroups: { label: string; options: { key: keyof SectionContentSettings; label: string }[] }[] = [
+  {
+    label: "Banner principal",
+    options: [
+      { key: "homeHeroTitle", label: "Título do banner" },
+      { key: "homeHeroDescription", label: "Descrição do banner" },
+      { key: "homeHeroButton", label: "Botão do banner" },
+    ],
+  },
+  {
+    label: "Passeios na página inicial",
+    options: [
+      { key: "homeToursTitle", label: "Título da seção" },
+      { key: "homeToursDescription", label: "Descrição da seção" },
+    ],
+  },
+  {
+    label: "Transfers na página inicial",
+    options: [
+      { key: "homeTransfersTitle", label: "Título da seção" },
+      { key: "homeTransfersDescription", label: "Descrição da seção" },
+    ],
+  },
+  {
+    label: "Sobre na página inicial",
+    options: [
+      { key: "homeAboutTitle", label: "Título" },
+      { key: "homeAboutDescription", label: "Descrição" },
+      { key: "homeAboutStats", label: "Estatísticas" },
+    ],
+  },
+  {
+    label: "Blog na página inicial",
+    options: [
+      { key: "homeBlogTitle", label: "Título da seção" },
+      { key: "homeBlogDescription", label: "Descrição da seção" },
+      { key: "homeBlogButton", label: "Botão para ver todos os artigos" },
+    ],
+  },
+  {
+    label: "Depoimentos na página inicial",
+    options: [
+      { key: "homeTestimonialsTitle", label: "Título da seção" },
+      { key: "homeTestimonialsDescription", label: "Descrição da seção" },
+    ],
+  },
+  {
+    label: "Perguntas frequentes na página inicial",
+    options: [
+      { key: "homeFaqTitle", label: "Título da seção" },
+      { key: "homeFaqDescription", label: "Descrição da seção" },
+    ],
+  },
+  {
+    label: "Página Sobre — apresentação",
+    options: [
+      { key: "aboutPageHeroTitle", label: "Título principal" },
+      { key: "aboutPageHeroDescription", label: "Descrição principal" },
+    ],
+  },
+  {
+    label: "Página Sobre — nossa história",
+    options: [
+      { key: "aboutPageHistoryTitle", label: "Título" },
+      { key: "aboutPageHistoryDescription", label: "Descrição" },
+    ],
+  },
+  {
+    label: "Página Sobre — missão e visão",
+    options: [
+      { key: "aboutPageMissionTitle", label: "Título da missão" },
+      { key: "aboutPageMissionDescription", label: "Descrição da missão" },
+      { key: "aboutPageVisionTitle", label: "Título da visão" },
+      { key: "aboutPageVisionDescription", label: "Descrição da visão" },
+    ],
+  },
+  {
+    label: "Página Sobre — valores",
+    options: [
+      { key: "aboutPageValuesTitle", label: "Título" },
+      { key: "aboutPageValuesDescription", label: "Lista de valores" },
+    ],
+  },
+  {
+    label: "Página Sobre — números",
+    options: [
+      { key: "aboutPageStatsTitle", label: "Título" },
+      { key: "aboutPageStatsContent", label: "Estatísticas" },
+    ],
+  },
+  {
+    label: "Página Sobre — por que escolher a Passeio Legal",
+    options: [
+      { key: "aboutPageWhyTitle", label: "Título da seção" },
+      { key: "aboutPageGuidesTitle", label: "Título: Guias experientes" },
+      { key: "aboutPageGuidesDescription", label: "Descrição: Guias experientes" },
+      { key: "aboutPageVehiclesTitle", label: "Título: Veículos confortáveis" },
+      { key: "aboutPageVehiclesDescription", label: "Descrição: Veículos confortáveis" },
+      { key: "aboutPageRoutesTitle", label: "Título: Roteiros exclusivos" },
+      { key: "aboutPageRoutesDescription", label: "Descrição: Roteiros exclusivos" },
+      { key: "aboutPageSupportTitle", label: "Título: Atendimento 24h" },
+      { key: "aboutPageSupportDescription", label: "Descrição: Atendimento 24h" },
+    ],
+  },
+  {
+    label: "Página do Blog",
+    options: [
+      { key: "blogPageTitle", label: "Título principal" },
+      { key: "blogPageDescription", label: "Descrição principal" },
+    ],
+  },
+];
 
 export default function SettingsAdmin() {
   const [settings, setSettings] = useState<any>(null);
@@ -53,6 +178,7 @@ export default function SettingsAdmin() {
 
       if (!response.ok) throw new Error("Failed to save settings");
 
+      setCachedSettings(settings);
       toast.success("Settings saved successfully");
     } catch (error) {
       console.error("Error saving settings:", error);
@@ -216,50 +342,78 @@ export default function SettingsAdmin() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Seções do Site</CardTitle>
-          <CardDescription>Ative ou desative seções do site</CardDescription>
+          <CardTitle>Seções da página inicial</CardTitle>
+          <CardDescription>Escolha quais seções serão exibidas no site</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <label className="text-sm font-medium">Passeios</label>
-              <p className="text-xs text-muted-foreground">Mostrar seção de passeios no site</p>
+          {sectionOptions.map(({ key, label, description }) => (
+            <div key={key} className="flex items-center justify-between">
+              <div>
+                <label htmlFor={`section-${key}`} className="text-sm font-medium">{label}</label>
+                <p className="text-xs text-muted-foreground">{description}</p>
+              </div>
+              <input
+                id={`section-${key}`}
+                type="checkbox"
+                checked={settings?.sections?.[key] !== false}
+                onChange={(event) =>
+                  setSettings({
+                    ...settings,
+                    sections: {
+                      ...settings?.sections,
+                      [key]: event.target.checked,
+                    },
+                  })
+                }
+                className="w-4 h-4 text-primary-600 rounded focus:ring-primary-600"
+              />
             </div>
-            <input
-              type="checkbox"
-              checked={settings?.sections?.toursEnabled ?? true}
-              onChange={(e) =>
-                setSettings({
-                  ...settings,
-                  sections: {
-                    ...settings?.sections,
-                    toursEnabled: e.target.checked,
-                  },
-                })
-              }
-              className="w-4 h-4 text-primary-600 rounded focus:ring-primary-600"
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <div>
-              <label className="text-sm font-medium">Transfer</label>
-              <p className="text-xs text-muted-foreground">Mostrar seção de transfer no site</p>
-            </div>
-            <input
-              type="checkbox"
-              checked={settings?.sections?.transfersEnabled ?? true}
-              onChange={(e) =>
-                setSettings({
-                  ...settings,
-                  sections: {
-                    ...settings?.sections,
-                    transfersEnabled: e.target.checked,
-                  },
-                })
-              }
-              className="w-4 h-4 text-primary-600 rounded focus:ring-primary-600"
-            />
-          </div>
+          ))}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Títulos e descrições</CardTitle>
+          <CardDescription>
+            Ative ou desative individualmente cada título, descrição, botão e conteúdo exibido no site.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {contentGroups.map((group) => (
+            <fieldset key={group.label} className="space-y-3 border-b pb-4 last:border-0 last:pb-0">
+              <legend className="text-sm font-semibold">{group.label}</legend>
+              {group.options.map(({ key, label }) => {
+                const enabled = settings?.sectionContent?.[key] !== false;
+                return (
+                  <div key={key} className="flex items-center justify-between gap-4">
+                    <label htmlFor={`content-${key}`} className="text-sm">{label}</label>
+                    <label htmlFor={`content-${key}`} className="flex items-center gap-2 cursor-pointer">
+                      <span className={`text-xs font-medium ${enabled ? "text-green-700" : "text-muted-foreground"}`}>
+                        {enabled ? "Ativo — exibido" : "Desativado — oculto"}
+                      </span>
+                      <input
+                        id={`content-${key}`}
+                        type="checkbox"
+                        checked={enabled}
+                        aria-label={`${enabled ? "Desativar" : "Ativar"} ${label.toLowerCase()}`}
+                        onChange={(event) =>
+                          setSettings({
+                            ...settings,
+                            sectionContent: {
+                              ...settings?.sectionContent,
+                              [key]: event.target.checked,
+                            },
+                          })
+                        }
+                        className="w-4 h-4 text-primary-600 rounded focus:ring-primary-600"
+                      />
+                    </label>
+                  </div>
+                );
+              })}
+            </fieldset>
+          ))}
         </CardContent>
       </Card>
 

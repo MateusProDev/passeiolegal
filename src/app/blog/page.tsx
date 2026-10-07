@@ -9,6 +9,7 @@ import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
 import { getSiteUrl } from '@/lib/site-url';
+import { fetchSettingsCached } from '@/lib/settings-cache';
 
 interface BlogPost {
   id: string;
@@ -25,6 +26,11 @@ interface BlogPost {
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [sectionDisabled, setSectionDisabled] = useState(false);
+  const [pageContent, setPageContent] = useState<{ titleEnabled: boolean; descriptionEnabled: boolean }>({
+    titleEnabled: true,
+    descriptionEnabled: true,
+  });
   
   const baseUrl = getSiteUrl();
   const breadcrumbItems = [
@@ -35,9 +41,17 @@ export default function BlogPage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const allPosts = await blogService.getAll(false);
+        const [allPosts, settings] = await Promise.all([
+          blogService.getAll(false),
+          fetchSettingsCached(),
+        ]);
         const publishedPosts = allPosts.filter(post => post.published);
         setPosts(publishedPosts);
+        setSectionDisabled(settings?.sections?.blogEnabled === false);
+        setPageContent({
+          titleEnabled: settings?.sectionContent?.blogPageTitle !== false,
+          descriptionEnabled: settings?.sectionContent?.blogPageDescription !== false,
+        });
       } catch (error) {
         console.error('Error fetching blog posts:', error);
       }
@@ -62,6 +76,19 @@ export default function BlogPage() {
     return Math.ceil(words / wordsPerMinute);
   };
 
+  if (sectionDisabled) {
+    return (
+      <main className="min-h-screen bg-gray-50 pt-24">
+        <Header />
+        <div className="container mx-auto px-4 py-16 text-center">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Seção indisponível</h1>
+          <p className="text-gray-600">O blog está temporariamente desativado.</p>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-gray-50 pt-24">
       <Header />
@@ -71,10 +98,10 @@ export default function BlogPage() {
       {/* Header */}
       <div className="bg-primary-600 text-white py-16">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Blog</h1>
-          <p className="text-xl max-w-2xl">
+          {pageContent.titleEnabled && <h1 className="text-4xl md:text-5xl font-bold mb-4">Blog</h1>}
+          {pageContent.descriptionEnabled && <p className="text-xl max-w-2xl">
             Dicas, guias e inspirações para suas próximas aventuras
-          </p>
+          </p>}
         </div>
       </div>
 

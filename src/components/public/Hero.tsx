@@ -15,9 +15,17 @@ interface Banner {
 
 interface HeroProps {
   banners: Banner[];
+  titleEnabled?: boolean;
+  descriptionEnabled?: boolean;
+  buttonEnabled?: boolean;
 }
 
-export default function Hero({ banners }: HeroProps) {
+export default function Hero({
+  banners,
+  titleEnabled = true,
+  descriptionEnabled = true,
+  buttonEnabled = true,
+}: HeroProps) {
   const availableBanners = banners.filter((banner) => banner?.imageUrl);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -43,8 +51,8 @@ export default function Hero({ banners }: HeroProps) {
     return (
       <section className="relative h-[600px] bg-gradient-to-r from-primary-600 to-secondary-600 flex items-center justify-center">
         <div className="text-center text-white px-4">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">Passeios e Transfers em Fortaleza e Região</h1>
-          <p className="text-xl md:text-2xl mb-8">Reserve experiências únicas com conforto, segurança e atendimento personalizado.</p>
+          {titleEnabled && <h1 className="text-4xl md:text-6xl font-bold mb-4">Passeios e Transfers em Fortaleza e Região</h1>}
+          {descriptionEnabled && <p className="text-xl md:text-2xl mb-8">Reserve experiências únicas com conforto, segurança e atendimento personalizado.</p>}
         </div>
       </section>
     );
@@ -75,13 +83,13 @@ export default function Hero({ banners }: HeroProps) {
 
       <div className="relative h-full flex items-center justify-center text-white px-4">
         <div className="text-center max-w-4xl">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          {titleEnabled && <h1 className="text-4xl md:text-6xl font-bold mb-4">
             {heroTitle}
-          </h1>
-          <p className="text-xl md:text-2xl mb-8">
+          </h1>}
+          {descriptionEnabled && <p className="text-xl md:text-2xl mb-8">
             {currentBanner.subtitle || 'Reserve experiências únicas em Fortaleza e região.'}
-          </p>
-          <a
+          </p>}
+          {buttonEnabled && <a
             href={currentBanner.buttonLink}
             target={/^https?:\/\//i.test(currentBanner.buttonLink) ? '_blank' : undefined}
             rel={/^https?:\/\//i.test(currentBanner.buttonLink) ? 'noopener noreferrer' : undefined}
@@ -89,7 +97,7 @@ export default function Hero({ banners }: HeroProps) {
             aria-label={currentBanner.buttonText}
           >
             {currentBanner.buttonText}
-          </a>
+          </a>}
         </div>
       </div>
 

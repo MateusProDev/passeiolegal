@@ -22,6 +22,8 @@ export const revalidate = 86400;
 
 export default async function AboutPage() {
   const settings = await settingsService.get();
+  const sectionDisabled = settings?.sections?.aboutEnabled === false;
+  const content = settings?.sectionContent;
   const aboutSection = settings?.aboutSection;
   const aboutStats = aboutSection?.stats || [
     { value: 10, label: "Anos de Experiência" },
@@ -33,6 +35,19 @@ export default async function AboutPage() {
     { name: "Sobre Nós", url: `${baseUrl}/about` },
   ];
 
+  if (sectionDisabled) {
+    return (
+      <main className="min-h-screen pt-24">
+        <Header />
+        <div className="container mx-auto px-4 py-16 text-center">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Seção indisponível</h1>
+          <p className="text-gray-600">A seção sobre a empresa está temporariamente desativada.</p>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen pt-24">
       <Header />
@@ -42,10 +57,10 @@ export default async function AboutPage() {
       {/* Header */}
       <div className="bg-primary-600 text-white py-16">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{aboutSection?.title || "Sobre a Passeio Legal"}</h1>
-          <p className="text-xl max-w-2xl">
+          {content?.aboutPageHeroTitle !== false && <h1 className="text-4xl md:text-5xl font-bold mb-4">{aboutSection?.title || "Sobre a Passeio Legal"}</h1>}
+          {content?.aboutPageHeroDescription !== false && <p className="text-xl max-w-2xl">
             Conheça nossa história e compromisso com proporcionar experiências inesquecíveis
-          </p>
+          </p>}
         </div>
       </div>
 
@@ -54,96 +69,96 @@ export default async function AboutPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              {content?.aboutPageHistoryTitle !== false && <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Nossa História
-              </h2>
-              <p className="text-gray-600 text-lg leading-relaxed">
+              </h2>}
+              {content?.aboutPageHistoryDescription !== false && <p className="text-gray-600 text-lg leading-relaxed">
                 {aboutSection?.description || "Há mais de 10 anos no mercado de turismo, a Passeio Legal nasceu com a missão de proporcionar momentos inesquecíveis para nossos clientes. O que começou como um pequeno sonho se transformou em uma empresa referência em passeios e transfers, sempre focada na qualidade, segurança e satisfação de quem nos escolhe."}
-              </p>
+              </p>}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
               <div className="bg-gray-50 p-6 rounded-xl">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Nossa Missão</h3>
-                <p className="text-gray-600">
+                {content?.aboutPageMissionTitle !== false && <h3 className="text-xl font-bold text-gray-900 mb-3">Nossa Missão</h3>}
+                {content?.aboutPageMissionDescription !== false && <p className="text-gray-600">
                   Proporcionar experiências turísticas únicas e memoráveis, com segurança, conforto e profissionalismo, superando as expectativas de nossos clientes em cada jornada.
-                </p>
+                </p>}
               </div>
               <div className="bg-gray-50 p-6 rounded-xl">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Nossa Visão</h3>
-                <p className="text-gray-600">
+                {content?.aboutPageVisionTitle !== false && <h3 className="text-xl font-bold text-gray-900 mb-3">Nossa Visão</h3>}
+                {content?.aboutPageVisionDescription !== false && <p className="text-gray-600">
                   Ser reconhecidos como a melhor empresa de turismo da região, sinônimo de qualidade, confiança e experiências transformadoras.
-                </p>
+                </p>}
               </div>
             </div>
 
             <div className="bg-gray-50 p-6 rounded-xl mb-12">
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Nossos Valores</h3>
-              <ul className="space-y-2 text-gray-600">
+              {content?.aboutPageValuesTitle !== false && <h3 className="text-xl font-bold text-gray-900 mb-3">Nossos Valores</h3>}
+              {content?.aboutPageValuesDescription !== false && <ul className="space-y-2 text-gray-600">
                 <li>• Segurança em primeiro lugar</li>
                 <li>• Qualidade e excelência no atendimento</li>
                 <li>• Transparência e honestidade</li>
                 <li>• Respeito ao meio ambiente e às comunidades locais</li>
                 <li>• Inovação constante em nossos serviços</li>
                 <li>• Paixão pelo que fazemos</li>
-              </ul>
+              </ul>}
             </div>
 
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
+              {content?.aboutPageStatsTitle !== false && <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
                 Nossos Números
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              </h2>}
+              {content?.aboutPageStatsContent !== false && <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
                 {aboutStats.map((stat) => (
                   <div className="text-center" key={stat.label}>
                     <AnimatedCounter target={stat.value} suffix="+" />
                     <div className="text-gray-600 mt-2">{stat.label}</div>
                   </div>
                 ))}
-              </div>
+              </div>}
             </div>
 
             <div className="text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              {content?.aboutPageWhyTitle !== false && <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Por Que Escolher a Passeio Legal?
-              </h2>
+              </h2>}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                <div className="flex items-start gap-4">
+                {(content?.aboutPageGuidesTitle !== false || content?.aboutPageGuidesDescription !== false) && <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-primary-600 text-xl">✓</span>
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-900 mb-1">Guias Experientes</h4>
-                    <p className="text-gray-600 text-sm">Profissionais qualificados e apaixonados por mostrar o melhor de cada destino.</p>
+                    {content?.aboutPageGuidesTitle !== false && <h4 className="font-bold text-gray-900 mb-1">Guias Experientes</h4>}
+                    {content?.aboutPageGuidesDescription !== false && <p className="text-gray-600 text-sm">Profissionais qualificados e apaixonados por mostrar o melhor de cada destino.</p>}
                   </div>
-                </div>
-                <div className="flex items-start gap-4">
+                </div>}
+                {(content?.aboutPageVehiclesTitle !== false || content?.aboutPageVehiclesDescription !== false) && <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-primary-600 text-xl">✓</span>
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-900 mb-1">Veículos Confortáveis</h4>
-                    <p className="text-gray-600 text-sm">Frota moderna e bem conservada para garantir seu conforto durante as viagens.</p>
+                    {content?.aboutPageVehiclesTitle !== false && <h4 className="font-bold text-gray-900 mb-1">Veículos Confortáveis</h4>}
+                    {content?.aboutPageVehiclesDescription !== false && <p className="text-gray-600 text-sm">Frota moderna e bem conservada para garantir seu conforto durante as viagens.</p>}
                   </div>
-                </div>
-                <div className="flex items-start gap-4">
+                </div>}
+                {(content?.aboutPageRoutesTitle !== false || content?.aboutPageRoutesDescription !== false) && <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-primary-600 text-xl">✓</span>
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-900 mb-1">Roteiros Exclusivos</h4>
-                    <p className="text-gray-600 text-sm">Passeios cuidadosamente planejados para oferecer experiências autênticas.</p>
+                    {content?.aboutPageRoutesTitle !== false && <h4 className="font-bold text-gray-900 mb-1">Roteiros Exclusivos</h4>}
+                    {content?.aboutPageRoutesDescription !== false && <p className="text-gray-600 text-sm">Passeios cuidadosamente planejados para oferecer experiências autênticas.</p>}
                   </div>
-                </div>
-                <div className="flex items-start gap-4">
+                </div>}
+                {(content?.aboutPageSupportTitle !== false || content?.aboutPageSupportDescription !== false) && <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-primary-600 text-xl">✓</span>
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-900 mb-1">Atendimento 24h</h4>
-                    <p className="text-gray-600 text-sm">Suporte completo antes, durante e após sua viagem.</p>
+                    {content?.aboutPageSupportTitle !== false && <h4 className="font-bold text-gray-900 mb-1">Atendimento 24h</h4>}
+                    {content?.aboutPageSupportDescription !== false && <p className="text-gray-600 text-sm">Suporte completo antes, durante e após sua viagem.</p>}
                   </div>
-                </div>
+                </div>}
               </div>
             </div>
           </div>

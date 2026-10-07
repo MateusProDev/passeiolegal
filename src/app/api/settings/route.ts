@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { settingsService } from "@/lib/firestore";
 import { PUBLIC_API_CACHE_HEADERS } from "@/lib/api-cache";
 
@@ -23,6 +24,7 @@ export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
     await settingsService.update(body);
+    revalidatePath("/", "layout");
     return NextResponse.json({ message: "Settings updated successfully" });
   } catch (error) {
     console.error("Error updating settings:", error);
@@ -38,6 +40,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     await settingsService.update(body);
+    revalidatePath("/", "layout");
     return NextResponse.json({ message: "Settings updated successfully" });
   } catch (error) {
     console.error("Error updating settings:", error);

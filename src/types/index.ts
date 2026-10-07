@@ -159,6 +159,7 @@ export interface SiteSettings {
   primaryColor: string;
   secondaryColor: string;
   sections: SectionSettings;
+  sectionContent?: SectionContentSettings;
   aboutSection?: AboutSectionSettings;
   updatedAt: Date;
 }
@@ -175,8 +176,56 @@ export interface AboutStat {
 }
 
 export interface SectionSettings {
-  toursEnabled: boolean;
-  transfersEnabled: boolean;
+  heroEnabled?: boolean;
+  toursEnabled?: boolean;
+  transfersEnabled?: boolean;
+  aboutEnabled?: boolean;
+  blogEnabled?: boolean;
+  testimonialsEnabled?: boolean;
+  faqEnabled?: boolean;
+}
+
+export interface SectionContentSettings {
+  homeHeroTitle?: boolean;
+  homeHeroDescription?: boolean;
+  homeHeroButton?: boolean;
+  homeToursTitle?: boolean;
+  homeToursDescription?: boolean;
+  homeTransfersTitle?: boolean;
+  homeTransfersDescription?: boolean;
+  homeAboutTitle?: boolean;
+  homeAboutDescription?: boolean;
+  homeAboutStats?: boolean;
+  homeBlogTitle?: boolean;
+  homeBlogDescription?: boolean;
+  homeBlogButton?: boolean;
+  homeTestimonialsTitle?: boolean;
+  homeTestimonialsDescription?: boolean;
+  homeFaqTitle?: boolean;
+  homeFaqDescription?: boolean;
+  aboutPageHeroTitle?: boolean;
+  aboutPageHeroDescription?: boolean;
+  aboutPageHistoryTitle?: boolean;
+  aboutPageHistoryDescription?: boolean;
+  aboutPageMissionTitle?: boolean;
+  aboutPageMissionDescription?: boolean;
+  aboutPageVisionTitle?: boolean;
+  aboutPageVisionDescription?: boolean;
+  aboutPageValuesTitle?: boolean;
+  aboutPageValuesDescription?: boolean;
+  aboutPageStatsTitle?: boolean;
+  aboutPageStatsContent?: boolean;
+  aboutPageWhyTitle?: boolean;
+  aboutPageGuidesTitle?: boolean;
+  aboutPageGuidesDescription?: boolean;
+  aboutPageVehiclesTitle?: boolean;
+  aboutPageVehiclesDescription?: boolean;
+  aboutPageRoutesTitle?: boolean;
+  aboutPageRoutesDescription?: boolean;
+  aboutPageSupportTitle?: boolean;
+  aboutPageSupportDescription?: boolean;
+  blogPageTitle?: boolean;
+  blogPageDescription?: boolean;
 }
 
 export interface MenuLink {

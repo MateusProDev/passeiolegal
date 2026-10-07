@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Clock, ArrowLeft } from 'lucide-react';
-import { blogService } from '@/lib/firestore';
+import { blogService, settingsService } from '@/lib/firestore';
 import { notFound } from 'next/navigation';
 import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
@@ -67,7 +67,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogPostPage({ params }: PageProps) {
   try {
-    const posts = await blogService.getAll(false);
+    const [posts, settings] = await Promise.all([
+      blogService.getAll(false),
+      settingsService.get(),
+    ]);
+    if (settings?.sections?.blogEnabled === false) {
+      notFound();
+    }
     const post = posts.find(p => p.slug === params.slug && p.published);
 
     if (!post) {

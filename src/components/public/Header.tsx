@@ -21,6 +21,13 @@ export default async function Header() {
   const settings = await settingsService.get();
   const logoUrl = settings?.headerLogo;
   const logoAlt = settings?.headerLogoAlt || 'Passeio Legal';
+  const visibleMenuItems = menuItems.filter((item) => {
+    if (item.href === '/passeios') return settings?.sections?.toursEnabled !== false;
+    if (item.href === '/transfer') return settings?.sections?.transfersEnabled !== false;
+    if (item.href === '/blog') return settings?.sections?.blogEnabled !== false;
+    if (item.href === '/about') return settings?.sections?.aboutEnabled !== false;
+    return true;
+  });
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-primary-800/70 bg-gradient-to-r from-primary-700 via-primary-600 to-primary-500 shadow-md">
@@ -45,7 +52,7 @@ export default async function Header() {
           </Link>
 
           <ul className="hidden md:flex items-center space-x-8" role="menubar">
-            {menuItems.map((item) => (
+            {visibleMenuItems.map((item) => (
               <li key={item.href} role="none">
                 <Link
                   href={item.href}
@@ -72,7 +79,7 @@ export default async function Header() {
 
             <div className="fixed inset-x-0 top-[90px] z-[60] h-[35vh] min-h-[260px] max-h-[40vh] border-t border-b border-white/10 bg-primary-700 p-3 shadow-2xl">
               <ul className="space-y-2 pt-1" role="menu">
-                {menuItems.map((item) => (
+                {visibleMenuItems.map((item) => (
                   <li key={item.href} role="none">
                     <Link
                       href={item.href}

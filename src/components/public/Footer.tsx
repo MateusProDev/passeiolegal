@@ -56,8 +56,8 @@ export default function Footer() {
     { label: 'Início', href: '/' },
     ...(settings?.sections?.toursEnabled !== false ? [{ label: 'Passeios', href: '/passeios' }] : []),
     ...(settings?.sections?.transfersEnabled !== false ? [{ label: 'Transfer', href: '/transfer' }] : []),
-    { label: 'Blog', href: '/blog' },
-    { label: 'Sobre', href: '/about' },
+    ...(settings?.sections?.blogEnabled !== false ? [{ label: 'Blog', href: '/blog' }] : []),
+    ...(settings?.sections?.aboutEnabled !== false ? [{ label: 'Sobre', href: '/about' }] : []),
     { label: 'Contato', href: '/contact' },
   ];
 

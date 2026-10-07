@@ -10,9 +10,11 @@ import type { Transfer } from '@/types';
 
 interface TransfersProps {
   transfers: Transfer[];
+  titleEnabled?: boolean;
+  descriptionEnabled?: boolean;
 }
 
-export default function Transfers({ transfers }: TransfersProps) {
+export default function Transfers({ transfers, titleEnabled = true, descriptionEnabled = true }: TransfersProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const itemsPerPage = 3;
@@ -65,12 +67,12 @@ export default function Transfers({ transfers }: TransfersProps) {
     <section id="transfers" className="py-14 bg-gray-100">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          {titleEnabled && <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Serviços de Transfer
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          </h2>}
+          {descriptionEnabled && <p className="text-gray-600 max-w-2xl mx-auto">
             Conforto e segurança em seus deslocamentos com nossa frota moderna
-          </p>
+          </p>}
         </div>
 
         <div className="relative">

@@ -12,9 +12,11 @@ interface FAQ {
 
 interface FAQProps {
   faqs: FAQ[];
+  titleEnabled?: boolean;
+  descriptionEnabled?: boolean;
 }
 
-export default function FAQ({ faqs }: FAQProps) {
+export default function FAQ({ faqs, titleEnabled = true, descriptionEnabled = true }: FAQProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggleFAQ = (index: number) => {
@@ -26,9 +28,9 @@ export default function FAQ({ faqs }: FAQProps) {
       <section className="py-14 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            {titleEnabled && <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Perguntas Frequentes
-            </h2>
+            </h2>}
           </div>
           <p className="text-center text-gray-600">Nenhuma pergunta disponível no momento.</p>
         </div>
@@ -42,12 +44,12 @@ export default function FAQ({ faqs }: FAQProps) {
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            {titleEnabled && <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Perguntas Frequentes
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            </h2>}
+            {descriptionEnabled && <p className="text-gray-600 max-w-2xl mx-auto">
               Tire suas dúvidas sobre nossos serviços
-            </p>
+            </p>}
           </div>
 
           <div className="max-w-3xl mx-auto space-y-4">

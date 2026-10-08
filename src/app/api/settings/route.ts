@@ -24,6 +24,7 @@ export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
     await settingsService.update(body);
+    revalidatePath("/api/settings");
     revalidatePath("/", "layout");
     return NextResponse.json({ message: "Settings updated successfully" });
   } catch (error) {
@@ -40,6 +41,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     await settingsService.update(body);
+    revalidatePath("/api/settings");
     revalidatePath("/", "layout");
     return NextResponse.json({ message: "Settings updated successfully" });
   } catch (error) {

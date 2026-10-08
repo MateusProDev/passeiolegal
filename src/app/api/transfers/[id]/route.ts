@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { transferService } from "@/lib/firestore";
 
 // GET /api/transfers/[id] - Get single transfer
@@ -32,6 +33,10 @@ export async function PUT(
   try {
     const body = await request.json();
     await transferService.update(params.id, body);
+    revalidatePath("/api/transfers");
+    revalidatePath("/", "page");
+    revalidatePath("/transfer", "page");
+    revalidatePath("/transfer/[id]", "page");
     return NextResponse.json({ message: "Transfer updated successfully" });
   } catch (error) {
     console.error("Error updating transfer:", error);
@@ -49,6 +54,10 @@ export async function DELETE(
 ) {
   try {
     await transferService.delete(params.id);
+    revalidatePath("/api/transfers");
+    revalidatePath("/", "page");
+    revalidatePath("/transfer", "page");
+    revalidatePath("/transfer/[id]", "page");
     return NextResponse.json({ message: "Transfer deleted successfully" });
   } catch (error) {
     console.error("Error deleting transfer:", error);

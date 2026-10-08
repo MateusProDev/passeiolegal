@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { blogService } from "@/lib/firestore";
 
 // GET /api/blog/[id] - Get single blog post
@@ -32,6 +33,10 @@ export async function PUT(
   try {
     const body = await request.json();
     await blogService.update(params.id, body);
+    revalidatePath("/api/blog");
+    revalidatePath("/", "page");
+    revalidatePath("/blog", "page");
+    revalidatePath("/blog/[slug]", "page");
     return NextResponse.json({ message: "Blog post updated successfully" });
   } catch (error) {
     console.error("Error updating blog post:", error);
@@ -49,6 +54,10 @@ export async function DELETE(
 ) {
   try {
     await blogService.delete(params.id);
+    revalidatePath("/api/blog");
+    revalidatePath("/", "page");
+    revalidatePath("/blog", "page");
+    revalidatePath("/blog/[slug]", "page");
     return NextResponse.json({ message: "Blog post deleted successfully" });
   } catch (error) {
     console.error("Error deleting blog post:", error);

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Clock, ArrowRight } from 'lucide-react';
-import { blogService } from '@/lib/firestore';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
@@ -16,12 +15,11 @@ interface BlogPost {
   title: string;
   slug: string;
   summary: string;
-  content: string;
+  readingMinutes: number;
   imageUrl: string;
   imageAlt: string;
   published: boolean;
-  createdAt: any;
-  updatedAt: any;
+  createdAt: unknown;
 }
 
 export default function BlogPage() {
@@ -42,7 +40,10 @@ export default function BlogPage() {
     const fetchPosts = async () => {
       try {
         const [allPosts, settings] = await Promise.all([
-          blogService.getAll(false),
+          fetch('/api/blog?published=true&summary=true').then(async (response) => {
+            if (!response.ok) throw new Error('Falha ao carregar os posts.');
+            return response.json() as Promise<BlogPost[]>;
+          }),
           fetchSettingsCached(),
         ]);
         const publishedPosts = allPosts.filter(post => post.published);
@@ -60,20 +61,20 @@ export default function BlogPage() {
     fetchPosts();
   }, []);
 
-  const formatDate = (date: any) => {
+  const formatDate = (date: unknown) => {
     if (!date) return '';
-    const d = date.toDate ? date.toDate() : new Date(date);
+    const timestamp = date as { seconds?: number; toDate?: () => Date };
+    const d = typeof timestamp.toDate === 'function'
+      ? timestamp.toDate()
+      : typeof timestamp.seconds === 'number'
+        ? new Date(timestamp.seconds * 1000)
+        : new Date(date as string | number);
+    if (Number.isNaN(d.getTime())) return '';
     return d.toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: 'long',
       year: 'numeric'
     });
-  };
-
-  const readTime = (content: string) => {
-    const wordsPerMinute = 200;
-    const words = content.split(/\s+/).length;
-    return Math.ceil(words / wordsPerMinute);
   };
 
   if (sectionDisabled) {
@@ -143,7 +144,7 @@ export default function BlogPage() {
                     </div>
                     <div className="flex items-center gap-1">
                       <Clock size={16} />
-                      <span>{readTime(post.content)} min de leitura</span>
+                      <span>{post.readingMinutes} min de leitura</span>
                     </div>
                   </div>
 

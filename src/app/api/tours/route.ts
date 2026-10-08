@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { tourService } from "@/lib/firestore";
 import { PUBLIC_API_CACHE_HEADERS } from "@/lib/api-cache";
 
@@ -39,6 +40,10 @@ export async function POST(request: NextRequest) {
     }
 
     const id = await tourService.create(body);
+    revalidatePath("/api/tours");
+    revalidatePath("/", "page");
+    revalidatePath("/passeios", "page");
+    revalidatePath("/passeios/[id]", "page");
     return NextResponse.json(
       { id, message: "Tour created successfully" },
       { status: 201 }

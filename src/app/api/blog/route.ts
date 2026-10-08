@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { blogService } from "@/lib/firestore";
 import { PUBLIC_API_CACHE_HEADERS } from "@/lib/api-cache";
 
@@ -8,8 +9,24 @@ export async function GET(request: NextRequest) {
     const publishedParam = request.nextUrl.searchParams.get("published");
     const onlyPublished = publishedParam === "true" || publishedParam === null;
     const posts = await blogService.getAll(onlyPublished);
+    const summaryOnly = request.nextUrl.searchParams.get("summary") === "true";
+    const responsePosts = summaryOnly && onlyPublished
+      ? posts.map((post) => ({
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          summary: post.summary,
+          imageUrl: post.imageUrl,
+          imageAlt: post.imageAlt,
+          published: post.published,
+          createdAt: post.createdAt,
+          readingMinutes: post.content
+            ? Math.ceil(post.content.trim().split(/\s+/).length / 200)
+            : 0,
+        }))
+      : posts;
     return NextResponse.json(
-      posts,
+      responsePosts,
       onlyPublished ? { headers: PUBLIC_API_CACHE_HEADERS } : undefined
     );
   } catch (error) {
@@ -40,6 +57,10 @@ export async function POST(request: NextRequest) {
     }
 
     const id = await blogService.create(body);
+    revalidatePath("/api/blog");
+    revalidatePath("/", "page");
+    revalidatePath("/blog", "page");
+    revalidatePath("/blog/[slug]", "page");
     return NextResponse.json(
       { id, message: "Blog post created successfully" },
       { status: 201 }

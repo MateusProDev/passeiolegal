@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { transferService } from "@/lib/firestore";
 import { PUBLIC_API_CACHE_HEADERS } from "@/lib/api-cache";
 
@@ -40,6 +41,10 @@ export async function POST(request: NextRequest) {
     }
 
     const id = await transferService.create(body);
+    revalidatePath("/api/transfers");
+    revalidatePath("/", "page");
+    revalidatePath("/transfer", "page");
+    revalidatePath("/transfer/[id]", "page");
     return NextResponse.json(
       { id, message: "Transfer created successfully" },
       { status: 201 }

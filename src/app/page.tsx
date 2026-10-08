@@ -76,7 +76,7 @@ async function getPageData() {
       tourService.getAll(false),
       transferService.getAll(true),
       testimonialService.getAll(),
-      blogService.getAll(false),
+      blogService.getAll(true),
       faqService.getAll(),
       settingsService.get(),
     ]);

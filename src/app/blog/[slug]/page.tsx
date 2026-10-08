@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Clock, ArrowLeft } from 'lucide-react';
 import { blogService, settingsService } from '@/lib/firestore';
+import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
@@ -18,11 +19,15 @@ interface PageProps {
 
 export const revalidate = 86400;
 
+const getPublishedPost = cache(async (slug: string) => {
+  const post = await blogService.getBySlug(slug);
+  return post?.published ? post : null;
+});
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const baseUrl = getSiteUrl();
   try {
-    const posts = await blogService.getAll(false);
-    const post = posts.find(p => p.slug === params.slug && p.published);
+    const post = await getPublishedPost(params.slug);
 
     if (!post) {
       return {
@@ -67,14 +72,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogPostPage({ params }: PageProps) {
   try {
-    const [posts, settings] = await Promise.all([
-      blogService.getAll(false),
+    const [post, settings] = await Promise.all([
+      getPublishedPost(params.slug),
       settingsService.get(),
     ]);
     if (settings?.sections?.blogEnabled === false) {
       notFound();
     }
-    const post = posts.find(p => p.slug === params.slug && p.published);
 
     if (!post) {
       notFound();

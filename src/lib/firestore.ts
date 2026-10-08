@@ -217,6 +217,7 @@ export const tourService = {
   async getBySlug(slug: string) {
     const result = await firebaseService.getMany<Types.Tour>("tours", [
       where("slug", "==", slug),
+      firestoreLimit(1),
     ]);
     return result[0] || null;
   },
@@ -240,6 +241,7 @@ export const tourService = {
         where("id", "!=", excludeId),
         orderBy("featured", "desc"),
         orderBy("name", "asc"),
+        firestoreLimit(limit),
       ]);
       return allTours.slice(0, limit);
     } catch (error) {
@@ -282,13 +284,18 @@ export const transferService = {
   async getBySlug(slug: string) {
     const result = await firebaseService.getMany<Types.Transfer>("transfers", [
       where("slug", "==", slug),
+      firestoreLimit(1),
     ]);
     return result[0] || null;
   },
 
   async getRelated(excludeId: string, limit: number = 3) {
     try {
-      const transfers = await transferService.getAll(true);
+      const transfers = await firebaseService.getMany<Types.Transfer>("transfers", [
+        where("active", "==", true),
+        orderBy("name", "asc"),
+        firestoreLimit(limit + 1),
+      ]);
       return transfers.filter((transfer) => transfer.id !== excludeId).slice(0, limit);
     } catch (error) {
       console.error("Error fetching related transfers:", error);
@@ -356,6 +363,7 @@ export const blogService = {
   async getBySlug(slug: string) {
     const result = await firebaseService.getMany<Types.BlogPost>("blog", [
       where("slug", "==", slug),
+      firestoreLimit(1),
     ]);
     return result[0] || null;
   },
@@ -398,7 +406,8 @@ export const faqService = {
 export const settingsService = {
   async get() {
     const settings = await firebaseService.getMany<Types.SiteSettings>(
-      "settings"
+      "settings",
+      [firestoreLimit(1)]
     );
     return settings[0] || null;
   },

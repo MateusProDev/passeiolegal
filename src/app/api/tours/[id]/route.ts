@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { tourService } from "@/lib/firestore";
 
 // GET /api/tours/[id] - Get single tour
@@ -32,6 +33,10 @@ export async function PUT(
   try {
     const body = await request.json();
     await tourService.update(params.id, body);
+    revalidatePath("/api/tours");
+    revalidatePath("/", "page");
+    revalidatePath("/passeios", "page");
+    revalidatePath("/passeios/[id]", "page");
     return NextResponse.json({ message: "Tour updated successfully" });
   } catch (error) {
     console.error("Error updating tour:", error);
@@ -49,6 +54,10 @@ export async function DELETE(
 ) {
   try {
     await tourService.delete(params.id);
+    revalidatePath("/api/tours");
+    revalidatePath("/", "page");
+    revalidatePath("/passeios", "page");
+    revalidatePath("/passeios/[id]", "page");
     return NextResponse.json({ message: "Tour deleted successfully" });
   } catch (error) {
     console.error("Error deleting tour:", error);

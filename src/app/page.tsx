@@ -1,5 +1,6 @@
 import dynamicImport from "next/dynamic";
 import { Metadata } from "next";
+import { Sparkles } from "lucide-react";
 import Header from "@/components/public/Header";
 import Hero from "@/components/public/Hero";
 import AnimatedCounter from "@/components/public/AnimatedCounter";
@@ -124,7 +125,29 @@ export default async function Home() {
   return (
     <main className="min-h-screen pt-20 sm:pt-24">
       <Header />
-      
+
+      <section
+        aria-label="Top 3 Passeio Legal"
+        className="relative isolate overflow-hidden border-y border-emerald-900/10 bg-[#f4f7f3] px-4 py-4 sm:py-5"
+      >
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(71,193,136,0.12),transparent_68%)]"
+        />
+        <div className="container mx-auto flex items-center justify-center gap-3 sm:gap-5">
+          <Sparkles aria-hidden="true" className="h-5 w-5 shrink-0 text-amber-500 sm:h-6 sm:w-6" />
+          <h2 className="flex flex-wrap items-baseline justify-center gap-x-2 text-center leading-none">
+            <span className="text-2xl font-black uppercase tracking-tight text-emerald-950 sm:text-3xl">
+              Top 3
+            </span>
+            <span className="font-serif text-2xl font-bold italic tracking-tight text-emerald-800 sm:text-3xl lg:text-4xl">
+              Passeio Legal
+            </span>
+          </h2>
+          <Sparkles aria-hidden="true" className="h-5 w-5 shrink-0 text-amber-500 sm:h-6 sm:w-6" />
+        </div>
+      </section>
+
       {heroEnabled && (
         <Hero
           banners={banners}

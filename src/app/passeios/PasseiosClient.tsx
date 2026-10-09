@@ -69,11 +69,19 @@ export default function PasseiosClient({ tours, sectionDisabled, loadError }: Pa
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <div className="bg-primary-600 text-white py-16">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Nossos Passeios</h1>
-          <p className="text-xl max-w-2xl">Descubra experiências únicas e memoráveis com nossos passeios cuidadosamente selecionados</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Passeios e Transfers</h1>
+          <p className="text-xl max-w-2xl mb-6">Encontre passeios para conhecer Fortaleza e região, além de transfers para viajar com conforto.</p>
+          <div className="flex flex-wrap gap-3">
+            <Link href="#passeios" className="inline-block rounded-lg bg-white px-6 py-3 font-semibold text-primary-700 transition-colors hover:bg-gray-100">
+              Ver passeios
+            </Link>
+            <Link href="/transfer" className="inline-block rounded-lg border border-white px-6 py-3 font-semibold text-white transition-colors hover:bg-white/10">
+              Ver transfers
+            </Link>
+          </div>
         </div>
       </div>
-      <div className="container mx-auto px-4 py-8">
+      <div id="passeios" className="container mx-auto scroll-mt-24 px-4 py-8">
         <div className="bg-gray-50 rounded-xl shadow-lg p-6 mb-8">
           <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="flex-1 relative">

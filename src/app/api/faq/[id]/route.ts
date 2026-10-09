@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { faqService } from "@/lib/firestore";
 
 // GET /api/faq/[id] - Get single FAQ item
@@ -32,6 +33,7 @@ export async function PUT(
   try {
     const body = await request.json();
     await faqService.update(params.id, body);
+    revalidatePath("/api/faq");
     return NextResponse.json({ message: "FAQ item updated successfully" });
   } catch (error) {
     console.error("Error updating FAQ item:", error);
@@ -49,6 +51,7 @@ export async function DELETE(
 ) {
   try {
     await faqService.delete(params.id);
+    revalidatePath("/api/faq");
     return NextResponse.json({ message: "FAQ item deleted successfully" });
   } catch (error) {
     console.error("Error deleting FAQ item:", error);

@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { testimonialService } from "@/lib/firestore";
+import { PUBLIC_API_CACHE_HEADERS } from "@/lib/api-cache";
 
 // GET /api/testimonials - Get all testimonials
 export async function GET() {
   try {
     const testimonials = await testimonialService.getAll();
-    return NextResponse.json(testimonials);
+    return NextResponse.json(testimonials, {
+      headers: PUBLIC_API_CACHE_HEADERS,
+    });
   } catch (error) {
     console.error("Error fetching testimonials:", error);
     return NextResponse.json(
@@ -33,6 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     const id = await testimonialService.create(body);
+    revalidatePath("/api/testimonials");
     return NextResponse.json(
       { id, message: "Testimonial created successfully" },
       { status: 201 }

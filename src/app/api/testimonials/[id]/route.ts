@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { testimonialService } from "@/lib/firestore";
 
 // GET /api/testimonials/[id] - Get single testimonial
@@ -32,6 +33,7 @@ export async function PUT(
   try {
     const body = await request.json();
     await testimonialService.update(params.id, body);
+    revalidatePath("/api/testimonials");
     return NextResponse.json({ message: "Testimonial updated successfully" });
   } catch (error) {
     console.error("Error updating testimonial:", error);
@@ -49,6 +51,7 @@ export async function DELETE(
 ) {
   try {
     await testimonialService.delete(params.id);
+    revalidatePath("/api/testimonials");
     return NextResponse.json({ message: "Testimonial deleted successfully" });
   } catch (error) {
     console.error("Error deleting testimonial:", error);

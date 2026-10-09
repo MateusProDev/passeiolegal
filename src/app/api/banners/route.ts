@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { bannerService } from "@/lib/firestore";
+import { PUBLIC_API_CACHE_HEADERS } from "@/lib/api-cache";
 
 // GET /api/banners - Get all banners
 export async function GET() {
   try {
     const banners = await bannerService.getAll();
-    return NextResponse.json(banners);
+    return NextResponse.json(banners, {
+      headers: PUBLIC_API_CACHE_HEADERS,
+    });
   } catch (error) {
     console.error("Error fetching banners:", error);
     return NextResponse.json(
@@ -35,6 +38,7 @@ export async function POST(request: NextRequest) {
     }
 
     const id = await bannerService.create(body);
+    revalidatePath("/api/banners");
     revalidatePath("/");
     return NextResponse.json(
       { id, message: "Banner created successfully" },

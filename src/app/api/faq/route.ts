@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { faqService } from "@/lib/firestore";
+import { PUBLIC_API_CACHE_HEADERS } from "@/lib/api-cache";
 
 // GET /api/faq - Get all FAQ items
 export async function GET() {
   try {
     const faqItems = await faqService.getAll();
-    return NextResponse.json(faqItems);
+    return NextResponse.json(faqItems, {
+      headers: PUBLIC_API_CACHE_HEADERS,
+    });
   } catch (error) {
     console.error("Error fetching FAQ items:", error);
     return NextResponse.json(
@@ -28,6 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     const id = await faqService.create(body);
+    revalidatePath("/api/faq");
     return NextResponse.json(
       { id, message: "FAQ item created successfully" },
       { status: 201 }

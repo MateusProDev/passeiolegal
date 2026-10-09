@@ -33,6 +33,7 @@ export async function PUT(
   try {
     const body = await request.json();
     await bannerService.update(params.id, body);
+    revalidatePath("/api/banners");
     revalidatePath("/");
     return NextResponse.json({ message: "Banner updated successfully" });
   } catch (error) {
@@ -51,6 +52,7 @@ export async function DELETE(
 ) {
   try {
     await bannerService.delete(params.id);
+    revalidatePath("/api/banners");
     revalidatePath("/");
     return NextResponse.json({ message: "Banner deleted successfully" });
   } catch (error) {

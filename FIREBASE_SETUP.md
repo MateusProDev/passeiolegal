@@ -64,3 +64,16 @@ Se as credenciais não estiverem configuradas, o script irá:
 - Verifique se a coleção está sendo criada no Firebase Console
 - Verifique se os documentos têm a estrutura correta
 - Verifique se o campo `active` está como `true`
+
+### Publicar índices do Firestore
+
+As consultas de posts publicados e passeios relacionados dependem dos índices
+compostos definidos em `firestore.indexes.json`. Para publicá-los no projeto
+Firebase `passeiolegal`, execute na raiz do projeto:
+
+```bash
+npx firebase-tools deploy --only firestore:indexes --project passeiolegal
+```
+
+O Firestore pode levar alguns minutos para criar os índices. Aguarde até que
+ambos apareçam como **Enabled** no Firebase Console antes de verificar o site.

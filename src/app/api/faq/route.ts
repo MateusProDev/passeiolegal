@@ -33,6 +33,7 @@ export async function POST(request: NextRequest) {
 
     const id = await faqService.create(body);
     revalidatePath("/api/faq");
+    revalidatePath("/", "page");
     return NextResponse.json(
       { id, message: "FAQ item created successfully" },
       { status: 201 }

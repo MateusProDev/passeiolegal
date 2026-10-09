@@ -34,6 +34,7 @@ export async function PUT(
     const body = await request.json();
     await testimonialService.update(params.id, body);
     revalidatePath("/api/testimonials");
+    revalidatePath("/", "page");
     return NextResponse.json({ message: "Testimonial updated successfully" });
   } catch (error) {
     console.error("Error updating testimonial:", error);
@@ -52,6 +53,7 @@ export async function DELETE(
   try {
     await testimonialService.delete(params.id);
     revalidatePath("/api/testimonials");
+    revalidatePath("/", "page");
     return NextResponse.json({ message: "Testimonial deleted successfully" });
   } catch (error) {
     console.error("Error deleting testimonial:", error);

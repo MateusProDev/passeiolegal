@@ -34,6 +34,7 @@ export async function PUT(
     const body = await request.json();
     await faqService.update(params.id, body);
     revalidatePath("/api/faq");
+    revalidatePath("/", "page");
     return NextResponse.json({ message: "FAQ item updated successfully" });
   } catch (error) {
     console.error("Error updating FAQ item:", error);
@@ -52,6 +53,7 @@ export async function DELETE(
   try {
     await faqService.delete(params.id);
     revalidatePath("/api/faq");
+    revalidatePath("/", "page");
     return NextResponse.json({ message: "FAQ item deleted successfully" });
   } catch (error) {
     console.error("Error deleting FAQ item:", error);

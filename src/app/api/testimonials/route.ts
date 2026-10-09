@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
 
     const id = await testimonialService.create(body);
     revalidatePath("/api/testimonials");
+    revalidatePath("/", "page");
     return NextResponse.json(
       { id, message: "Testimonial created successfully" },
       { status: 201 }

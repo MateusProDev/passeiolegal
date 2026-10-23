@@ -167,7 +167,7 @@ export default async function Home() {
       
       {transfersEnabled && (
         <Transfers
-          transfers={transfers}
+          transfers={transfers.slice(0, 12)}
           titleEnabled={content?.homeTransfersTitle !== false}
           descriptionEnabled={content?.homeTransfersDescription !== false}
         />

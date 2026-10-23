@@ -9,6 +9,7 @@
     "vercel-build": "npm run update-tour-slugs && npm run update-transfer-slugs && npm run build",
     "start": "next start",
     "init-site-content": "tsx scripts/initialize-site-content.ts",
+    "init-transfers": "tsx scripts/init-transfers.ts",
     "update-tour-slugs": "tsx scripts/update-tour-slugs.ts",
     "update-transfer-slugs": "tsx scripts/update-transfer-slugs.ts"
   },

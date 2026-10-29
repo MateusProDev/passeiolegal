@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import TourLink from '@/components/public/TourLink';
 import { Clock, Users, Search, SlidersHorizontal } from 'lucide-react';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 import Header from '@/components/public/Header';
@@ -153,7 +154,7 @@ export default function PasseiosClient({ tours, sectionDisabled, loadError }: Pa
                     <div className="flex items-center space-x-1"><Clock size={16} /><span>{tour.duration || 'Consulte'}</span></div>
                     <div className="flex items-center space-x-1"><Users size={16} /><span>Gr pequenos</span></div>
                   </div>
-                  <div className="flex items-center justify-end"><Link href={`/passeios/${tour.slug || tour.id}`} onClick={() => sessionStorage.setItem('passeios-scroll-position', window.scrollY.toString())} className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium" aria-label={`Ver detalhes de ${tour.name}`}>Ver Detalhes</Link></div>
+                  <div className="flex items-center justify-end"><TourLink href={`/passeios/${tour.slug || tour.id}`} className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium" ariaLabel={`Ver detalhes de ${tour.name}`}>Ver Detalhes</TourLink></div>
                 </div>
               </article>
             ))}

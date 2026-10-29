@@ -5,7 +5,7 @@ import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import { tourService } from "@/lib/firestore";
 import { Clock, Check, X, Users, AlertCircle, Sparkles, ChevronDown } from "lucide-react";
-import Link from "next/link";
+import BackLink from "@/components/public/BackLink";
 import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import TourConversionBar from "@/components/public/TourConversionBar";
 import TourTrustBadges from "@/components/public/TourTrustBadges";
@@ -176,16 +176,7 @@ export default async function PasseioDetailPage({ params }: PageProps) {
 
       <div className="bg-white">
         <div className="container mx-auto px-4 py-6">
-          <Link
-            href="/passeios"
-            onClick={() => {
-              sessionStorage.setItem('passeios-scroll-position', window.scrollY.toString());
-            }}
-            className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6 font-medium transition-colors"
-            aria-label="Voltar para lista de passeios"
-          >
-            ← Voltar para passeios
-          </Link>
+          <BackLink />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Coluna Esquerda - Imagens */}

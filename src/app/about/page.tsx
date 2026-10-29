@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import AnimatedCounter from "@/components/public/AnimatedCounter";
@@ -160,6 +161,26 @@ export default async function AboutPage() {
                   </div>
                 </div>}
               </div>
+            </div>
+
+            {/* Instagram QR Code */}
+            <div className="text-center mt-16 pt-8 border-t border-gray-200">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Siga-nos no Instagram</h3>
+              <p className="text-gray-600 mb-6">Acompanhe nossas novidades e experiências</p>
+              <div className="flex justify-center">
+                <a href="https://instagram.com/passeiolegalfortaleza" target="_blank" rel="noopener noreferrer">
+                  <Image 
+                    src="/instagram-qrcode.png" 
+                    alt="QR Code Instagram Passeio Legal" 
+                    width={256}
+                    height={256}
+                    className="w-48 h-48 md:w-64 md:h-64 hover:opacity-80 transition-opacity"
+                  />
+                </a>
+              </div>
+              <p className="text-xs text-gray-400 mt-4">
+                QR Code criado com <a href="https://lucrazi.com/gerador-de-qr-code" target="_blank" rel="noopener noreferrer" className="hover:text-gray-600">gerador qrcode</a>
+              </p>
             </div>
           </div>
         </div>

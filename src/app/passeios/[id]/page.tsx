@@ -178,6 +178,9 @@ export default async function PasseioDetailPage({ params }: PageProps) {
         <div className="container mx-auto px-4 py-6">
           <Link
             href="/passeios"
+            onClick={() => {
+              sessionStorage.setItem('passeios-scroll-position', window.scrollY.toString());
+            }}
             className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6 font-medium transition-colors"
             aria-label="Voltar para lista de passeios"
           >

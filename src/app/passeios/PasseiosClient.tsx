@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Clock, Users, Search, SlidersHorizontal } from 'lucide-react';
@@ -22,6 +22,7 @@ export default function PasseiosClient({ tours, sectionDisabled, loadError }: Pa
   const [showFilters, setShowFilters] = useState(false);
   const [durationFilter, setDurationFilter] = useState<'all' | 'short' | 'medium' | 'long'>('all');
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
+  const mainRef = useRef<HTMLElement>(null);
   const baseUrl = getSiteUrl();
   const breadcrumbItems = [
     { name: 'Início', url: baseUrl },
@@ -49,6 +50,28 @@ export default function PasseiosClient({ tours, sectionDisabled, loadError }: Pa
     setFilteredTours(filtered);
   }, [searchTerm, durationFilter, showFeaturedOnly, tours]);
 
+  // Restaurar posição de scroll ao voltar da página de detalhes
+  useEffect(() => {
+    const savedScroll = sessionStorage.getItem('passeios-scroll-position');
+    if (savedScroll && mainRef.current) {
+      // Aguardar um pouco para o DOM renderizar completamente
+      setTimeout(() => {
+        window.scrollTo(0, parseInt(savedScroll));
+        sessionStorage.removeItem('passeios-scroll-position');
+      }, 100);
+    }
+  }, []);
+
+  // Salvar posição de scroll ao sair da página
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      sessionStorage.setItem('passeios-scroll-position', window.scrollY.toString());
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
+
   if (sectionDisabled) {
     return (
       <main className="min-h-screen bg-gray-50 pt-24">
@@ -64,7 +87,7 @@ export default function PasseiosClient({ tours, sectionDisabled, loadError }: Pa
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 pt-24">
+    <main ref={mainRef} className="min-h-screen bg-gray-50 pt-24">
       <Header />
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <div className="bg-primary-600 text-white py-16">
@@ -130,7 +153,7 @@ export default function PasseiosClient({ tours, sectionDisabled, loadError }: Pa
                     <div className="flex items-center space-x-1"><Clock size={16} /><span>{tour.duration || 'Consulte'}</span></div>
                     <div className="flex items-center space-x-1"><Users size={16} /><span>Gr pequenos</span></div>
                   </div>
-                  <div className="flex items-center justify-end"><Link href={`/passeios/${tour.slug || tour.id}`} className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium" aria-label={`Ver detalhes de ${tour.name}`}>Ver Detalhes</Link></div>
+                  <div className="flex items-center justify-end"><Link href={`/passeios/${tour.slug || tour.id}`} onClick={() => sessionStorage.setItem('passeios-scroll-position', window.scrollY.toString())} className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors font-medium" aria-label={`Ver detalhes de ${tour.name}`}>Ver Detalhes</Link></div>
                 </div>
               </article>
             ))}

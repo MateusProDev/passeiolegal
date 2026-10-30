@@ -185,7 +185,8 @@ export default function Tours({ tours, titleEnabled = true, descriptionEnabled =
                     </>
                   )}
                   <article
-                    className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 ease-out flex flex-col group"
+                    className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 ease-out flex flex-col group cursor-pointer"
+                    onClick={() => { handleTourClick(tour.name); window.location.href = `/passeios/${tour.slug || tour.id}`; }}
                   >
                 <div className="relative aspect-square w-full overflow-hidden">
                   {tour.mainImageUrl ? (
@@ -210,13 +211,9 @@ export default function Tours({ tours, titleEnabled = true, descriptionEnabled =
 
                 <div className="p-6 flex flex-col flex-1">
                   <h3 className="mb-2">
-                    <Link
-                      href={`/passeios/${tour.slug || tour.id}`}
-                      className="block text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2"
-                      onClick={() => handleTourClick(tour.name)}
-                    >
+                    <span className="block text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2">
                       {tour.name}
-                    </Link>
+                    </span>
                   </h3>
                   <div className="flex items-center gap-2 mb-4">
                     <button

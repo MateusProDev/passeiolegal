@@ -149,7 +149,8 @@ export default function Transfers({ transfers, titleEnabled = true, descriptionE
                   </>
                 )}
                 <article
-                  className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-all duration-300 ease-out flex flex-col group"
+                  className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-all duration-300 ease-out flex flex-col group cursor-pointer"
+                  onClick={() => { window.location.href = `/transfer/${transfer.slug || transfer.id}`; }}
                 >
                 <div className="relative h-40 mb-4 w-full">
                   {transfer.imageUrl ? (
@@ -168,12 +169,9 @@ export default function Transfers({ transfers, titleEnabled = true, descriptionE
                 </div>
 
                 <h3 className="mb-2">
-                  <Link
-                    href={`/transfer/${transfer.slug || transfer.id}`}
-                    className="block text-lg font-bold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2"
-                  >
+                  <span className="block text-lg font-bold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2">
                     {transfer.name}
-                  </Link>
+                  </span>
                 </h3>
                 <div className="flex items-center gap-2 mb-4">
                   <button

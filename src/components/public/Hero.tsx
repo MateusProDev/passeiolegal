@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { CheckCircle2 } from 'lucide-react';
 
 interface Banner {
   id: string;
@@ -49,10 +50,16 @@ export default function Hero({
 
   if (!safeBanner) {
     return (
-      <section className="relative h-[600px] bg-gradient-to-r from-primary-600 to-secondary-600 flex items-center justify-center">
-        <div className="text-center text-white px-4">
-          {titleEnabled && <h1 className="text-4xl md:text-6xl font-bold mb-4">Passeios e Transfers em Fortaleza e Região</h1>}
-          {descriptionEnabled && <p className="text-xl md:text-2xl mb-8">Reserve experiências únicas com conforto, segurança e atendimento personalizado.</p>}
+      <section className="relative h-[600px] bg-gradient-to-r from-primary-600 to-secondary-600 flex items-center">
+        <div className="max-w-3xl text-left text-white px-4 md:px-8">
+          <p className="text-orange-300 font-semibold tracking-widest uppercase text-xs md:text-sm mb-3">Fortaleza • Ceará</p>
+          {titleEnabled && <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4">Passeios e Transfers em Fortaleza e Região</h1>}
+          {descriptionEnabled && <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl">Reserve experiências únicas com conforto, segurança e atendimento personalizado.</p>}
+          <div className="space-y-2 text-sm md:text-base text-white/90">
+            <p className="flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-300" />5/5 no Google com 173 avaliações</p>
+            <p className="flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-300" />2.000+ Clientes Satisfeitos</p>
+            <p className="flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-300" />Credenciada no Cadastur</p>
+          </div>
         </div>
       </section>
     );
@@ -78,26 +85,42 @@ export default function Hero({
         ) : (
           <div className="w-full h-full bg-gradient-to-r from-primary-600 to-secondary-600" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/35 to-black/45" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/50 to-black/40" />
       </div>
 
-      <div className="relative h-full flex items-center justify-center text-white px-4">
-        <div className="text-center max-w-4xl">
-          {titleEnabled && <h1 className="text-4xl md:text-6xl font-bold mb-4">
+      <div className="relative h-full flex items-center text-white px-4 md:px-8">
+        <div className="max-w-3xl text-left">
+          <p className="text-orange-400 font-semibold tracking-widest uppercase text-xs md:text-sm mb-3">Fortaleza • Ceará</p>
+          {titleEnabled && <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4">
             {heroTitle}
           </h1>}
-          {descriptionEnabled && <p className="text-xl md:text-2xl mb-8">
+          {descriptionEnabled && <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl">
             {currentBanner.subtitle || 'Reserve experiências únicas em Fortaleza e região.'}
           </p>}
-          {buttonEnabled && <a
-            href={currentBanner.buttonLink}
-            target={/^https?:\/\//i.test(currentBanner.buttonLink) ? '_blank' : undefined}
-            rel={/^https?:\/\//i.test(currentBanner.buttonLink) ? 'noopener noreferrer' : undefined}
-            className="inline-block bg-primary-800 hover:bg-primary-900 text-white font-bold px-8 py-3 rounded-lg transition-colors"
-            aria-label={currentBanner.buttonText}
-          >
-            {currentBanner.buttonText}
-          </a>}
+          {buttonEnabled && (
+            <div className="flex flex-col sm:flex-row gap-3 mb-8">
+              <a
+                href={currentBanner.buttonLink}
+                target={/^https?:\/\//i.test(currentBanner.buttonLink) ? '_blank' : undefined}
+                rel={/^https?:\/\//i.test(currentBanner.buttonLink) ? 'noopener noreferrer' : undefined}
+                className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3 rounded-full transition-colors text-center"
+                aria-label={currentBanner.buttonText}
+              >
+                {currentBanner.buttonText}
+              </a>
+              <a
+                href="#transfers"
+                className="inline-block border border-white/70 hover:border-white hover:bg-white/10 text-white font-semibold px-8 py-3 rounded-full transition-colors text-center backdrop-blur-sm"
+              >
+                Ver transfers
+              </a>
+            </div>
+          )}
+          <div className="space-y-2 text-sm md:text-base text-white/90">
+            <p className="flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-400" />5/5 no Google com 173 avaliações</p>
+            <p className="flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-400" />2.000+ Clientes Satisfeitos</p>
+            <p className="flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-400" />Credenciada no Cadastur</p>
+          </div>
         </div>
       </div>
 

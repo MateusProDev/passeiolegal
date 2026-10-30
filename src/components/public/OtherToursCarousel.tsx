@@ -55,6 +55,20 @@ export default function OtherToursCarousel({ tours }: OtherToursCarouselProps) {
     });
   };
 
+  const addBookmark = (url: string, title: string) => {
+    try {
+      const win = window as any;
+      if (win.external && 'AddFavorite' in win.external) {
+        win.external.AddFavorite(url, title);
+      } else if (win.sidebar && win.sidebar.addPanel) {
+        win.sidebar.addPanel(title, url, '');
+      } else {
+        window.open(url, '_blank');
+        alert('Para favoritar, use Ctrl+D / Cmd+D nesta página.');
+      }
+    } catch {}
+  };
+
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     const updateReducedMotion = () => setIsPaused(mediaQuery.matches);
@@ -159,7 +173,13 @@ export default function OtherToursCarousel({ tours }: OtherToursCarouselProps) {
                   <Heart size={18} fill={likedIds.has(tour.id) ? 'currentColor' : 'none'} />
                 </button>
                 <button
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFav(tour.id); window.location.href = `/passeios/${tour.slug || tour.id}`; }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleFav(tour.id);
+                    const url = `${window.location.origin}/passeios/${tour.slug || tour.id}`;
+                    addBookmark(url, tour.name);
+                  }}
                   className={`p-2 rounded-full transition-colors ${favIds.has(tour.id) ? 'text-amber-500 bg-amber-50' : 'text-gray-400 hover:text-amber-500 hover:bg-amber-50'}`}
                   aria-label={favIds.has(tour.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
                 >

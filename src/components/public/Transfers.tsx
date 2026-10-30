@@ -48,6 +48,20 @@ export default function Transfers({ transfers, titleEnabled = true, descriptionE
     });
   };
 
+  const addBookmark = (url: string, title: string) => {
+    try {
+      const win = window as any;
+      if (win.external && 'AddFavorite' in win.external) {
+        win.external.AddFavorite(url, title);
+      } else if (win.sidebar && win.sidebar.addPanel) {
+        win.sidebar.addPanel(title, url, '');
+      } else {
+        window.open(url, '_blank');
+        alert('Para favoritar, use Ctrl+D / Cmd+D nesta página.');
+      }
+    } catch {}
+  };
+
   const featuredTransfers = transfers.filter((transfer) => transfer.featuredOnHome);
   const displayTransfers = featuredTransfers.length > 0 ? featuredTransfers : transfers.slice(0, 6);
   const otherTransfers = featuredTransfers.length > 0
@@ -170,7 +184,13 @@ export default function Transfers({ transfers, titleEnabled = true, descriptionE
                     <Heart size={18} fill={likedIds.has(transfer.id) ? 'currentColor' : 'none'} />
                   </button>
                   <button
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFav(transfer.id); window.location.href = `/transfer/${transfer.slug || transfer.id}`; }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      toggleFav(transfer.id);
+                      const url = `${window.location.origin}/transfer/${transfer.slug || transfer.id}`;
+                      addBookmark(url, transfer.name);
+                    }}
                     className={`p-2 rounded-full transition-colors ${favIds.has(transfer.id) ? 'text-amber-500 bg-amber-50' : 'text-gray-400 hover:text-amber-500 hover:bg-amber-50'}`}
                     aria-label={favIds.has(transfer.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
                   >

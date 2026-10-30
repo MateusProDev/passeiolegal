@@ -58,7 +58,7 @@ export default function Hero({
           <div className="space-y-2 text-sm md:text-base text-white/90">
             <p className="flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-300" />5/5 no Google com 173 avaliações</p>
             <p className="flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-300" />2.000+ Clientes Satisfeitos</p>
-            <p className="flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-300" />Credenciada no Cadastur</p>
+            <p className="flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-300" />Agência de Turismo</p>
           </div>
         </div>
       </section>
@@ -119,7 +119,7 @@ export default function Hero({
           <div className="space-y-2 text-sm md:text-base text-white/90">
             <p className="flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-400" />5/5 no Google com 173 avaliações</p>
             <p className="flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-400" />2.000+ Clientes Satisfeitos</p>
-            <p className="flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-400" />Credenciada no Cadastur</p>
+            <p className="flex items-center gap-2"><CheckCircle2 size={18} className="text-emerald-400" />Agência de Turismo</p>
           </div>
         </div>
       </div>

@@ -153,31 +153,29 @@ export default function Transfers({ transfers, titleEnabled = true, descriptionE
                   )}
                 </div>
 
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <h3 className="flex-1 min-w-0">
-                    <Link
-                      href={`/transfer/${transfer.slug || transfer.id}`}
-                      className="block text-lg font-bold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2"
-                    >
-                      {transfer.name}
-                    </Link>
-                  </h3>
-                  <div className="flex items-center gap-1 shrink-0">
-                    <button
-                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleLike(transfer.id); }}
-                      className={`p-2 rounded-full transition-colors ${likedIds.has(transfer.id) ? 'text-red-500 bg-red-50' : 'text-gray-400 hover:text-red-500 hover:bg-red-50'}`}
-                      aria-label={likedIds.has(transfer.id) ? 'Remover curtida' : 'Curtir'}
-                    >
-                      <Heart size={18} fill={likedIds.has(transfer.id) ? 'currentColor' : 'none'} />
-                    </button>
-                    <button
-                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFav(transfer.id); }}
-                      className={`p-2 rounded-full transition-colors ${favIds.has(transfer.id) ? 'text-amber-500 bg-amber-50' : 'text-gray-400 hover:text-amber-500 hover:bg-amber-50'}`}
-                      aria-label={favIds.has(transfer.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
-                    >
-                      <Star size={18} fill={favIds.has(transfer.id) ? 'currentColor' : 'none'} />
-                    </button>
-                  </div>
+                <h3 className="mb-2">
+                  <Link
+                    href={`/transfer/${transfer.slug || transfer.id}`}
+                    className="block text-lg font-bold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2"
+                  >
+                    {transfer.name}
+                  </Link>
+                </h3>
+                <div className="flex items-center gap-2 mb-4">
+                  <button
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleLike(transfer.id); }}
+                    className={`p-2 rounded-full transition-colors ${likedIds.has(transfer.id) ? 'text-red-500 bg-red-50' : 'text-gray-400 hover:text-red-500 hover:bg-red-50'}`}
+                    aria-label={likedIds.has(transfer.id) ? 'Remover curtida' : 'Curtir'}
+                  >
+                    <Heart size={18} fill={likedIds.has(transfer.id) ? 'currentColor' : 'none'} />
+                  </button>
+                  <button
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFav(transfer.id); window.location.href = `/transfer/${transfer.slug || transfer.id}`; }}
+                    className={`p-2 rounded-full transition-colors ${favIds.has(transfer.id) ? 'text-amber-500 bg-amber-50' : 'text-gray-400 hover:text-amber-500 hover:bg-amber-50'}`}
+                    aria-label={favIds.has(transfer.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
+                  >
+                    <Star size={18} fill={favIds.has(transfer.id) ? 'currentColor' : 'none'} />
+                  </button>
                 </div>
 
                 <div className="mt-auto">

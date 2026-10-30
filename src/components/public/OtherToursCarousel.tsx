@@ -141,32 +141,30 @@ export default function OtherToursCarousel({ tours }: OtherToursCarouselProps) {
             </div>
 
             <div className="p-6 flex flex-col flex-1">
-              <div className="flex items-start justify-between gap-3 mb-4">
-                <h3 className="flex-1 min-w-0">
-                  <Link
-                    href={`/passeios/${tour.slug || tour.id}`}
-                    className="block text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2"
-                    onClick={() => handleTourClick(tour.name)}
-                  >
-                    {tour.name}
-                  </Link>
-                </h3>
-                <div className="flex items-center gap-1 shrink-0">
-                  <button
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleLike(tour.id); }}
-                    className={`p-2 rounded-full transition-colors ${likedIds.has(tour.id) ? 'text-red-500 bg-red-50' : 'text-gray-400 hover:text-red-500 hover:bg-red-50'}`}
-                    aria-label={likedIds.has(tour.id) ? 'Remover curtida' : 'Curtir'}
-                  >
-                    <Heart size={18} fill={likedIds.has(tour.id) ? 'currentColor' : 'none'} />
-                  </button>
-                  <button
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFav(tour.id); }}
-                    className={`p-2 rounded-full transition-colors ${favIds.has(tour.id) ? 'text-amber-500 bg-amber-50' : 'text-gray-400 hover:text-amber-500 hover:bg-amber-50'}`}
-                    aria-label={favIds.has(tour.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
-                  >
-                    <Star size={18} fill={favIds.has(tour.id) ? 'currentColor' : 'none'} />
-                  </button>
-                </div>
+              <h3 className="mb-2">
+                <Link
+                  href={`/passeios/${tour.slug || tour.id}`}
+                  className="block text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2"
+                  onClick={() => handleTourClick(tour.name)}
+                >
+                  {tour.name}
+                </Link>
+              </h3>
+              <div className="flex items-center gap-2 mb-4">
+                <button
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleLike(tour.id); }}
+                  className={`p-2 rounded-full transition-colors ${likedIds.has(tour.id) ? 'text-red-500 bg-red-50' : 'text-gray-400 hover:text-red-500 hover:bg-red-50'}`}
+                  aria-label={likedIds.has(tour.id) ? 'Remover curtida' : 'Curtir'}
+                >
+                  <Heart size={18} fill={likedIds.has(tour.id) ? 'currentColor' : 'none'} />
+                </button>
+                <button
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFav(tour.id); window.location.href = `/passeios/${tour.slug || tour.id}`; }}
+                  className={`p-2 rounded-full transition-colors ${favIds.has(tour.id) ? 'text-amber-500 bg-amber-50' : 'text-gray-400 hover:text-amber-500 hover:bg-amber-50'}`}
+                  aria-label={favIds.has(tour.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
+                >
+                  <Star size={18} fill={favIds.has(tour.id) ? 'currentColor' : 'none'} />
+                </button>
               </div>
 
               <div className="mt-auto">

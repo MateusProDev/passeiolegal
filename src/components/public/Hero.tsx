@@ -27,7 +27,7 @@ export default function Hero({
   descriptionEnabled = true,
   buttonEnabled = true,
 }: HeroProps) {
-  const availableBanners = banners.filter((banner) => banner?.imageUrl);
+  const availableBanners = [...banners.filter((banner) => banner?.imageUrl)].reverse();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
